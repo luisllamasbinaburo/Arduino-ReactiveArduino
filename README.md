@@ -83,6 +83,7 @@ void setup()
 
 	Reactive::FromArray<int>(values, valuesLength)
 		>> Reactive::Cast<int, float>()
+		>> Reactive::Median3<float>()
 		>> Reactive::MovingAverage<float>(4)
 		>> Reactive::DoAndFinally<float>(
 			[](float x) { Serial.println(x); },
