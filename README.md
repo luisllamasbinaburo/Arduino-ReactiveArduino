@@ -4,6 +4,8 @@ ReactiveArduino implements observable-observer pattern on a processor like Ardui
 
 ReactiveArduino is heavly based on ReactiveX and ReactiveUI, adapted to the needs and limitations in a MCU.
 
+*More info about the Observables, Observers, and Operators available in the [Wiki](https://github.com/luisllamasbinaburo/Arduino-ReactiveArduino/wiki)*
+
 ## Instructions for use
 The general use of ReactiveArduino consists of:
 * Define an observable (Timer, Interval, FromArray, FromProperty...)
@@ -20,8 +22,6 @@ Reactive::FromRange<int>(10, 20)
   []() { Serial.println("No more items"); 
 });
 ```
-
-**More info about the Observables, Observers, and Operators available in the [Wiki](https://github.com/luisllamasbinaburo/Arduino-ReactiveArduino/wiki)**
 
 ### Creating operators
 Operators are generally generated through factory methods provided in the reactive class.
