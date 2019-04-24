@@ -1,5 +1,3 @@
-# WIP: Subject of changes in future
-
 # Library ReactiveArduino
 
 ReactiveArduino implements observable-observer pattern on a processor like Arduino. The purpose is to provide declarative programming approach, within the capacity constraints of a low-power MCU.
@@ -22,6 +20,9 @@ Reactive::FromRange<int>(10, 20)
   []() { Serial.println("No more items"); 
 });
 ```
+
+More info about the Observables, Observers, and Operators available in the [Wiki](https://github.com/luisllamasbinaburo/Arduino-ReactiveArduino/wiki)
+
 ### Creating operators
 Operators are generally generated through factory methods provided in the reactive class.
 For example:
