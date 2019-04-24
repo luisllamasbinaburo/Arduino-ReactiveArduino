@@ -21,7 +21,7 @@ Reactive::FromRange<int>(10, 20)
 });
 ```
 
-More info about the Observables, Observers, and Operators available in the [Wiki](https://github.com/luisllamasbinaburo/Arduino-ReactiveArduino/wiki)
+**More info about the Observables, Observers, and Operators available in the [Wiki](https://github.com/luisllamasbinaburo/Arduino-ReactiveArduino/wiki)**
 
 ### Creating operators
 Operators are generally generated through factory methods provided in the reactive class.
