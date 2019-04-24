@@ -16,7 +16,6 @@ For example:
 ```c++
 Reactive::FromRange<int>(10, 20)
 >> Reactive::Select<int>([](int x) { return x + 10; })
->> Reactive::ToSerial<int>();
 >> Reactive::DoAndFinally<int>(
   [](int x) { Serial.println(x); },
   []() { Serial.println("No more items"); 
