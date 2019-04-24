@@ -2,7 +2,7 @@
 
 ReactiveArduino implements observable-observer pattern on a processor like Arduino. The purpose is to provide declarative programming approach, within the capacity constraints of a low-power MCU.
 
-ReactiveArduino is heavly based on ReactiveX and ReactiveUI, adapted to the needs and limitations in a MCU.
+ReactiveArduino is heavly based on [ReactiveX](http://reactivex.io/) and [ReactiveUI](https://reactiveui.net/), adapted to the needs and limitations in a MCU.
 
 *More info about the Observables, Observers, and Operators available in the [Wiki](https://github.com/luisllamasbinaburo/Arduino-ReactiveArduino/wiki)*
 
@@ -24,21 +24,21 @@ Reactive::FromRange<int>(10, 20)
 ```
 
 ### Creating operators
-Operators are generally generated through factory methods provided in the reactive class.
+Operators are generally generated through factory methods provided by the Reactive class.
 For example:
 ```c++
 Reactive::FromArray<int>(values, valuesLength)
 ```
 
 ### Chaining operators
-To chain operators ReactiveArduino uses the overload of `>>`, which allows to combine observable and observers.
+To chain operators ReactiveArduino uses overload of operator `>>`, which allows to combine observable and observers.
 For example:
 ```c++
 observableInt >> Reactive::ToSerial<bool>();
 ```
 
 ### Templating
-ReactiveArduino intensively uses templating to define the type of data that an operator receives or sends.
+ReactiveArduino intensively uses templating to define the type of data that an operator receives or emits.
 Some operators need one template
 ```c++
 Reactive::Count<float>()
@@ -47,21 +47,21 @@ But other operators need two templates
 ```c++
 Reactive::Cast<int, float>()
 ```
-Ant other operatos need no templates.
+And other operators need no templates.
 
 ### Cool and hot observables
 ReactiveArduino has two types of observables, hot and cold.
-Hot observables launch the actions when another operator subscribes to it. For example, `FromArray(...)` is a HotObservable.
+Hot observables emits the sequence when an observer subscribes to it. For example, `FromArray(...)` is a Hot Observable.
 ```c++
 Reactive::FromArray<int>(values, valuesLength)
 ```
-By cons in the cold observable subscribe does not generate any action. To run we will have to explicitly call the `Next()` method when we want. For example, `FromArrayDefer(...)`
+Cold observable does not emits any item when a observer suscribes to it. You have to explicitly call the `Next()` method whenever you want. For example, `FromArrayDefer(...)`
 ```c++
 Reactive::FromArrayDefer<int>(values, valuesLength)
 ```
 ### Dynamic memory considerations
-On many occasions we generate the operators directly when we chain the operators, for example in the `Setup()`. However, keeping in mind that creating an operator implies allocate dynamic memory. Therefore, we should avoid generating them in `Loop()` because could run out of memory.
-If you need to reuse or call an operator set it as a global variable, and chain as normal.
+On many occasions we generate operators directly when we chain them, for example in the `Setup()`. However, creating an operator allocates dynamic memory. Therefore, you should avoid creating them in `Loop()`, or you coul run out of memory.
+If you need to reuse (tipically, call some operator method later in your code) set it as a global variable, and chain as normal.
 ```c++
 auto counter = Reactive::Count<int>();
 ...
