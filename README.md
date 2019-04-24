@@ -70,6 +70,7 @@ obsString >> counter >> Reactive::ToSerial<String>();
 ```
 
 ## Examples
+This example show how to use Reactive Operator to perform a 3-elements Median filter, then a 4-elements Moving Average Filter, and make some action with the final filtered value.
 ```c++
 #include "ReactiveArduinoLib.h"
 
