@@ -7,8 +7,8 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License
  ****************************************************/
 
-#ifndef _FILTERSTOPBAND_h
-#define _FILTERSTOPBAND_h
+#ifndef _REACTIVEFILTERSTOPBAND_h
+#define _REACTIVEFILTERSTOPBAND_h
 
 template <typename T>
 class FilterStopBand : public Operator<T, T>
@@ -21,10 +21,10 @@ private:
 	double _alphaLow;
 	double _alphaHigh;
 
-	T _lowPassFilterLow;
-	T _lowPassFilterHigh;
-	T _bandPassFilter;
-	T _bandStopFilter;
+	T _lowPassFilterLow = T();
+	T _lowPassFilterHigh = T();
+	T _bandPassFilter = T();
+	T _bandStopFilter = T();
 };
 
 template<typename T>
@@ -44,5 +44,5 @@ void FilterStopBand<T>::OnNext(T value)
 
 	if (this->_childObserver != nullptr) this->_childObserver->OnNext(_bandStopFilter);
 }
-#endif
 
+#endif

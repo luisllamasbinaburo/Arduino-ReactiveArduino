@@ -7,8 +7,8 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License
  ****************************************************/
 
-#ifndef _FILTERONRISING_h
-#define _FILTERONRISING_h
+#ifndef _REACTIVEFILTERONRISING_h
+#define _REACTIVEFILTERONRISING_h
 
 template <typename T>
 class FilterOnRising : public Operator<T, T>
@@ -17,10 +17,9 @@ public:
 	FilterOnRising();
 
 	void OnNext(T value);
-	//void OnComplete();
 
 private:
-	T _last = false;
+	T _last = T();
 	bool _any = false;
 };
 
@@ -40,4 +39,3 @@ void FilterOnRising<T>::OnNext(T value)
 }
 
 #endif
-

@@ -1,7 +1,7 @@
 // FilterWindowsMicros.h
 
-#ifndef _FILTERWINDOWSMICROS_h
-#define _FILTERWINDOWSMICROS_h
+#ifndef _REACTIVEFILTERWINDOWSMICROS_h
+#define _REACTIVEFILTERWINDOWSMICROS_h
 
 template <typename T>
 class FilterWindowMicros : public Operator<T, T>
@@ -35,5 +35,5 @@ void FilterWindowMicros<T>::OnNext(T value)
 		if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
 	}
 }
-#endif
 
+#endif

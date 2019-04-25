@@ -7,15 +7,15 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License
  ****************************************************/
 
-#ifndef _FILTERSMA_h
-#define _FILTERSMA_h
+#ifndef _REACTIVEFILTERSMA_h
+#define _REACTIVEFILTERSMA_h
 
 template <typename T>
 class FilterMovingAverage : public Operator<T, T>
 {
 public:
 	FilterMovingAverage<T>(const size_t windowSize);
-	T AddValue(const T value);
+	void AddValue(const T value);
 	T GetFiltered();
 
 	void OnNext(T value);
@@ -25,7 +25,7 @@ private:
 	T* _accessor;
 	int _windowSize;
 	int _count;
-	T _sum;
+	T _sum = T();
 
 	void addToBuffer(const T value);
 	void incCounter();
@@ -41,7 +41,7 @@ FilterMovingAverage<T>::FilterMovingAverage(const size_t windowSize)
 }
 
 template<typename T>
-T FilterMovingAverage<T>::AddValue(const T value)
+void FilterMovingAverage<T>::AddValue(const T value)
 {
 	_sum += value;
 
@@ -84,5 +84,5 @@ void FilterMovingAverage<T>::OnNext(T value)
 	AddValue(value);
 	if (this->_childObserver != nullptr) this->_childObserver->OnNext(GetFiltered());
 }
-#endif
 
+#endif

@@ -7,8 +7,8 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License
  ****************************************************/
 
-#ifndef _FILTERHIGHPASS_h
-#define _FILTERHIGHPASS_h
+#ifndef _REACTIVEFILTERHIGHPASS_h
+#define _REACTIVEFILTERHIGHPASS_h
 
 template <typename T>
 class FilterHighPass : public Operator<T, T>
@@ -19,23 +19,23 @@ public:
 
 private:
 	double _alpha;
-	T _lowPassFilter;
-	T _highPassFilter;
+	T _lowPassFilter = T();
+	T _highPassFilter = T();
 };
 
 template<typename T>
 FilterHighPass<T>::FilterHighPass(const double alpha)
 {
-	_alpha = alpha;
+	this->_alpha = alpha;
 }
 
 template <typename T>
 void FilterHighPass<T>::OnNext(T value)
 {
-	_lowPassFilter = static_cast<T>(_alpha * value + (1 - _alpha) * _lowPassFilter);
-	_highPassFilter = value - _lowPassFilter;
+	this->_lowPassFilter = static_cast<T>(this->_alpha * value + (1 - this->_alpha) * this->_lowPassFilter);
+	this->_highPassFilter = value - this->_lowPassFilter;
 
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(_lowPassFilter);
+	if (this->_childObserver != nullptr) this->_childObserver->OnNext(this->_lowPassFilter);
 }
-#endif
 
+#endif

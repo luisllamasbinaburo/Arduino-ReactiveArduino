@@ -7,8 +7,8 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License
  ****************************************************/
 
-#ifndef _AGGREGATEMIN_h
-#define _AGGREGATEMIN_h
+#ifndef _REACTIVEAGGREGATEMIN_h
+#define _REACTIVEAGGREGATEMIN_h
 
 template <typename T>
 class AggregateMin : public Operator<T, T>
@@ -20,7 +20,7 @@ public:
 
 private:
 	bool _any = false;
-	T _min = false;
+	T _min = T();
 };
 
 template <typename T>
@@ -31,12 +31,12 @@ AggregateMin<T>::AggregateMin()
 template <typename T>
 void AggregateMin <T>::OnNext(T value)
 {
-	if (!_any) _min = value;
-	else _min = value < _min ? value : _min;
-	_any = true;
+	if (!this->_any) this->_min = value;
+	else this->_min = value < this->_min ? value : this->_min;
+	this->_any = true;
 
-	if(this->_childObserver != nullptr) this->_childObserver->OnNext(_min);
+	if(this->_childObserver != nullptr) this->_childObserver->OnNext(this->_min);
 
 }
-#endif
 
+#endif

@@ -7,12 +7,13 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License
  ****************************************************/
 
-#ifndef _FILTERS_h
-#define _FILTERS_h
+#ifndef _REACTIVEFILTERS_h
+#define _REACTIVEFILTERS_h
 
 #include "FilterOnRising.h"
 #include "FilterOnFalling.h"
 #include "FilterMovingAverage.h"
+#include "FilterMovingRMS.h"
 #include "FilterMedian5.h"
 #include "FilterMedian3.h"
 
@@ -20,7 +21,6 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #include "FilterStopBand.h"
 #include "FilterLowPass.h"
 #include "FilterHighPass.h"
-#include "FilterThreshold.h"
 
 #include "FilterDebounceMillis.h"
 #include "FilterDebounceMicros.h"
@@ -36,8 +36,4 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #include "FilterIsNotZero.h"
 #include "FilterIsZero.h"
 
-#include "FilterLimit.h"
-#include "FilterScale.h"
-
 #endif
-

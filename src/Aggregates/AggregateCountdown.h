@@ -7,8 +7,8 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License
  ****************************************************/
 
-#ifndef _AGGREGATECOUNTDOWN_h
-#define _AGGREGATECOUNTDOWN_h
+#ifndef _REACTIVEAGGREGATECOUNTDOWN_h
+#define _REACTIVEAGGREGATECOUNTDOWN_h
 
 template <typename T>
 class AggregateCountdown : public Operator<T, int>
@@ -17,7 +17,6 @@ public:
 	AggregateCountdown(int count);
 
 	void OnNext(T value);
-	//void OnComplete();
 
 private:
 	int _count = false;
@@ -26,13 +25,13 @@ private:
 template <typename T>
 AggregateCountdown<T>::AggregateCountdown(int count)
 {
-	_count = count;
+	this->_count = count;
 }
 
 template <typename T>
 void AggregateCountdown<T>::OnNext(T value)
 {
-	_count--;
+	this->_count--;
 	this->_childObserver->OnNext(_count);
 
 	if (_count <= 0)
@@ -42,4 +41,3 @@ void AggregateCountdown<T>::OnNext(T value)
 }
 
 #endif
-

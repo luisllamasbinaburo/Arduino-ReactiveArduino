@@ -7,53 +7,59 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License
  ****************************************************/
 
-#ifndef _REACTIVEFILTERMEDIAN3_h
-#define _REACTIVEFILTERMEDIAN3_h
+#ifndef _REACTIVEFILTERSMRMS_h
+#define _REACTIVEFILTERSMRMS_h
 
 template <typename T>
-class FilterMedian3 : public Operator<T, T>
+class FilterMovingRMS : public Operator<T, T>
 {
 public:
-	FilterMedian3<T>();
-	T AddValue(const T value);
+	FilterMovingRMS<T>(const size_t windowSize);
+	void AddValue(const T value);
 	T GetFiltered();
 
 	void OnNext(T value);
 
 private:
-	const int _windowSize = 3;
-	T _items[3];
+	T* _items;
 	T* _accessor;
+	int _windowSize;
 	int _count;
+	T _sum = T();
 
 	void addToBuffer(const T value);
 	void incCounter();
 };
 
 template <typename T>
-FilterMedian3<T>::FilterMedian3()
+FilterMovingRMS<T>::FilterMovingRMS(const size_t windowSize)
 {
+	_items = new T[windowSize];
 	_accessor = _items;
+	_windowSize = windowSize;
 	_count = 0;
 }
 
 template<typename T>
-T FilterMedian3<T>::AddValue(const T value)
+void FilterMovingRMS<T>::AddValue(const T value)
 {
 	addToBuffer(value);
 	incCounter();
-
-	return GetFiltered();
 }
 
 template<typename T>
-T FilterMedian3<T>::GetFiltered()
+T FilterMovingRMS<T>::GetFiltered()
 {
-	return Median3(_items[0], _items[1], _items[2]);
+	_sum = 0;
+	for (size_t index = 0; index < _count; index++)
+	{
+		_sum += _items[index] * _items[index];
+	}
+	return (sqrt(_sum / _count));
 }
 
 template<typename T>
-inline void FilterMedian3<T>::addToBuffer(const T value)
+inline void FilterMovingRMS<T>::addToBuffer(const T value)
 {
 	*_accessor = value;
 
@@ -64,29 +70,17 @@ inline void FilterMedian3<T>::addToBuffer(const T value)
 }
 
 template<typename T>
-inline void FilterMedian3<T>::incCounter()
+inline void FilterMovingRMS<T>::incCounter()
 {
 	if (_count < _windowSize)
 		++_count;
 }
 
 template <typename T>
-void FilterMedian3<T>::OnNext(T value)
+void FilterMovingRMS<T>::OnNext(T value)
 {
 	AddValue(value);
-
-	if (_count < _windowSize) return;
 	if (this->_childObserver != nullptr) this->_childObserver->OnNext(GetFiltered());
-}
-
-template<typename T>
-T Median3(T a, T b, T c)
-{
-	if ((a <= b) && (a <= c))
-		return (b <= c) ? b : c;
-	if ((b <= a) && (b <= c))
-		return (a <= c) ? a : c;
-	return (a <= b) ? a : b;
 }
 
 #endif
