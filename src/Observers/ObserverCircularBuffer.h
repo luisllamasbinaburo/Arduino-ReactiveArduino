@@ -14,7 +14,7 @@ public:
 private:
 	T *_array;
 	size_t _length;
-	size_t index;
+	size_t _index;
 };
 
 template <typename T>
@@ -31,7 +31,7 @@ inline void ObserverCircularBuffer<T>::OnNext(T value)
 	this->_array[this->_index] = value;
 
 	this->_index++;
-	if (this->_index >= this->_length) index = 0;
+	if (this->_index >= this->_length) this->_index = 0;
 }
 
 template <typename T>
