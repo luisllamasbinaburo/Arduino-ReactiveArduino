@@ -11,7 +11,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #define _REACTIVEFILTERISEQUAL_h
 
 template <typename T>
-class FilterIsEqual : public Operator<T, bool>
+class FilterIsEqual : public Operator<T, T>
 {
 public:
 	FilterIsEqual<T>(T value);

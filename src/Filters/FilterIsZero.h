@@ -11,7 +11,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #define _REACTIVEFILTERISZERO_h
 
 template <typename T>
-class FilterIsZero : public Operator<T, bool>
+class FilterIsZero : public Operator<T, T>
 {
 public:
 	FilterIsZero<T>();

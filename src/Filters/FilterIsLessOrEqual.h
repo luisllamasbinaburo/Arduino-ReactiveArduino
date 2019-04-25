@@ -11,7 +11,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #define _REACTIVEFILTERISLESSOREQUAL_h
 
 template <typename T>
-class FilterIsLessOrEqual : public Operator<T, bool>
+class FilterIsLessOrEqual : public Operator<T, T>
 {
 public:
 	FilterIsLessOrEqual<T>(T value);
