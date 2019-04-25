@@ -14,7 +14,7 @@ template <typename T>
 class TransformationAdcToVoltage : public Operator<T, T>
 {
 public:
-	TransformationAdcToVoltage<T>(T input_max = 1023, T output_max = 5.0);
+	TransformationAdcToVoltage<T>(T input_max = 1023, T output_max = 5);
 
 	void OnNext(T value);
 
@@ -26,16 +26,15 @@ private:
 template <typename T>
 TransformationAdcToVoltage<T>::TransformationAdcToVoltage(T input_max, T output_max)
 {
-	this->_input_max = this->input_max;
-	this->_output_max = this->output_max;
+	this->_input_max = input_max;
+	this->_output_max = output_max;
 }
 
 
 template <typename T>
 inline void TransformationAdcToVoltage<T>::OnNext(T value)
 {
-	T scaled = (value) * (_output_max) / (_input_max );
-	this->_childObserver->OnNext(scaled);
+	this->_childObserver->OnNext((value * _output_max) / _input_max);
 }
 
 #endif
