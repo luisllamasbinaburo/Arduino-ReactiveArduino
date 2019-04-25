@@ -376,6 +376,12 @@ public:
 	}
 
 	template <typename T>
+	static TransformationScale<T>& Scale(T factor)
+	{
+		return *(new TransformationScale<T>(0, 1, 0, factor));
+	}
+
+	template <typename T>
 	static TransformationScale<T>& Scale(T input_min, T input_max, T output_min, T output_max)
 	{
 		return *(new TransformationScale<T>(input_min, input_max, output_min, output_max));
@@ -606,15 +612,15 @@ public:
 	}
 
 	template <typename T>
-	static FilterIsNotZero<T>& IsNotZero(T value)
+	static FilterIsNotZero<T>& IsNotZero()
 	{
-		return *(new FilterIsNotZero<T>(value));
+		return *(new FilterIsNotZero<T>());
 	}
 
 	template <typename T>
-	static FilterIsZero<T>& IsZero(T value)
+	static FilterIsZero<T>& IsZero()
 	{
-		return *(new FilterIsZero<T>(value));
+		return *(new FilterIsZero<T>());
 	}
 #pragma endregion
 
