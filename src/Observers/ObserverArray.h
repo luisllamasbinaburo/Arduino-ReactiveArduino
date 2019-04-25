@@ -7,8 +7,8 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License
  ****************************************************/
 
-#ifndef _OBSERVERTOARRAY_h
-#define _OBSERVERTOARRAY_h
+#ifndef _REACTIVEOBSERVERTOARRAY_h
+#define _REACTIVEOBSERVERTOARRAY_h
 
 template <typename T>
 class ObserverArray : public IObserver<T>
@@ -53,5 +53,5 @@ inline size_t ObserverArray<T>::GetIndex()
 {
 	return this->_index;
 }
-#endif
 
+#endif

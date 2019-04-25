@@ -68,8 +68,6 @@ void Operator<Torig, Tdest>::Suscribe(IObserver<Tdest> &observer)
 template <typename Torig, typename Tdest>
 inline void Operator<Torig, Tdest>::OnNext(Torig value)
 {
-	//if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
-	//if (this->_childObserver != nullptr) this->_childObserver->OnNext((Tdest)value);
 }
 
 template <typename Torig, typename Tdest>
@@ -83,5 +81,5 @@ inline void Operator<Torig, Tdest>::Reset()
 {
 	if(_parentObservable != nullptr) _parentObservable->Reset();
 }
-#endif
 
+#endif

@@ -7,16 +7,16 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License
  ****************************************************/
 
-#ifndef _OPERATORSKIPUNTIL_h
-#define _OPERATORSKIPUNTIL_h
+#ifndef _REACTIVEOPERATORSKIPUNTIL_h
+#define _REACTIVEOPERATORSKIPUNTIL_h
 
 template <typename T>
 class OperatorSkipUntil : public Operator<T, T>
 {
 public:
-	ReactiveCondition<T> _condition;
+	ReactivePredicate<T> _condition;
 
-	OperatorSkipUntil(ReactiveCondition<T> condition);
+	OperatorSkipUntil(ReactivePredicate<T> condition);
 
 	void OnNext(T value);
 
@@ -25,7 +25,7 @@ private:
 };
 
 template <typename T>
-OperatorSkipUntil<T>::OperatorSkipUntil(ReactiveCondition<T> condition)
+OperatorSkipUntil<T>::OperatorSkipUntil(ReactivePredicate<T> condition)
 {
 	this->_condition = condition;
 }
@@ -39,4 +39,5 @@ void OperatorSkipUntil<T>::OnNext(T value)
 	if (_started == true)
 		if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
 }
+
 #endif

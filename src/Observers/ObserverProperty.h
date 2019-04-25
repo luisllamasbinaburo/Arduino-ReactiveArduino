@@ -39,4 +39,5 @@ template <typename T>
 inline void ObserverProperty<T>::OnComplete()
 {
 }
+
 #endif

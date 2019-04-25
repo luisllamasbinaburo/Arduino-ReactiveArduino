@@ -7,8 +7,8 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License
  ****************************************************/
 
-#ifndef _OPERATORTAKEN_h
-#define _OPERATORTAKEN_h
+#ifndef _REACTIVEOPERATORTAKEN_h
+#define _REACTIVEOPERATORTAKEN_h
 
 template <typename T>
 class OperatorTake : public Operator<T, T>
@@ -27,7 +27,7 @@ private:
 template <typename T>
 OperatorTake<T>::OperatorTake(size_t N)
 {
-	num_elements = N;
+	this->num_elements = N;
 }
 
 template <typename T>
@@ -35,7 +35,7 @@ void OperatorTake<T>::OnNext(T value)
 {
 	if (this->_completed) return;
 
-	if (index < num_elements)
+	if (this->index < this->num_elements)
 	{
 		if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
 	}
@@ -45,6 +45,7 @@ void OperatorTake<T>::OnNext(T value)
 		this->_completed = true;
 	}
 
-	index++;
+	this->index++;
 }
+
 #endif

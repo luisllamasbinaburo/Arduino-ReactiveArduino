@@ -18,11 +18,14 @@ using ReactiveAction = void(*)(T);
 template <typename T>
 using ReactiveFunction = T(*)(T);
 
+template <typename T>
+using ReactiveCompound = T(*)(T, T);
+
 template <typename Torig, typename Tdest>
 using ReactiveMap = Tdest(*)(Torig);
 
 template <typename T>
-using ReactiveCondition = bool(*)(T);
+using ReactivePredicate = bool(*)(T);
 
 template <typename T> class IObserver;
 template <typename T> class Observable;

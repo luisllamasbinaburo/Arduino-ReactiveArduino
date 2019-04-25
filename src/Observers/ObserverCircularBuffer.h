@@ -1,5 +1,5 @@
-#ifndef _OBSERVERCIRCULARBUFFER_h
-#define _OBSERVERCIRCULARBUFFER_h
+#ifndef _REACTIVEOBSERVERCIRCULARBUFFER_h
+#define _REACTIVEOBSERVERCIRCULARBUFFER_h
 
 template <typename T>
 class ObserverCircularBuffer : public IObserver<T>
@@ -45,4 +45,3 @@ inline size_t ObserverCircularBuffer<T>::GetIndex()
 }
 
 #endif
-

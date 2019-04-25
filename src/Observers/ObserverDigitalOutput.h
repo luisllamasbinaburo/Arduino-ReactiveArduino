@@ -1,7 +1,7 @@
 // ObserverDigitalOutput.h
 
-#ifndef _OBSERVERDIGITALOUTPUT_h
-#define _OBSERVERDIGITALOUTPUT_h
+#ifndef _REACTIVEOBSERVERDIGITALOUTPUT_h
+#define _REACTIVEOBSERVERDIGITALOUTPUT_h
 
 template <typename T>
 class ObserverDigitalOutput : public IObserver<T>
@@ -33,5 +33,5 @@ template <typename T>
 inline void ObserverDigitalOutput<T>::OnComplete()
 {
 }
-#endif
 
+#endif

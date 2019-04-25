@@ -7,25 +7,25 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License
  ****************************************************/
 
-#ifndef _OPERATORIF_h
-#define _OPERATORIF_h
+#ifndef _REACTIVEOPERATORIF_h
+#define _REACTIVEOPERATORIF_h
 
 
 template <typename T>
 class OperatorIf : public Operator<T, T>
 {
 public:
-	OperatorIf(ReactiveCondition<T> condition, ReactiveAction<T> action);
+	OperatorIf(ReactivePredicate<T> condition, ReactiveAction<T> action);
 
 	void OnNext(T value);
 
 private:
-	ReactiveCondition<T> _condition;
+	ReactivePredicate<T> _condition;
 	ReactiveAction<T> _action;
 };
 
 template <typename T>
-OperatorIf<T>::OperatorIf(ReactiveCondition<T> condition, ReactiveAction<T> action)
+OperatorIf<T>::OperatorIf(ReactivePredicate<T> condition, ReactiveAction<T> action)
 {
 	_condition = condition;
 	_action = action;
