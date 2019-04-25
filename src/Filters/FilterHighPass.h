@@ -33,9 +33,8 @@ template <typename T>
 void FilterHighPass<T>::OnNext(T value)
 {
 	this->_lowPassFilter = static_cast<T>(this->_alpha * value + (1 - this->_alpha) * this->_lowPassFilter);
-	this->_highPassFilter = value - this->_lowPassFilter;
 
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(this->_lowPassFilter);
+	if (this->_childObserver != nullptr) this->_childObserver->OnNext(value - this->_lowPassFilter);
 }
 
 #endif
