@@ -21,7 +21,6 @@ public:
 	void OnNext(T value);
 
 private:
-	bool _any = false;
 	T _rst = T();
 
 };
@@ -35,12 +34,7 @@ TransformationReduce<T>::TransformationReduce(ReactiveCompound<T> function)
 template <typename T>
 void TransformationReduce<T>::OnNext(T value)
 {
-	if (this->_any == false)
-	{
-		this->_any = true;
-		this->_rst = value;
-		this->_rst = function(this->_rst, value);
-		if (this->_childObserver != nullptr) this->_childObserver->OnNext(this->_rst);
-	}
+	this->_rst = this->_function(this->_rst, value);
+	if (this->_childObserver != nullptr) this->_childObserver->OnNext(this->_rst);
 }
 #endif
