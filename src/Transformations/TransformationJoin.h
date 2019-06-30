@@ -26,7 +26,7 @@ private:
 };
 
 template <typename T>
-TransformationJoin<T>::TransformationJoin(char separator = ',')
+TransformationJoin<T>::TransformationJoin(char separator)
 {
 	_separator = String(separator);
 }

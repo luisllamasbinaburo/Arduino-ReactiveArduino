@@ -28,7 +28,7 @@ private:
 };
 
 template <typename T>
-inline ObservableRange<T>::ObservableRange(T start, T end, T step = 1)
+inline ObservableRange<T>::ObservableRange(T start, T end, T step)
 {
 	this->_start = start;
 	this->_end = end;

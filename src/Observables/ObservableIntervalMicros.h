@@ -42,7 +42,7 @@ private:
 };
 
 template <typename T>
-inline ObservableIntervalMicros<T>::ObservableIntervalMicros(unsigned long interval, unsigned long delay = 0)
+inline ObservableIntervalMicros<T>::ObservableIntervalMicros(unsigned long interval, unsigned long delay)
 {
 	this->__isActive = true;
 	this->_delay = delay;

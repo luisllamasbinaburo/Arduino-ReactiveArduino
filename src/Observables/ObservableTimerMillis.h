@@ -42,7 +42,7 @@ private:
 };
 
 template <typename T>
-inline ObservableTimerMillis<T>::ObservableTimerMillis(unsigned long interval, unsigned long delay = 0)
+inline ObservableTimerMillis<T>::ObservableTimerMillis(unsigned long interval, unsigned long delay)
 {
 	this->__isActive = true;
 	this->_delay = delay;

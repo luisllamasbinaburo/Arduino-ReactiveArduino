@@ -25,7 +25,7 @@ private:
 };
 
 template <typename T>
-inline ObservableAnalogInput<T>::ObservableAnalogInput(uint8_t pin, uint8_t mode = INPUT)
+inline ObservableAnalogInput<T>::ObservableAnalogInput(uint8_t pin, uint8_t mode)
 {
 	this->_pin = pin;
 	pinMode(pin, mode);

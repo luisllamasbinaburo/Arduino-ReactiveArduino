@@ -29,7 +29,7 @@ private:
 };
 
 template <typename T>
-inline ObservableRangeDefer<T>::ObservableRangeDefer(T start, T end, T step = 1)
+inline ObservableRangeDefer<T>::ObservableRangeDefer(T start, T end, T step)
 {
 	this->_start = start;
 	this->_end = end;

@@ -26,7 +26,7 @@ private:
 };
 
 template <typename T>
-inline ObservableSerialInteger<T>::ObservableSerialInteger(char separator = '\n')
+inline ObservableSerialInteger<T>::ObservableSerialInteger(char separator)
 {
 	_separator = separator;
 }

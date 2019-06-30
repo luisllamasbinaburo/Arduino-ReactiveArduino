@@ -26,7 +26,7 @@ private:
 };
 
 template <typename T>
-TransformationSplit<T>::TransformationSplit(char separator = ',')
+TransformationSplit<T>::TransformationSplit(char separator)
 {
 	_separator = separator;
 }
