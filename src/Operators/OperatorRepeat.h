@@ -20,13 +20,13 @@ public:
 	void OnComplete();
 
 private:
-	size_t _N;
+	size_t N;
 };
 
 template <typename T>
 OperatorRepeat<T>::OperatorRepeat(size_t N)
 {
-	this->_N = N;
+	this->N = N;
 }
 
 template <typename T>
@@ -38,8 +38,8 @@ void OperatorRepeat<T>::OnNext(T value)
 template <typename T>
 void OperatorRepeat<T>::OnComplete()
 {
-	this->_N--;
-	if (this->_N > 0)
+	this->N--;
+	if (this->N > 0)
 	{
 		if (this->_parentObservable != nullptr) this->_parentObservable->Reset();
 	}

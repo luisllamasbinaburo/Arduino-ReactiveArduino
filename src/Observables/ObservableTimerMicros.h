@@ -42,7 +42,7 @@ private:
 };
 
 template <typename T>
-inline ObservableTimerMicros<T>::ObservableTimerMicros(unsigned long interval, unsigned long delay = 0)
+inline ObservableTimerMicros<T>::ObservableTimerMicros(unsigned long interval, unsigned long delay)
 {
 	this->__isActive = true;
 	this->_delay = delay;

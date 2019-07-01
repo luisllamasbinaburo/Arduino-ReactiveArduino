@@ -32,7 +32,7 @@ private:
 };
 
 template <typename T>
-inline ObservableSerialFloat<T>::ObservableSerialFloat(char separator = '\n')
+inline ObservableSerialFloat<T>::ObservableSerialFloat(char separator)
 {
 	_separator = separator;
 }

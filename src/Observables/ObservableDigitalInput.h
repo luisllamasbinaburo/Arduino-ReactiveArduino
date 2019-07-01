@@ -25,7 +25,7 @@ private:
 };
 
 template <typename T>
-inline ObservableDigitalInput<T>::ObservableDigitalInput(uint8_t pin, uint8_t mode = INPUT)
+inline ObservableDigitalInput<T>::ObservableDigitalInput(uint8_t pin, uint8_t mode)
 {
 	this->_pin = pin;
 	pinMode(pin, mode);
