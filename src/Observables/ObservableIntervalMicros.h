@@ -44,7 +44,7 @@ private:
 template <typename T>
 inline ObservableIntervalMicros<T>::ObservableIntervalMicros(unsigned long interval, unsigned long delay)
 {
-	this->__isActive = true;
+	this->_isActive = true;
 	this->_delay = delay;
 	this->_offset = delay;
 	this->_interval = interval;
@@ -74,7 +74,7 @@ void ObservableIntervalMicros<T>::Update()
 template <typename T>
 void ObservableIntervalMicros<T>::Reset()
 {
-	this->__isActive = true;
+	this->_isActive = true;
 	this->_offset = delay;
 	this->_startTime = micros();
 }
