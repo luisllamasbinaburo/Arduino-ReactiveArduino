@@ -44,7 +44,7 @@ private:
 template <typename T>
 inline ObservableIntervalMillis<T>::ObservableIntervalMillis(unsigned long interval, unsigned long delay)
 {
-	this->__isActive = true;
+	this->_isActive = true;
 	this->_delay = delay;
 	this->_offset = delay;
 	this->_interval = interval;
@@ -60,7 +60,7 @@ void ObservableIntervalMillis<T>::Suscribe(IObserver<T> &observer)
 template <typename T>
 void ObservableIntervalMillis<T>::Update()
 {
-	if (_isActive == false) return false;
+	if (_isActive == false) return;
 
 	auto elapsed = static_cast<unsigned long>(millis() - _startTime);
 	if (elapsed >= _interval + _offset)
@@ -74,8 +74,8 @@ void ObservableIntervalMillis<T>::Update()
 template <typename T>
 void ObservableIntervalMillis<T>::Reset()
 {
-	this->__isActive = true;
-	this->_offset = delay;
+	this->_isActive = true;
+	this->_offset = _delay;
 	this->_startTime = millis();
 }
 

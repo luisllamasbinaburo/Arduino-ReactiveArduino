@@ -14,7 +14,7 @@ template <typename T>
 class ObservableIntervalMicros : public Observable<unsigned long>
 {
 public:
-	ObservableIntervalMicros(unsigned long microsInterval, unsigned long delay = 0);
+	ObservableIntervalMicros(unsigned long microsInterval, unsigned long delay);
 	void Suscribe(IObserver<T> &observer);
 
 	void Start();
@@ -42,7 +42,7 @@ private:
 };
 
 template <typename T>
-inline ObservableIntervalMicros<T>::ObservableIntervalMicros(unsigned long interval, unsigned long delay)
+inline ObservableIntervalMicros<T>::ObservableIntervalMicros(unsigned long interval, unsigned long delay = 0)
 {
 	this->_isActive = true;
 	this->_delay = delay;
@@ -60,7 +60,7 @@ void ObservableIntervalMicros<T>::Suscribe(IObserver<T> &observer)
 template <typename T>
 void ObservableIntervalMicros<T>::Update()
 {
-	if (_isActive == false) return false;
+	if (_isActive == false) return;
 
 	auto elapsed = static_cast<unsigned long>(micros() - _startTime);
 	if (elapsed >= _interval + _offset)
@@ -75,7 +75,7 @@ template <typename T>
 void ObservableIntervalMicros<T>::Reset()
 {
 	this->_isActive = true;
-	this->_offset = delay;
+	this->_offset = _delay;
 	this->_startTime = micros();
 }
 

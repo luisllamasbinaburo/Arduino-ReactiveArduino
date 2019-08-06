@@ -14,7 +14,7 @@ template <typename T>
 class ObservableTimerMicros : public Observable<unsigned long>
 {
 public:
-	ObservableTimerMicros(unsigned long microsInterval, unsigned long delay = 0);
+	ObservableTimerMicros(unsigned long microsInterval, unsigned long delay);
 	void Suscribe(IObserver<T> &observer);
 
 	void Start();
@@ -42,7 +42,7 @@ private:
 };
 
 template <typename T>
-inline ObservableTimerMicros<T>::ObservableTimerMicros(unsigned long interval, unsigned long delay)
+inline ObservableTimerMicros<T>::ObservableTimerMicros(unsigned long interval, unsigned long delay = 0)
 {
 	this->__isActive = true;
 	this->_delay = delay;

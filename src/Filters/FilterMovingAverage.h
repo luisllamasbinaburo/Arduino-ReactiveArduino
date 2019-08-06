@@ -15,7 +15,7 @@ class FilterMovingAverage : public Operator<T, T>
 {
 public:
 	FilterMovingAverage<T>(const size_t windowSize);
-	void AddValue(const T value);
+	T AddValue(const T value);
 	T GetFiltered();
 
 	void OnNext(T value);
@@ -41,7 +41,7 @@ FilterMovingAverage<T>::FilterMovingAverage(const size_t windowSize)
 }
 
 template<typename T>
-void FilterMovingAverage<T>::AddValue(const T value)
+T FilterMovingAverage<T>::AddValue(const T value)
 {
 	_sum += value;
 
