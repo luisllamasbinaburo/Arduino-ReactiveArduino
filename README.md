@@ -12,9 +12,9 @@ The general use of ReactiveArduino consists of:
 
 For example:
 ```c++
-Reactive::FromRange<int>(10, 20)
->> Reactive::Select<int>([](int x) { return x + 10; })
->> Reactive::DoAndFinally<int>(
+FromRange<int>(10, 20)
+>> Select<int>([](int x) { return x + 10; })
+>> DoAndFinally<int>(
   [](int x) { Serial.println(x); },
   []() { Serial.println("No more items"); 
 });
@@ -32,25 +32,25 @@ More info about the Observables, Observers, and Operators available in the [Wiki
 Operators are generally generated through factory methods provided by the Reactive class.
 For example:
 ```c++
-Reactive::FromArray<int>(values, valuesLength)
+FromArray<int>(values, valuesLength)
 ```
 
 ### Chaining operators
 To chain operators ReactiveArduino uses overload of operator `>>`, which allows to combine observable and observers.
 For example:
 ```c++
-observableInt >> Reactive::ToSerial<bool>();
+observableInt >> ToSerial<bool>();
 ```
 
 ### Templating
 ReactiveArduino intensively uses templating to define the type of data that an operator receives or emits.
 Some operators need one template
 ```c++
-Reactive::Count<float>()
+Count<float>()
 ```
 But other operators need two templates
 ```c++
-Reactive::Cast<int, float>()
+Cast<int, float>()
 ```
 And other operators need no templates.
 
@@ -58,21 +58,21 @@ And other operators need no templates.
 ReactiveArduino has two types of observables, hot and cold.
 Hot observables emits the sequence when an observer subscribes to it. For example, `FromArray(...)` is a Hot Observable.
 ```c++
-Reactive::FromArray<int>(values, valuesLength)
+FromArray<int>(values, valuesLength)
 ```
 Cold observable does not emits any item when a observer suscribes to it. You have to explicitly call the `Next()` method whenever you want. For example, `FromArrayDefer(...)`
 ```c++
-Reactive::FromArrayDefer<int>(values, valuesLength)
+FromArrayDefer<int>(values, valuesLength)
 ```
 ### Dynamic memory considerations
 On many occasions we generate operators directly when we chain them, for example in the `Setup()`. However, creating an operator allocates dynamic memory. Therefore, you should avoid creating them in `Loop()`, or you coul run out of memory.
 If you need to reuse (tipically, call some operator method later in your code) set it as a global variable, and chain as normal.
 ```c++
-auto counter = Reactive::Count<int>();
+auto counter = Count<int>();
 ...
 //(later in code)
 ...
-obsString >> counter >> Reactive::ToSerial<String>();
+obsString >> counter >> ToSerial<String>();
 ```
 
 ## Examples
@@ -88,11 +88,11 @@ void setup()
 	Serial.begin(9600);
 	while (!Serial) delay(1);
 
-	Reactive::FromArray<int>(values, valuesLength)
-		>> Reactive::Cast<int, float>()
-		>> Reactive::Median3<float>()
-		>> Reactive::MovingAverage<float>(4)
-		>> Reactive::DoAndFinally<float>(
+	FromArray<int>(values, valuesLength)
+		>> Cast<int, float>()
+		>> Median3<float>()
+		>> MovingAverage<float>(4)
+		>> DoAndFinally<float>(
 			[](float x) { Serial.println(x); },
 			[]() { Serial.println("No more items"); }
 	);
