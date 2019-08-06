@@ -8,24 +8,25 @@ Unless required by applicable law or agreed to in writing, software distributed 
  ****************************************************/
 
 #include "ReactiveArduinoLib.h"
+using namespace Reactive;
 
 ObservableProperty<int> observableInt;
 
 void setup()
 {
-	Serial.begin(9600);
+	Serial.begin(115200);
 	while (!Serial) delay(1);
 
 	observableInt
-	>> Reactive::Distinct<int>()
-	>> Reactive::Where<int>([](int x) { return x > 2; })
-	>> Reactive::DoAndFinally<int>(
-		[](int x) { Serial.println(x); },
-		[]() { Serial.println("No more items"); 
-
+		>> Distinct<int>()
+		>> Where<int>([](int x) { return x > 2; })
+		>> DoAndFinally<int>(
+			[](int x) { Serial.println(x); },
+			[]() { Serial.println("No more items"); }
+		);
 }
 
-void loop() 
+void loop()
 {
 	observableInt = 1;
 	delay(200);
@@ -38,4 +39,3 @@ void loop()
 	observableInt = 5;
 	delay(200);
 }
-

@@ -8,18 +8,18 @@ Unless required by applicable law or agreed to in writing, software distributed 
  ****************************************************/
  
 #include "ReactiveArduinoLib.h"
+using namespace Reactive;
 
-auto timer = Reactive::IntervalMillis<unsigned long>(100);
+auto timer = IntervalMillis<unsigned long>(500);
 
 void setup()
 {
 	timer
-	>> Reactive::Toggle<unsigned long>()
-	>> Reactive::ToDigital<bool>(LED_BUILTIN);
+	>> Toggle<unsigned long>()
+	>> ToDigitalOutput<bool>(LED_BUILTIN);
 }
 
-void loop() 
+void loop()
 {
 	timer.Update();
 }
-

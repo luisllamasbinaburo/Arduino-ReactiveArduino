@@ -8,26 +8,26 @@ Unless required by applicable law or agreed to in writing, software distributed 
  ****************************************************/
  
 #include "ReactiveArduinoLib.h"
+using namespace Reactive;
 
 int values[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 int valuesLength = sizeof(values) / sizeof(values[0]);
 
 void setup()
 {
-	Serial.begin(9600);
+	Serial.begin(115200);
 	while (!Serial) delay(1);
 
-	Reactive::FromArray<int>(values, valuesLength)
-		>> Reactive::Cast<int, float>()
-		>> Reactive::MovingAverage<float>(4)
-		>> Reactive::DoAndFinally<float>(
+	FromArray<int>(values, valuesLength)
+		>> Cast<int, float>()
+		>> MovingAverage<float>(4)
+		>> DoAndFinally<float>(
 			[](float x) { Serial.println(x); },
 			[]() { Serial.println("No more items"); }
 	);
 }
 
-void loop() 
+void loop()
 {
 	delay(2000);
 }
-

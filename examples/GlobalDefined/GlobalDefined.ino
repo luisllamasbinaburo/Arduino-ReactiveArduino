@@ -8,17 +8,18 @@ Unless required by applicable law or agreed to in writing, software distributed 
  ****************************************************/
  
 #include "ReactiveArduinoLib.h"
+using namespace Reactive;
 
-auto obs = Reactive::FromRangeDefer<int>(0, 10, 2);
-auto filter = Reactive::MovingAverage<int>(4);
-auto observer = Reactive::ToSerial<int>();
+auto obs = FromRangeDefer<int>(0, 10, 2);
+auto filter = MovingAverage<int>(4);
+auto observer = ToSerial<int>();
 
 void setup()
 {
-	Serial.begin(9600);
+	Serial.begin(115200);
 	while (!Serial) delay(1);
 
-	obs >> filter >> Reactive::ToSerial<int>();
+	obs >> filter >> observer;
 }
 
 void loop() 

@@ -52,5 +52,4 @@ void TransformationSplit<T>::OnNext(T value)
 		}
 	}
 }
-
 #endif
