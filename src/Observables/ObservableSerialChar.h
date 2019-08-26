@@ -10,33 +10,30 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #ifndef _REACTIVEOBSERVABLESERIALCHAR_h
 #define _REACTIVEOBSERVABLESERIALCHAR_h
 
-template <typename T>
-class ObservableSerialChar : public Observable<T>
+template <>
+class ObservableSerial<char> : public Observable<char>
 {
 public:
-	ObservableSerialChar();
-	void Suscribe(IObserver<T> &observer);
-	void Recieve();
+	ObservableSerial();
+	void Suscribe(IObserver<char> &observer) override;
+	void Receive();
 
 private:
-	IObserver<T>* _childObserver;
+	IObserver<char>* _childObserver;
 };
 
-template <typename T>
-inline ObservableSerialChar<T>::ObservableSerialChar()
+ObservableSerial<char>::ObservableSerial()
 {
 }
 
-template <typename T>
-void ObservableSerialChar<T>::Suscribe(IObserver<T> &observer)
+void ObservableSerial<char>::Suscribe(IObserver<char> &observer)
 {
 	_childObserver = &observer;
 }
 
-template <typename T>
-void ObservableSerialChar<T>::Recieve()
+void ObservableSerial<char>::Receive()
 {
-	if (Serial.available())
+	while(Serial.available())
 	{
 		char newChar = Serial.read();
 		if (_childObserver != nullptr) _childObserver->OnNext(newChar);

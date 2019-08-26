@@ -14,8 +14,8 @@ template <typename T>
 class FilterPassBand : public Operator<T, T>
 {
 public:
-	FilterPassBand<T>(const double alpha1, const double alpha2);
-	void OnNext(T value);
+	FilterPassBand<T>(double alpha1, double alpha2);
+	void OnNext(T value) override;
 
 private:
 	double _alphaLow;

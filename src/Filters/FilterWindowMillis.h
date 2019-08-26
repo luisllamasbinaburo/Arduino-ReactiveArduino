@@ -14,8 +14,8 @@ template <typename T>
 class FilterWindowMillis : public Operator<T, T>
 {
 public:
-	FilterWindowMillis<T>(const unsigned long interval);
-	void OnNext(T value);
+	FilterWindowMillis<T>(unsigned long interval);
+	void OnNext(T value) override;
 
 private:
 	bool _started = false;

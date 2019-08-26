@@ -15,7 +15,7 @@ class FilterIsNotZero : public Operator<T, T>
 {
 public:
 	FilterIsNotZero<T>();
-	void OnNext(T value);
+	void OnNext(T value) override;
 };
 
 template<typename T>

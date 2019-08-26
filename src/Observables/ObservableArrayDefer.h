@@ -15,9 +15,9 @@ class ObservableArrayDefer : public Observable<T>
 {
 public:
 	ObservableArrayDefer(T *array, size_t length);
-	void Suscribe(IObserver<T> &observer);
+	void Suscribe(IObserver<T> &observer) override;
 	void Next();
-	void Reset();
+	void Reset() override;
 
 private:
 	T *_array;
@@ -28,7 +28,7 @@ private:
 };
 
 template <typename T>
-inline ObservableArrayDefer<T>::ObservableArrayDefer(T *array, size_t length)
+ObservableArrayDefer<T>::ObservableArrayDefer(T *array, size_t length)
 {
 	this->_index = 0;
 	this->_array = array;

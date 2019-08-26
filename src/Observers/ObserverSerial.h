@@ -14,21 +14,21 @@ template <typename T>
 class ObserverSerial : public IObserver<T>
 {
 public:
-	void OnNext(T value);
-	void OnComplete();
+
 
 private:
-
+	void OnNext(T value) override;
+	void OnComplete() override;
 };
 
 template <typename T>
-inline void ObserverSerial<T>::OnNext(T value)
+void ObserverSerial<T>::OnNext(T value)
 {
 	Serial.println((T)value);
 }
 
 template <typename T>
-inline void ObserverSerial<T>::OnComplete()
+void ObserverSerial<T>::OnComplete()
 {
 }
 

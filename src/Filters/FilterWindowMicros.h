@@ -7,8 +7,8 @@ template <typename T>
 class FilterWindowMicros : public Operator<T, T>
 {
 public:
-	FilterWindowMicros<T>(const unsigned long interval);
-	void OnNext(T value);
+	FilterWindowMicros<T>(unsigned long interval);
+	void OnNext(T value) override;
 
 private:
 	bool _started = false;

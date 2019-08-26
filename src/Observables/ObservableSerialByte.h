@@ -7,36 +7,37 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License
  ****************************************************/
 
-#ifndef _REACTIVEAGGREGATEANY_h
-#define _REACTIVEAGGREGATEANY_h
+#ifndef _REACTIVEOBSERVABLESERIALBYTE_h
+#define _REACTIVEOBSERVABLESERIALBYTE_h
 
-template <typename T>
-class AggregateAny : public Operator<T, bool>
+template <>
+class ObservableSerial<byte> : public Observable<byte>
 {
 public:
-	ReactivePredicate<T> _condition;
-
-	AggregateAny(ReactivePredicate<T> condition);
-
-	void OnNext(T value) override;
+	ObservableSerial();
+	void Suscribe(IObserver<byte> &observer);
+	void Receive();
 
 private:
-	bool _state = false;
+	IObserver<byte>* _childObserver;
 };
 
-template <typename T>
-AggregateAny<T>::AggregateAny(ReactivePredicate<T> condition)
+ObservableSerial<byte>::ObservableSerial()
 {
-	this->_condition = condition;
 }
 
-template <typename T>
-void AggregateAny<T>::OnNext(T value)
+void ObservableSerial<byte>::Suscribe(IObserver<byte> &observer)
 {
-	if (this->_condition(value)) this->_state = true;
-
-	this->_childObserver->OnNext(this->_state);
+	_childObserver = &observer;
 }
 
+void ObservableSerial<byte>::Receive()
+{
+	while (Serial.available())
+	{
+		byte newChar = Serial.read();
+		if (_childObserver != nullptr) _childObserver->OnNext(newChar);
+	}
+}
 
 #endif

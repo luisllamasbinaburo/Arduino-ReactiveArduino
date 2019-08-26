@@ -7,8 +7,8 @@ class ObserverCircularBuffer : public IObserver<T>
 public:
 	ObserverCircularBuffer(T *array, size_t length);
 
-	void OnNext(T value);
-	void OnComplete();
+	void OnNext(T value) override;
+	void OnComplete() override;
 	size_t GetIndex();
 
 private:
@@ -18,7 +18,7 @@ private:
 };
 
 template <typename T>
-inline ObserverCircularBuffer<T>::ObserverCircularBuffer(T *array, size_t length)
+ObserverCircularBuffer<T>::ObserverCircularBuffer(T *array, size_t length)
 {
 	this->_array = array;
 	this->_length = length;
@@ -26,7 +26,7 @@ inline ObserverCircularBuffer<T>::ObserverCircularBuffer(T *array, size_t length
 }
 
 template <typename T>
-inline void ObserverCircularBuffer<T>::OnNext(T value)
+void ObserverCircularBuffer<T>::OnNext(T value)
 {
 	this->_array[this->_index] = value;
 
@@ -35,11 +35,11 @@ inline void ObserverCircularBuffer<T>::OnNext(T value)
 }
 
 template <typename T>
-inline void ObserverCircularBuffer<T>::OnComplete()
+void ObserverCircularBuffer<T>::OnComplete()
 {
 }
 template<typename T>
-inline size_t ObserverCircularBuffer<T>::GetIndex()
+size_t ObserverCircularBuffer<T>::GetIndex()
 {
 	return this->_index;
 }

@@ -16,8 +16,8 @@ class ObserverDoAndFinally : public IObserver<T>
 public:
 	ObserverDoAndFinally(ReactiveAction<T> doAction, ReactiveCallback finallyAction);
 
-	void OnNext(T value);
-	void OnComplete();
+	void OnNext(T value) override;
+	void OnComplete() override;
 
 private:
 	ReactiveAction<T> _doAction;
@@ -25,20 +25,20 @@ private:
 };
 
 template <typename T>
-inline ObserverDoAndFinally<T>::ObserverDoAndFinally(ReactiveAction<T> doAction, ReactiveCallback finallyAction)
+ObserverDoAndFinally<T>::ObserverDoAndFinally(ReactiveAction<T> doAction, ReactiveCallback finallyAction)
 {
 	_doAction = doAction;
 	_finallyAction = finallyAction;
 }
 
 template <typename T>
-inline void ObserverDoAndFinally<T>::OnNext(T value)
+void ObserverDoAndFinally<T>::OnNext(T value)
 {
 	_doAction(value);
 }
 
 template <typename T>
-inline void ObserverDoAndFinally<T>::OnComplete()
+void ObserverDoAndFinally<T>::OnComplete()
 {
 	_finallyAction();
 }

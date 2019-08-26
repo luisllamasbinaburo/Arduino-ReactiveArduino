@@ -16,27 +16,27 @@ class ObserverFinally : public IObserver<T>
 public:
 	ObserverFinally(ReactiveCallback action);
 
-	void OnNext(T value);
-	void OnComplete();
+	void OnNext(T value) override;
+	void OnComplete() override;
 
 private:
 	ReactiveCallback _action;
 };
 
 template <typename T>
-inline ObserverFinally<T>::ObserverFinally(ReactiveCallback action)
+ObserverFinally<T>::ObserverFinally(ReactiveCallback action)
 {
 	_action = action;
 }
 
 template <typename T>
-inline void ObserverFinally<T>::OnNext(T value)
+void ObserverFinally<T>::OnNext(T value)
 {
 
 }
 
 template <typename T>
-inline void ObserverFinally<T>::OnComplete()
+void ObserverFinally<T>::OnComplete()
 {
 	_action();
 }

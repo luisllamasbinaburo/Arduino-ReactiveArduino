@@ -15,10 +15,10 @@ class FilterMedian5 : public Operator<T, T>
 {
 public:
 	FilterMedian5<T>();
-	T AddValue(const T value);
+	T AddValue(T value);
 	T GetFiltered();
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	const int _windowSize = 5;
@@ -26,8 +26,10 @@ private:
 	T* _accessor;
 	int _count;
 
-	void addToBuffer(const T value);
+	void addToBuffer(T value);
 	void incCounter();
+
+	static T getMedian5(T a, T b, T c, T d, T e);
 };
 
 template <typename T>
@@ -49,11 +51,11 @@ T FilterMedian5<T>::AddValue(const T value)
 template<typename T>
 T FilterMedian5<T>::GetFiltered()
 {
-	return Median5(_items[0], _items[1], _items[2], _items[3], _items[4]);
+	return getMedian5(_items[0], _items[1], _items[2], _items[3], _items[4]);
 }
 
 template<typename T>
-inline void FilterMedian5<T>::addToBuffer(const T value)
+void FilterMedian5<T>::addToBuffer(const T value)
 {
 	*_accessor = value;
 
@@ -64,23 +66,14 @@ inline void FilterMedian5<T>::addToBuffer(const T value)
 }
 
 template<typename T>
-inline void FilterMedian5<T>::incCounter()
+void FilterMedian5<T>::incCounter()
 {
 	if (_count < _windowSize)
 		++_count;
 }
 
 template <typename T>
-void FilterMedian5<T>::OnNext(T value)
-{
-	AddValue(value);
-
-	if (_count < _windowSize) return;
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(GetFiltered());
-}
-
-template<typename T>
-T Median5(T a, T b, T c, T d, T e)
+T FilterMedian5<T>::getMedian5(T a, T b, T c, T d, T e)
 {
 	return b < a ? d < c ? b < d ? a < e ? a < d ? e < d ? e : d
 		: c < a ? c : a
@@ -116,4 +109,12 @@ T Median5(T a, T b, T c, T d, T e)
 		: d < a ? d : a;
 }
 
+template <typename T>
+void FilterMedian5<T>::OnNext(T value)
+{
+	AddValue(value);
+
+	if (_count < _windowSize) return;
+	if (this->_childObserver != nullptr) this->_childObserver->OnNext(GetFiltered());
+}
 #endif

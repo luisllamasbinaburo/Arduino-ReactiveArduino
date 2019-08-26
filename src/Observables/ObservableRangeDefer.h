@@ -15,9 +15,9 @@ class ObservableRangeDefer : public Observable<T>
 {
 public:
 	ObservableRangeDefer(T start, T end, T step = 1);
-	void Suscribe(IObserver<T> &observer);
+	void Suscribe(IObserver<T> &observer) override;
 	void Next();
-	void Reset();
+	void Reset() override;
 
 private:
 	T _start;
@@ -29,7 +29,7 @@ private:
 };
 
 template <typename T>
-inline ObservableRangeDefer<T>::ObservableRangeDefer(T start, T end, T step)
+ObservableRangeDefer<T>::ObservableRangeDefer(T start, T end, T step)
 {
 	this->_start = start;
 	this->_end = end;
@@ -46,12 +46,12 @@ void ObservableRangeDefer<T>::Suscribe(IObserver<T> &observer)
 template <typename T>
 void ObservableRangeDefer<T>::Next()
 {
-	if (_value >= this->_end) return;
+	if (_value > this->_end) return;
 
 	if (_childObserver != nullptr) _childObserver->OnNext(_value);
 	_value += _step;
 
-	if(_value >= this->_end)
+	if(_value > this->_end)
 		if (_childObserver != nullptr) _childObserver->OnComplete();
 }
 

@@ -15,18 +15,18 @@ class ObservableTimerMicros : public Observable<unsigned long>
 {
 public:
 	ObservableTimerMicros(unsigned long microsInterval, unsigned long delay);
-	void Suscribe(IObserver<T> &observer);
+	void Suscribe(IObserver<T> &observer) override;
 
 	void Start();
-	void Reset();
+	void Reset() override;
 	void Stop();
 	void Update();
 
 	void SetInterval(unsigned long interval);
 
-	unsigned long GetStartTime();
-	unsigned long GetElapsedTime();
-	unsigned long GetRemainingTime();
+	unsigned long GetStartTime() const;
+	unsigned long GetElapsedTime() const;
+	unsigned long GetRemainingTime() const;
 
 	bool IsActive() const;
 
@@ -42,9 +42,9 @@ private:
 };
 
 template <typename T>
-inline ObservableTimerMicros<T>::ObservableTimerMicros(unsigned long interval, unsigned long delay = 0)
+ObservableTimerMicros<T>::ObservableTimerMicros(unsigned long interval, unsigned long delay = 0)
 {
-	this->__isActive = true;
+	this->_isActive = true;
 	this->_delay = delay;
 	this->_offset = delay;
 	this->_interval = interval;
@@ -60,7 +60,7 @@ void ObservableTimerMicros<T>::Suscribe(IObserver<T> &observer)
 template <typename T>
 void ObservableTimerMicros<T>::Update()
 {
-	if (_isActive == false) return false;
+	if (_isActive == false) return;
 
 	auto elapsed = static_cast<unsigned long>(micros() - _startTime);
 	if (elapsed >= _interval + _offset)
@@ -73,7 +73,7 @@ void ObservableTimerMicros<T>::Update()
 template <typename T>
 void ObservableTimerMicros<T>::Reset()
 {
-	this->__isActive = true;
+	this->_isActive = true;
 	this->_offset = delay;
 	this->_startTime = micros();
 }
@@ -99,19 +99,19 @@ void ObservableTimerMicros<T>::SetInterval(unsigned long interval)
 }
 
 template <typename T>
-unsigned long ObservableTimerMicros<T>::GetStartTime()
+unsigned long ObservableTimerMicros<T>::GetStartTime() const
 {
 	return _startTime;
 }
 
 template <typename T>
-unsigned long ObservableTimerMicros<T>::GetElapsedTime()
+unsigned long ObservableTimerMicros<T>::GetElapsedTime() const
 {
 	return micros() - _startTime;
 }
 
 template <typename T>
-unsigned long ObservableTimerMicros<T>::GetRemainingTime()
+unsigned long ObservableTimerMicros<T>::GetRemainingTime() const
 {
 	return _interval - micros() + _startTime;
 }

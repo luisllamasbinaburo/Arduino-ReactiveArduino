@@ -7,51 +7,34 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License
  ****************************************************/
 
-#ifndef _REACTIVEOBSERVERTOARRAY_h
-#define _REACTIVEOBSERVERTOARRAY_h
+#ifndef _REACTIVEOBSERVABLESERIAL_h
+#define _REACTIVEOBSERVABLESERIAL_h
 
 template <typename T>
-class ObserverArray : public IObserver<T>
+class ObservableSerial : public Observable<T>
 {
 public:
-	ObserverArray(T *array, size_t length);
-
-	void OnNext(T value) override;
-	void OnComplete() override;
-	size_t GetIndex();
+	ObservableSerial();
+	void Suscribe(IObserver<T> &observer) override;
+	virtual void Receive();
 
 private:
-	T *_array;
-	size_t _length;
-	size_t _index;
+	IObserver<T>* _childObserver;
 };
 
 template <typename T>
-ObserverArray<T>::ObserverArray(T *array, size_t length)
+ObservableSerial<T>::ObservableSerial()
 {
-	this->_array = array;
-	this->_length = length;
-	this->_index = 0;
 }
 
 template <typename T>
-void ObserverArray<T>::OnNext(T value)
+void ObservableSerial<T>::Suscribe(IObserver<T> &observer)
 {
-	if (this->_index >= this->_length) return;
-
-	this->_array[this->_index] = value;
-	this->_index++;
+	_childObserver = &observer;
 }
 
 template <typename T>
-void ObserverArray<T>::OnComplete()
+void ObservableSerial<T>::Receive()
 {
 }
-
-template<typename T>
-size_t ObserverArray<T>::GetIndex()
-{
-	return this->_index;
-}
-
 #endif

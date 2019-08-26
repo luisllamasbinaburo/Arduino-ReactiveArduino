@@ -15,7 +15,7 @@ class ObservableDigitalInput : public Observable<T>
 {
 public:
 	ObservableDigitalInput(uint8_t pin, uint8_t pinMode = INPUT);
-	void Suscribe(IObserver<T> &observer);
+	void Suscribe(IObserver<T> &observer) override;
 	void Next();
 
 private:
@@ -25,7 +25,7 @@ private:
 };
 
 template <typename T>
-inline ObservableDigitalInput<T>::ObservableDigitalInput(uint8_t pin, uint8_t mode)
+ObservableDigitalInput<T>::ObservableDigitalInput(uint8_t pin, uint8_t mode)
 {
 	this->_pin = pin;
 	pinMode(pin, mode);

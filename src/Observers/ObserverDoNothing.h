@@ -16,25 +16,25 @@ class ObserverDoNothing : public IObserver<T>
 public:
 	ObserverDoNothing();
 
-	void OnNext(T value);
-	void OnComplete();
+	void OnNext(T value) override;
+	void OnComplete() override;
 
 private:
 	ReactiveAction<T> _doAction;
 };
 
 template <typename T>
-inline ObserverDoNothing<T>::ObserverDoNothing()
+ObserverDoNothing<T>::ObserverDoNothing()
 {
 }
 
 template <typename T>
-inline void ObserverDoNothing<T>::OnNext(T value)
+void ObserverDoNothing<T>::OnNext(T value)
 {
 }
 
 template <typename T>
-inline void ObserverDoNothing<T>::OnComplete()
+void ObserverDoNothing<T>::OnComplete()
 {
 }
 

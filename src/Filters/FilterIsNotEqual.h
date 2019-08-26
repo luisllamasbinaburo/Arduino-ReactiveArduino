@@ -15,7 +15,7 @@ class FilterIsNotEqual : public Operator<T, T>
 {
 public:
 	FilterIsNotEqual<T>(T value);
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	T _value = T();

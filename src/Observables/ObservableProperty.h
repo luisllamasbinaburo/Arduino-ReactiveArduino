@@ -14,11 +14,11 @@ template <typename T>
 class ObservableProperty : public Observable<T>
 {
 public:
-	void operator =(const T&);
+	void operator = (const T&);
 	ObservableProperty();
-	void Suscribe(IObserver<T> &);
+	void Suscribe(IObserver<T> &) override;
 	void Finish();
-	void Reset();
+	void Reset() override;
 
 private:
 	IObserver<T> *_observer;
@@ -26,7 +26,7 @@ private:
 };
 
 template <typename T>
-inline void ObservableProperty<T>::operator=(const T& value)
+void ObservableProperty<T>::operator=(const T& value)
 {
 	if (this->_complete) return;
 	if (this->_observer != nullptr) this->_observer->OnNext(value);
@@ -44,7 +44,7 @@ void ObservableProperty<T>::Suscribe(IObserver<T> &observer)
 }
 
 template<typename T>
-inline void ObservableProperty<T>::Finish()
+void ObservableProperty<T>::Finish()
 {
 	if (_complete) return;
 
@@ -53,7 +53,7 @@ inline void ObservableProperty<T>::Finish()
 }
 
 template<typename T>
-inline void ObservableProperty<T>::Reset()
+void ObservableProperty<T>::Reset()
 {
 	this->_complete = false;
 }

@@ -16,7 +16,7 @@ class FilterOnRising : public Operator<T, T>
 public:
 	FilterOnRising();
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	T _last = T();

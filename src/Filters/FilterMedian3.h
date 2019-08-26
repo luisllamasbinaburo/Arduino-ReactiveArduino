@@ -15,10 +15,10 @@ class FilterMedian3 : public Operator<T, T>
 {
 public:
 	FilterMedian3<T>();
-	T AddValue(const T value);
+	T AddValue(T value);
 	T GetFiltered();
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	const int _windowSize = 3;
@@ -26,8 +26,10 @@ private:
 	T* _accessor;
 	int _count;
 
-	void addToBuffer(const T value);
+	void addToBuffer(T value);
 	void incCounter();
+
+	static T getMedian3(T a, T b, T c);
 };
 
 template <typename T>
@@ -49,11 +51,11 @@ T FilterMedian3<T>::AddValue(const T value)
 template<typename T>
 T FilterMedian3<T>::GetFiltered()
 {
-	return Median3(_items[0], _items[1], _items[2]);
+	return getMedian3(_items[0], _items[1], _items[2]);
 }
 
 template<typename T>
-inline void FilterMedian3<T>::addToBuffer(const T value)
+void FilterMedian3<T>::addToBuffer(const T value)
 {
 	*_accessor = value;
 
@@ -64,10 +66,20 @@ inline void FilterMedian3<T>::addToBuffer(const T value)
 }
 
 template<typename T>
-inline void FilterMedian3<T>::incCounter()
+void FilterMedian3<T>::incCounter()
 {
 	if (_count < _windowSize)
 		++_count;
+}
+
+template <typename T>
+T FilterMedian3<T>::getMedian3(T a, T b, T c)
+{
+	if ((a <= b) && (a <= c))
+		return (b <= c) ? b : c;
+	if ((b <= a) && (b <= c))
+		return (a <= c) ? a : c;
+	return (a <= b) ? a : b;
 }
 
 template <typename T>
@@ -78,15 +90,4 @@ void FilterMedian3<T>::OnNext(T value)
 	if (_count < _windowSize) return;
 	if (this->_childObserver != nullptr) this->_childObserver->OnNext(GetFiltered());
 }
-
-template<typename T>
-T Median3(T a, T b, T c)
-{
-	if ((a <= b) && (a <= c))
-		return (b <= c) ? b : c;
-	if ((b <= a) && (b <= c))
-		return (a <= c) ? a : c;
-	return (a <= b) ? a : b;
-}
-
 #endif

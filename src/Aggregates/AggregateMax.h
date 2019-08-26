@@ -16,7 +16,7 @@ class AggregateMax : public Operator<T, T>
 public:
 	AggregateMax();
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	bool _any = false;

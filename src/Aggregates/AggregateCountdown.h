@@ -16,7 +16,7 @@ class AggregateCountdown : public Operator<T, int>
 public:
 	AggregateCountdown(int count);
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	int _count = false;

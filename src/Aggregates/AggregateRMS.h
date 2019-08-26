@@ -16,7 +16,7 @@ class AggregateRMS : public Operator<T, T>
 public:
 	AggregateRMS();
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	T _sumSqr = T();

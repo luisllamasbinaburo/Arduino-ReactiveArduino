@@ -10,6 +10,8 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #ifndef _REACTIVEOBSERVABLES_h
 #define _REACTIVEOBSERVABLES_h
 
+#include "ObservableManualDefer.h"
+
 #include "ObservableRange.h"
 #include "ObservableRangeDefer.h"
 
@@ -26,9 +28,12 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #include "ObservableIntervalMillis.h"
 #include "ObservableIntervalMicros.h"
 
+#include "ObservableSerial.h"
+#include "ObservableSerialByte.h"
 #include "ObservableSerialChar.h"
 #include "ObservableSerialString.h"
 #include "ObservableSerialInteger.h"
 #include "ObservableSerialFloat.h"
+#include "ObservableSerialDouble.h"
 
 #endif

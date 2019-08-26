@@ -7,17 +7,17 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License
  ****************************************************/
 
-#ifndef _REACTIVEOBSERVABLESERIALFLOAT_h
-#define _REACTIVEOBSERVABLESERIALFLOAT_h
+#ifndef _REACTIVEOBSERVABLESERIALDOUBLE_h
+#define _REACTIVEOBSERVABLESERIALDOUBLE_h
 
 
 template <>
-class ObservableSerial<float> : public Observable<float>
+class ObservableSerial<double> : public Observable<double>
 {
 public:
 	ObservableSerial(char separator = '\n');
-	void Suscribe(IObserver<float> &observer) override;
-	void Receive() ;
+	void Suscribe(IObserver<double> &observer) override;
+	void Receive();
 
 private:
 	char _separator;
@@ -29,21 +29,21 @@ private:
 	bool _isDecimalStage = false;
 	bool _isNegative = false;
 
-	IObserver<float>* _childObserver;
+	IObserver<double>* _childObserver;
 };
 
 
-ObservableSerial<float>::ObservableSerial(char separator)
+ObservableSerial<double>::ObservableSerial(char separator)
 {
 	_separator = separator;
 }
 
-void ObservableSerial<float>::Suscribe(IObserver<float> &observer)
+void ObservableSerial<double>::Suscribe(IObserver<double> &observer)
 {
 	_childObserver = &observer;
 }
 
-void ObservableSerial<float>::Receive()
+void ObservableSerial<double>::Receive()
 {
 	while (Serial.available())
 	{
@@ -67,9 +67,9 @@ void ObservableSerial<float>::Receive()
 		}
 		else if (newChar == _separator)
 		{
-			_data = (float)_dataReal + (float)_dataDecimal / _dataPow;
+			_data = (double)_dataReal + (double)_dataDecimal / _dataPow;
 			_data = _isNegative ? -_data : _data;
-				
+
 			if (_childObserver != nullptr) _childObserver->OnNext(_data);
 
 			_dataReal = 0;

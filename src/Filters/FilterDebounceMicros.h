@@ -15,7 +15,7 @@ class FilterDebounceMicros : public Operator<T, T>
 {
 public:
 	FilterDebounceMicros<T>(unsigned long interval);
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	unsigned long _previousMicros;

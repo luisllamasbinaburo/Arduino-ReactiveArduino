@@ -16,27 +16,27 @@ class ObserverProperty : public IObserver<T>
 public:
 	ObserverProperty(T & property);
 
-	void OnNext(T value);
-	void OnComplete();
+	void OnNext(T value) override;
+	void OnComplete() override;
 
 private:
-	int * _property;
+	T * _property;
 };
 
 template <typename T>
-inline ObserverProperty<T>::ObserverProperty(T &property)
+ObserverProperty<T>::ObserverProperty(T &property)
 {
 	this->_property = &property;
 }
 
 template <typename T>
-inline void ObserverProperty<T>::OnNext(T value)
+void ObserverProperty<T>::OnNext(T value)
 {
 	*(this->_property) = value;
 }
 
 template <typename T>
-inline void ObserverProperty<T>::OnComplete()
+void ObserverProperty<T>::OnComplete()
 {
 }
 

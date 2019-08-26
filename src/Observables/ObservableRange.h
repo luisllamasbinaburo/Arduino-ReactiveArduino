@@ -10,14 +10,16 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #ifndef _REACTIVEOBSERVABLERANGE_h
 #define _REACTIVEOBSERVABLERANGE_h
 
+template <typename T> class Observable;
+
 template <typename T>
 class ObservableRange : public Observable<T>
 {
 public:
 	ObservableRange(T start, T end, T step = 1);
-	void Suscribe(IObserver<T> &observer);
+	void Suscribe(IObserver<T> &observer) override;
 	void Run();
-	void Reset();
+	void Reset() override;
 
 private:
 	T _start;
@@ -28,7 +30,7 @@ private:
 };
 
 template <typename T>
-inline ObservableRange<T>::ObservableRange(T start, T end, T step)
+ObservableRange<T>::ObservableRange(T start, T end, T step)
 {
 	this->_start = start;
 	this->_end = end;
@@ -43,7 +45,7 @@ void ObservableRange<T>::Suscribe(IObserver<T> &observer)
 }
 
 template<typename T>
-inline void ObservableRange<T>::Run()
+void ObservableRange<T>::Run()
 {
 	for (auto i = _start; i <= _end; i += _step)
 		_childObserver->OnNext(i);
@@ -52,7 +54,7 @@ inline void ObservableRange<T>::Run()
 }
 
 template<typename T>
-inline void ObservableRange<T>::Reset()
+void ObservableRange<T>::Reset()
 {
 	Run();
 }

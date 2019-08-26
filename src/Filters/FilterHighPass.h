@@ -14,8 +14,8 @@ template <typename T>
 class FilterHighPass : public Operator<T, T>
 {
 public:
-	FilterHighPass<T>(const double alpha);
-	void OnNext(T value);
+	FilterHighPass<T>(double alpha);
+	void OnNext(T value) override;
 
 private:
 	double _alpha;

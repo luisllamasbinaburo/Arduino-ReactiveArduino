@@ -10,35 +10,33 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #ifndef _REACTIVEOBSERVABLESERIALINTEGER_h
 #define _REACTIVEOBSERVABLESERIALINTEGER_h
 
-template <typename T>
-class ObservableSerialInteger : public Observable<T>
+
+template <>
+class ObservableSerial<int> : public Observable<int>
 {
 public:
-	ObservableSerialInteger(char separator = '\n');
-	void Suscribe(IObserver<T> &observer);
-	void Recieve();
+	ObservableSerial(char separator = '\n');
+	void Suscribe(IObserver<int> &observer) override;
+	void Receive();
 
 private:
-	T _data = 0;
+	int _data = 0;
 	char _separator;
 	bool _isNegative = false;
-	IObserver<T>* _childObserver;
+	IObserver<int>* _childObserver;
 };
 
-template <typename T>
-inline ObservableSerialInteger<T>::ObservableSerialInteger(char separator)
+ObservableSerial<int>::ObservableSerial(char separator)
 {
 	_separator = separator;
 }
 
-template <typename T>
-void ObservableSerialInteger <T>::Suscribe(IObserver<T> &observer)
+void ObservableSerial<int>::Suscribe(IObserver<int> &observer)
 {
 	_childObserver = &observer;
 }
 
-template <typename T>
-void ObservableSerialInteger <T>::Recieve()
+void ObservableSerial<int>::Receive()
 {
 	if (_childObserver != nullptr)
 	{
@@ -64,5 +62,61 @@ void ObservableSerialInteger <T>::Recieve()
 		}
 	}
 }
+
+//
+//template <typename T>
+//class ObservableSerialInteger : public Observable<T>
+//{
+//public:
+//	ObservableSerialInteger(char separator = '\n');
+//	void Suscribe(IObserver<T> &observer) override;
+//	void Receive();
+//
+//private:
+//	T _data = 0;
+//	char _separator;
+//	bool _isNegative = false;
+//	IObserver<T>* _childObserver;
+//};
+//
+//template <typename T>
+//ObservableSerialInteger<T>::ObservableSerialInteger(char separator)
+//{
+//	_separator = separator;
+//}
+//
+//template <typename T>
+//void ObservableSerialInteger <T>::Suscribe(IObserver<T> &observer)
+//{
+//	_childObserver = &observer;
+//}
+//
+//template <typename T>
+//void ObservableSerialInteger <T>::Receive()
+//{
+//	if (_childObserver != nullptr)
+//	{
+//		
+//		while (Serial.available())
+//		{
+//			char newChar = Serial.read();
+//
+//			if (newChar >= '0' && newChar <= '9')
+//				_data = (_data * 10) + (newChar - '0');
+//
+//			else if (newChar == '-')
+//				_isNegative = true;
+//
+//			else if (newChar == _separator)
+//			{
+//				_data = _isNegative ? -_data : _data;
+//				if (_childObserver != nullptr) _childObserver->OnNext(_data);
+//
+//				_data = 0;
+//				_isNegative = false;
+//			}
+//		}
+//	}
+//}
 
 #endif

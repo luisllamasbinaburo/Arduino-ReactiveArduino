@@ -14,11 +14,11 @@ template <typename T>
 class FilterMovingRMS : public Operator<T, T>
 {
 public:
-	FilterMovingRMS<T>(const size_t windowSize);
-	void AddValue(const T value);
+	FilterMovingRMS<T>(size_t windowSize);
+	void AddValue(T value);
 	T GetFiltered();
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	T* _items;
@@ -27,7 +27,7 @@ private:
 	int _count;
 	T _sum = T();
 
-	void addToBuffer(const T value);
+	void addToBuffer(T value);
 	void incCounter();
 };
 
@@ -59,7 +59,7 @@ T FilterMovingRMS<T>::GetFiltered()
 }
 
 template<typename T>
-inline void FilterMovingRMS<T>::addToBuffer(const T value)
+void FilterMovingRMS<T>::addToBuffer(const T value)
 {
 	*_accessor = value;
 
@@ -70,7 +70,7 @@ inline void FilterMovingRMS<T>::addToBuffer(const T value)
 }
 
 template<typename T>
-inline void FilterMovingRMS<T>::incCounter()
+void FilterMovingRMS<T>::incCounter()
 {
 	if (_count < _windowSize)
 		++_count;

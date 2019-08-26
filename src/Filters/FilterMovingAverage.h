@@ -14,11 +14,11 @@ template <typename T>
 class FilterMovingAverage : public Operator<T, T>
 {
 public:
-	FilterMovingAverage<T>(const size_t windowSize);
-	T AddValue(const T value);
+	FilterMovingAverage<T>(size_t windowSize);
+	T AddValue(T value);
 	T GetFiltered();
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	T* _items;
@@ -27,7 +27,7 @@ private:
 	int _count;
 	T _sum = T();
 
-	void addToBuffer(const T value);
+	void addToBuffer(T value);
 	void incCounter();
 };
 
@@ -61,7 +61,7 @@ T FilterMovingAverage<T>::GetFiltered()
 }
 
 template<typename T>
-inline void FilterMovingAverage<T>::addToBuffer(const T value)
+void FilterMovingAverage<T>::addToBuffer(const T value)
 {
 	*_accessor = value;
 
@@ -72,7 +72,7 @@ inline void FilterMovingAverage<T>::addToBuffer(const T value)
 }
 
 template<typename T>
-inline void FilterMovingAverage<T>::incCounter()
+void FilterMovingAverage<T>::incCounter()
 {
 	if (_count < _windowSize)
 		++_count;

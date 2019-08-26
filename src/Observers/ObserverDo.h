@@ -16,27 +16,27 @@ class ObserverDo : public IObserver<T>
 public:
 	ObserverDo(ReactiveAction<T> action);
 
-	void OnNext(T value);
-	void OnComplete();
+	void OnNext(T value) override;
+	void OnComplete() override;
 
 private:
 	ReactiveAction<T> _doAction;
 };
 
 template <typename T>
-inline ObserverDo<T>::ObserverDo(ReactiveAction<T> action)
+ObserverDo<T>::ObserverDo(ReactiveAction<T> action)
 {
 	_doAction = action;
 }
 
 template <typename T>
-inline void ObserverDo<T>::OnNext(T value)
+void ObserverDo<T>::OnNext(T value)
 {
 	_doAction(value);
 }
 
 template <typename T>
-inline void ObserverDo<T>::OnComplete()
+void ObserverDo<T>::OnComplete()
 {
 }
 

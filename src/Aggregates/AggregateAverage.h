@@ -16,7 +16,7 @@ class AggregateAverage : public Operator<T, T>
 public:
 	AggregateAverage();
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	T _sum = T();

@@ -15,7 +15,7 @@ class FilterDebounceMillis : public Operator<T, T>
 {
 public:
 	FilterDebounceMillis<T>(unsigned long interval);
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	unsigned long _previousMillis;

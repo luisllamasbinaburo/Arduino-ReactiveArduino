@@ -15,10 +15,10 @@ class ObservableIntervalMillis : public Observable<unsigned long>
 {
 public:
 	ObservableIntervalMillis(unsigned long microsInterval, unsigned long delay = 0);
-	void Suscribe(IObserver<T> &observer);
+	void Suscribe(IObserver<T> &observer) override;
 
 	void Start();
-	void Reset();
+	void Reset() override;
 	void Stop();
 	void Update();
 
@@ -42,7 +42,7 @@ private:
 };
 
 template <typename T>
-inline ObservableIntervalMillis<T>::ObservableIntervalMillis(unsigned long interval, unsigned long delay)
+ObservableIntervalMillis<T>::ObservableIntervalMillis(unsigned long interval, unsigned long delay)
 {
 	this->_isActive = true;
 	this->_delay = delay;

@@ -15,7 +15,7 @@ class FilterIsGreater : public Operator<T, T>
 {
 public:
 	FilterIsGreater<T>(T value);
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	T _value = T();

@@ -16,15 +16,15 @@ class ObserverAnalogOutput : public IObserver<T>
 public:
 	ObserverAnalogOutput(uint8_t pin);
 
-	void OnNext(T value);
-	void OnComplete();
+	void OnNext(T value) override;
+	void OnComplete() override;
 
 private:
 	uint8_t _pin;
 };
 
 template <typename T>
-inline ObserverAnalogOutput<T>::ObserverAnalogOutput(uint8_t pin)
+ObserverAnalogOutput<T>::ObserverAnalogOutput(uint8_t pin)
 {
 	this->_pin = pin;
 	pinMode(pin, OUTPUT);
@@ -32,13 +32,13 @@ inline ObserverAnalogOutput<T>::ObserverAnalogOutput(uint8_t pin)
 
 
 template <typename T>
-inline void ObserverAnalogOutput<T>::OnNext(T value)
+void ObserverAnalogOutput<T>::OnNext(T value)
 {
 	analogWrite(value);
 }
 
 template <typename T>
-inline void ObserverAnalogOutput<T>::OnComplete()
+void ObserverAnalogOutput<T>::OnComplete()
 {
 }
 
