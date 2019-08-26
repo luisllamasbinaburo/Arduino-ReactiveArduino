@@ -25,41 +25,35 @@ More info about the Observables, Observers, and Operators available in the [Wiki
 
 ![alt text](https://github.com/luisllamasbinaburo/Arduino-ReactiveArduino/blob/master/ReactiveArduino%20Legend.png "Legend")
 
-### Creating operators
-Operators are generally generated through factory methods provided by the Reactive class.
+### Creating Observables
+Observables are generally generated through factory methods provided by the Reactive class.
 For example:
 ```c++
 FromArray<int>(values, valuesLength)
 ```
 
-### Chaining operators
-To chain operators ReactiveArduino uses overload of operator `>>`, which allows to combine observable and observers.
+### Chaining operators and observers
+Chaining operators are usually make using 'Fluent Notation' which allows to combine observable and observers.
+For example:
+```c++
+observableInt.ToSerial();
+```
+
+To chain existing operators ReactiveArduino uses overload of operator `>>`.
 For example:
 ```c++
 observableInt >> ToSerial<bool>();
 ```
 
-### Templating
-ReactiveArduino intensively uses templating to define the type of data that an operator receives or emits.
-Some operators need one template
-```c++
-Count<float>()
-```
-But other operators need two templates
-```c++
-Cast<int, float>()
-```
-And other operators need no templates.
-
 ### Cool and hot observables
 ReactiveArduino has two types of observables, hot and cold.
 Hot observables emits the sequence when an observer subscribes to it. For example, `FromArray(...)` is a Hot Observable.
 ```c++
-FromArray<int>(values, valuesLength)
+FromArray(values, valuesLength)
 ```
 Cold observable does not emits any item when a observer suscribes to it. You have to explicitly call the `Next()` method whenever you want. For example, `FromArrayDefer(...)`
 ```c++
-FromArrayDefer<int>(values, valuesLength)
+FromArrayDefer(values, valuesLength)
 ```
 ### Dynamic memory considerations
 On many occasions we generate operators directly when we chain them, for example in the `Setup()`. However, creating an operator allocates dynamic memory. Therefore, you should avoid creating them in `Loop()`, or you coul run out of memory.
