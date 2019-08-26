@@ -16,7 +16,7 @@ class OperatorTakeFirst : public Operator<T, T>
 public:
 	OperatorTakeFirst();
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	bool _completed = false;
@@ -33,7 +33,6 @@ void OperatorTakeFirst<T>::OnNext(T value)
 	if (this->_completed) return;
 
 	if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
-	if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
 	this->_completed = true;
 }
 

@@ -16,8 +16,8 @@ class OperatorLoop : public Operator<T, T>
 public:
 	OperatorLoop();
 
-	void OnNext(T value);
-	void OnComplete();
+	void OnNext(T value) override;
+	void OnComplete() override;
 
 private:
 	int _last = false;

@@ -22,9 +22,9 @@ class TransformationFrequency : public Operator<T, float>
 public:
 	TransformationFrequency();
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
-	void Reset();
+	void Reset() override;
 
 private:
 	unsigned long _starTime;

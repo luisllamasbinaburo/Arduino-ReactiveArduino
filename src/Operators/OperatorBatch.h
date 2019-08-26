@@ -16,7 +16,7 @@ class OperatorBatch : public Operator<T, T>
 public:
 	OperatorBatch(size_t N);
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	size_t index = 0;

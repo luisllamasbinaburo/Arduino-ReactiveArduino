@@ -16,8 +16,8 @@ class OperatorRepeat : public Operator<T, T>
 public:
 	OperatorRepeat(size_t N);
 
-	void OnNext(T value);
-	void OnComplete();
+	void OnNext(T value) override;
+	void OnComplete() override;
 
 private:
 	size_t _repetition;

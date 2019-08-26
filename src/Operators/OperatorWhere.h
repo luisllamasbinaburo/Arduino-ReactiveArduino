@@ -18,7 +18,7 @@ public:
 
 	OperatorWhere(ReactivePredicate<T> condition);
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 

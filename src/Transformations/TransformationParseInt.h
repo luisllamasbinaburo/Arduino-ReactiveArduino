@@ -10,22 +10,22 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #ifndef _REACTIVETRANSFORMATIONPARSEINT_h
 #define _REACTIVETRANSFORMATIONPARSEINT_h
 
-template <typename Torig, typename Tdest>
-class TransformationParseInt : public Operator<Torig, Tdest>
+template <typename T>
+class TransformationParseInt : public Operator<String, int>
 {
 public:
-	TransformationParseInt<Torig, Tdest>();
+	TransformationParseInt<T>();
 
-	void OnNext(Torig value);
+	void OnNext(String value) override;
 };
 
-template <typename Torig, typename Tdest>
-TransformationParseInt<Torig, Tdest>::TransformationParseInt()
+template <typename T>
+TransformationParseInt<T>::TransformationParseInt()
 {
 }
 
-template<typename Torig, typename Tdest>
-inline void TransformationParseInt<Torig, Tdest>::OnNext(Torig value)
+template <typename T>
+void TransformationParseInt<T>::OnNext(String value)
 {
 	this->_childObserver->OnNext((value).toInt());
 }

@@ -16,8 +16,8 @@ class OperatorTimeoutMillis : public Operator<T, T>
 public:
 	OperatorTimeoutMillis(unsigned long interval, ReactiveAction<T> action);
 
-	void OnNext(T value);
-	void OnComplete();
+	void OnNext(T value) override;
+	void OnComplete() override;
 	void Update();
 
 private:

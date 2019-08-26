@@ -18,7 +18,7 @@ public:
 
 	TransformationReduce<T>(ReactiveCompound<T> function);
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	T _rst = T();

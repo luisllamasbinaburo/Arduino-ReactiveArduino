@@ -16,7 +16,7 @@ class OperatorDistinct : public Operator<T, T>
 public:
 	OperatorDistinct();
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	T _last = T();

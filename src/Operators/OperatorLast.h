@@ -16,8 +16,8 @@ class OperatorLast : public Operator<T, T>
 public:
 	OperatorLast();
 
-	void OnNext(T value);
-	void OnComplete();
+	void OnNext(T value) override;
+	void OnComplete() override;
 
 private:
 	T _last = T();

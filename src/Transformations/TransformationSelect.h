@@ -18,7 +18,7 @@ public:
 
 	TransformationSelect<T>(ReactiveFunction<T> function);
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 };
 
 template <typename T>

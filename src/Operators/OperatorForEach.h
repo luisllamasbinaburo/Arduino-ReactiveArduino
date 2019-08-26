@@ -16,8 +16,8 @@ class OperatorForEach : public Operator<T, T>
 public:
 	OperatorForEach(ReactiveAction<T> action);
 
-	void OnNext(T value);
-	void OnComplete();
+	void OnNext(T value) override;
+	void OnComplete() override;
 
 private:
 	ReactiveAction<T> _doAction;

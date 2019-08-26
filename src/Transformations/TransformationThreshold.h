@@ -11,25 +11,24 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #define _REACTIVETRANSFORMATIONTHRESHOLD_h
 
 template <typename T>
-class TransformationThreshold : public Operator<T, bool>
+class TransformationThreshold : public Operator<T, int>
 {
 public:
-	TransformationThreshold<T>(T threshold) : TransformationThreshold<T>(threshold, threshold, false) {}
-	TransformationThreshold<T>(T threshold, bool state) : TransformationThreshold<T>(threshold, threshold, state) {}
-	TransformationThreshold<T>(T lowThreshold, T highThreshold) : TransformationThreshold<T>(lowThreshold, highThreshold, false) {}
-	TransformationThreshold<T>(T lowThreshold, T highThreshold, bool state);
+	TransformationThreshold<T>(T threshold) : TransformationThreshold<T>(threshold, threshold, LOW) {}
+	TransformationThreshold<T>(T threshold, int state) : TransformationThreshold<T>(threshold, threshold, state) {}
+	TransformationThreshold<T>(T lowThreshold, T highThreshold) : TransformationThreshold<T>(lowThreshold, highThreshold, LOW) {}
+	TransformationThreshold<T>(T lowThreshold, T highThreshold, int state);
 
-	void OnNext(T value);
-	//void OnComplete();
+	void OnNext(T value) override;
 
 private:
 	T _fallThreshold = T();
 	T _riseThreshold = T();
-	bool _state;
+	int _state;
 };
 
 template<typename T>
-TransformationThreshold<T>::TransformationThreshold(T threshold1, T threshold2, bool state)
+TransformationThreshold<T>::TransformationThreshold(T threshold1, T threshold2, int state)
 {
 	_fallThreshold = threshold1 <= threshold2 ? threshold1 : threshold2;
 	_riseThreshold = threshold1 > threshold2 ? threshold1 : threshold2;
@@ -39,17 +38,16 @@ TransformationThreshold<T>::TransformationThreshold(T threshold1, T threshold2, 
 template <typename T>
 void TransformationThreshold<T>::OnNext(T value)
 {
-	if (_state == false && value > _riseThreshold)
+	if (_state == LOW && value > _riseThreshold)
 	{
-		_state = true;
-		if (this->_childObserver != nullptr) this->_childObserver->OnNext(_state);
+		_state = HIGH;
 	}
 
-	if (_state == true && value < _fallThreshold)
+	if (_state == HIGH && value < _fallThreshold)
 	{
-		_state = false;
-		if (this->_childObserver != nullptr) this->_childObserver->OnNext(_state);
+		_state = LOW;
 	}
+	if (this->_childObserver != nullptr) this->_childObserver->OnNext(_state);
 }
 #endif
 

@@ -16,7 +16,7 @@ class TransformationCast : public Operator<Torig, Tdest>
 public:
 	TransformationCast<Torig, Tdest>();
 
-	void OnNext(Torig value);
+	void OnNext(Torig value) override;
 };
 
 template <typename Torig, typename Tdest>
@@ -25,7 +25,7 @@ TransformationCast<Torig, Tdest>::TransformationCast()
 }
 
 template<typename Torig, typename Tdest>
-inline void TransformationCast<Torig, Tdest>::OnNext(Torig value)
+void TransformationCast<Torig, Tdest>::OnNext(Torig value)
 {
 	this->_childObserver->OnNext((Tdest)(value));
 }

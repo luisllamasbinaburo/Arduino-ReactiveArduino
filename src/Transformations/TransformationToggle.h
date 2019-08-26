@@ -11,19 +11,19 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #define _REACTIVETRANSFORMATIONTOGGLE_h
 
 template <typename T>
-class TransformationToggle : public Operator<T, bool>
+class TransformationToggle : public Operator<T, int>
 {
 public:
-	TransformationToggle(bool state = false);
+	TransformationToggle(int state = LOW);
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
-	bool _state = false;
+	int _state = false;
 };
 
 template <typename T>
-TransformationToggle<T>::TransformationToggle(bool state)
+TransformationToggle<T>::TransformationToggle(int state)
 {
 	this->_state = false;
 }

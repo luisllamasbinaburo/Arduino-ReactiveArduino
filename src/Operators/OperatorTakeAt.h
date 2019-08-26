@@ -16,7 +16,7 @@ class OperatorTakeAt : public Operator<T, T>
 public:
 	OperatorTakeAt(size_t N);
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	size_t index = 0;

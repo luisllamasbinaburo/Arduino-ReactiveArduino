@@ -11,32 +11,32 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #define _REACTIVETRANSFORMATIONBUFFER_h
 
 template <typename T>
-class TransformationBuffer : public Operator<T, T>
+class TransformationStringBuffer : public Operator<T, T>
 {
 public:
-	TransformationBuffer();
+	TransformationStringBuffer();
 
-	void OnNext(T value);
-	void OnComplete();
+	void OnNext(T value) override;
+	void OnComplete() override;
 
-	void Reset();
+	void Reset() override;
 private:
 	String _buffer = "";
 };
 
 template <typename T>
-TransformationBuffer<T>::TransformationBuffer()
+TransformationStringBuffer <T>::TransformationStringBuffer()
 {
 }
 
 template <typename T>
-void TransformationBuffer<T>::Reset()
+void TransformationStringBuffer <T>::Reset()
 {
 	_buffer = "";
 }
 
 template <typename T>
-void TransformationBuffer<T>::OnNext(T value)
+void TransformationStringBuffer <T>::OnNext(T value)
 {
 	_buffer = _buffer + String(value);
 
@@ -44,7 +44,7 @@ void TransformationBuffer<T>::OnNext(T value)
 }
 
 template <typename T>
-inline void TransformationBuffer<T>::OnComplete()
+void TransformationStringBuffer <T>::OnComplete()
 {
 	if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
 }

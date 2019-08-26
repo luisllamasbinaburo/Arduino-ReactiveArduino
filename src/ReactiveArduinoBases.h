@@ -37,6 +37,9 @@ class IObserver
 public:
 	virtual void OnNext(T value) = 0;
 	virtual void OnComplete() = 0;
+
+protected:
+	virtual ~IObserver() = default;
 };
 
 template <typename T>
@@ -44,6 +47,9 @@ class IObservable
 {
 public:
 	virtual void Suscribe(IObserver<T> &observer) = 0;
+
+protected:
+	virtual ~IObservable() = default;
 };
 
 template <typename T>
@@ -51,8 +57,9 @@ class IResetable
 {
 public:
 	virtual void Reset() = 0;
+	virtual ~IResetable() = default;
 
-private:
+protected:
 	bool _isComplete = false;
 };
 #endif

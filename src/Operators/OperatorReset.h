@@ -16,9 +16,9 @@ class OperatorReset : public Operator<T, T>
 public:
 	OperatorReset();
 
-	void OnNext(T value);
-	void OnComplete();
-	void Reset();
+	void OnNext(T value) override;
+	void OnComplete() override;
+	void Reset() override;
 };
 
 template <typename T>

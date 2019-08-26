@@ -11,12 +11,12 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #define _REACTIVETRANSFORMATIONTOBOOL_h
 
 template <typename T>
-class TransformationToBool : public Operator<T, T>
+class TransformationToBool : public Operator<T, bool>
 {
 public:
 	TransformationToBool<T>();
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 };
 
 template <typename T>
@@ -25,7 +25,7 @@ TransformationToBool<T>::TransformationToBool()
 }
 
 template <typename T>
-inline void TransformationToBool<T>::OnNext(T value)
+void TransformationToBool<T>::OnNext(T value)
 {
 	this->_childObserver->OnNext(value != 0);
 }

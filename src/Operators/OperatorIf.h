@@ -17,7 +17,7 @@ class OperatorIf : public Operator<T, T>
 public:
 	OperatorIf(ReactivePredicate<T> condition, ReactiveAction<T> action);
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	ReactivePredicate<T> _condition;

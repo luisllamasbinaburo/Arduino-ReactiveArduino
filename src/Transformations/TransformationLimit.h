@@ -16,7 +16,7 @@ class TransformationLimit : public Operator<T, T>
 public:
 	TransformationLimit<T>(T lowerLimit, T upperLimit);
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	T _upperLimit = T();
@@ -31,7 +31,7 @@ TransformationLimit<T>::TransformationLimit(T lowerLimit, T upperLimit)
 }
 
 template <typename T>
-inline void TransformationLimit<T>::OnNext(T value)
+void TransformationLimit<T>::OnNext(T value)
 {
 	this->_childObserver->OnNext(value < _lowerLimit ? _lowerLimit : value > _upperLimit ? _upperLimit : value);
 }

@@ -18,7 +18,7 @@ public:
 
 	TransformationSplit(char separator = ',');
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	String _buffer = "";

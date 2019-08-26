@@ -16,8 +16,8 @@ class TransformationJoin: public Operator<T, T>
 public:
 	TransformationJoin(char separator = ',');
 
-	void OnNext(T value);
-	void OnComplete();
+	void OnNext(T value) override;
+	void OnComplete() override;
 
 private:
 	bool _isFirst = true;
@@ -49,7 +49,7 @@ void TransformationJoin<T>::OnNext(T value)
 }
 
 template <typename T>
-inline void TransformationJoin<T>::OnComplete()
+void TransformationJoin<T>::OnComplete()
 {
 	if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
 }

@@ -16,8 +16,8 @@ class OperatorFirst : public Operator<T, T>
 public:
 	OperatorFirst();
 
-	void OnNext(T value);
-	void OnComplete();
+	void OnNext(T value) override;
+	void OnComplete() override;
 
 
 private:

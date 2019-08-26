@@ -11,7 +11,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #define _REACTIVEARDUINOLIB_h
 
 #if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
+#include "arduino.h"
 #else
 	#include "WProgram.h"
 #endif
@@ -26,163 +26,181 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #include "Filters/Filters.h"
 #include "Aggregates/Aggregates.h"
 
-
 namespace Reactive
 {
-
-
 #pragma region Observables
 	template <typename T>
-	 ObservableRange<T>& FromRange(T start, T end, T step = 1)
+	auto ManualDefer() -> ObservableManualDefer<T>&
+	{
+		return *(new ObservableManualDefer<T>());
+	}
+
+	template <typename T>
+	auto FromRange(T start, T end, T step = 1) -> ObservableRange<T>&
 	{
 		return *(new ObservableRange<T>(start, end, step));
 	}
+
 	template <typename T>
-	 ObservableRangeDefer<T>& FromRangeDefer(T start, T end, T step = 1)
+	auto FromRangeDefer(T start, T end, T step = 1) -> ObservableRangeDefer<T>&
 	{
 		return *(new ObservableRangeDefer<T>(start, end, step));
 	}
 
 	template <typename T>
-	 ObservableArray<T>& FromArray(T *array, size_t length)
+	auto FromArray(T* array, size_t length) -> ObservableArray<T>&
 	{
 		return *(new ObservableArray<T>(array, length));
 	}
 
 	template <typename T>
-	 ObservableArrayDefer<T>& FromArrayDefer(T *array, size_t length)
+	auto FromArrayDefer(T* array, size_t length) -> ObservableArrayDefer<T>&
 	{
 		return *(new ObservableArrayDefer<T>(array, length));
 	}
 
 	template <typename T>
-	 ObservableProperty<T>& FromProperty()
+	auto Property() -> ObservableProperty<T>&
 	{
 		return *(new ObservableProperty<T>());
 	}
 
-
-	template <typename T>
-	 ObservableAnalogInput<T>& FromAnalogInput(uint8_t pin, uint8_t pinMode = INPUT)
+	inline auto FromAnalogInput(uint8_t pin, uint8_t pinMode = INPUT) -> ObservableAnalogInput<int>&
 	{
-		return *(new ObservableAnalogInput<T>(pin, pinMode));
+		return *(new ObservableAnalogInput<int>(pin, pinMode));
+	}
+
+	inline auto FromDigitalInput(uint8_t pin, uint8_t pinMode = INPUT) -> ObservableDigitalInput<int>&
+	{
+		return *(new ObservableDigitalInput<int>(pin, pinMode));
+	}
+
+	inline auto TimerMillis(unsigned long interval) -> ObservableTimerMillis<unsigned long>&
+	{
+		return *(new ObservableTimerMillis<unsigned long>(interval));
+	}
+
+	inline auto TimerMicros(unsigned long interval) -> ObservableTimerMicros<unsigned long>&
+	{
+		return *(new ObservableTimerMicros<unsigned long>(interval));
+	}
+
+	inline auto IntervalMillis(unsigned long interval, unsigned long delay = 0) -> ObservableIntervalMillis<unsigned long>&
+	{
+		return *(new ObservableIntervalMillis<unsigned long>(interval, delay));
+	}
+
+	inline auto IntervalMicros(unsigned long interval, unsigned long delay = 0) -> ObservableIntervalMicros<unsigned long>&
+	{
+		return *(new ObservableIntervalMicros<unsigned long>(interval, delay));
+	}
+
+	inline auto FromSerial(char separator = '\n') -> ObservableSerial<String>&
+	{
+		return *(new ObservableSerial<String>(separator));
 	}
 
 	template <typename T>
-	 ObservableDigitalInput<T>& FromDigitalInput(uint8_t pin, uint8_t pinMode = INPUT)
+	auto FromSerial() -> ObservableSerial<T>&
 	{
-		return *(new ObservableDigitalInput<T>(pin, pinMode));
-	}
-
-
-	template <typename T>
-	 ObservableTimerMillis<T>& TimerMillis(unsigned long interval)
-	{
-		return *(new ObservableTimerMillis<T>(interval));
+		return *(new ObservableSerial<T>());
 	}
 
 	template <typename T>
-	 ObservableTimerMicros<T>& TimerMicros(unsigned long interval)
+	auto FromSerial(char separator) -> ObservableSerial<T>&
 	{
-		return *(new ObservableTimerMicros<T>(interval));
+		return *(new ObservableSerial<String>());
 	}
 
-	template <typename T>
-	 ObservableIntervalMillis<T>& IntervalMillis(unsigned long interval, unsigned long delay = 0)
+	template <>
+	inline auto FromSerial<String>() -> ObservableSerial<String>&
 	{
-		return *(new ObservableIntervalMillis<T>(interval, delay));
+		return *(new ObservableSerial<String>());
 	}
 
-	template <typename T>
-	 ObservableIntervalMicros<T>& IntervalMicros(unsigned long interval, unsigned long delay = 0)
+	template <>
+	inline auto FromSerial<char>() -> ObservableSerial<char>&
 	{
-		return *(new ObservableIntervalMicros<T>(interval, delay));
+		return *(new ObservableSerial<char>());
 	}
 
-
-	 ObservableSerialChar<char>& FromSerialChar()
+	template <>
+	inline auto FromSerial<int>() -> ObservableSerial<int>&
 	{
-		return *(new ObservableSerialChar<char>());
+		return *(new ObservableSerial<int>());
 	}
 
-
-	 ObservableSerialString<String>& FromSerialString()
+	template <>
+	inline auto FromSerial<float>() -> ObservableSerial<float>&
 	{
-		return *(new ObservableSerialString<String>());
+		return *(new ObservableSerial<float>());
 	}
 
-
-	 ObservableSerialInteger<int>& FromSerialInteger()
+	template <>
+	inline auto FromSerial<double>() -> ObservableSerial<double>&
 	{
-		return *(new ObservableSerialInteger<int>());
+		return *(new ObservableSerial<double>());
 	}
-
-
-	 ObservableSerialFloat<float>& FromSerialFloat()
-	{
-		return *(new ObservableSerialFloat<float>());
-	}
-
 #pragma endregion
 
 
 #pragma region Observers
 	template <typename T>
-	 ObserverDo<T>& Do(ReactiveAction<T> action)
+	ObserverDo<T>& Do(ReactiveAction<T> action)
 	{
 		return *(new ObserverDo<T>(action));
 	}
 
 	template <typename T>
-	 ObserverFinally<T>& Finally(ReactiveCallback action)
+	ObserverFinally<T>& Finally(ReactiveCallback action)
 	{
 		return *(new ObserverFinally<T>(action));
 	}
 
 	template <typename T>
-	 ObserverDoAndFinally<T>& DoAndFinally(ReactiveAction<T> doAction, ReactiveCallback finallyAction)
+	ObserverDoAndFinally<T>& DoAndFinally(ReactiveAction<T> doAction, ReactiveCallback finallyAction)
 	{
 		return *(new ObserverDoAndFinally<T>(doAction, finallyAction));
 	}
 
 	template <typename T>
-	 ObserverDoNothing<T>& DoNothing()
+	ObserverDoNothing<T>& DoNothing()
 	{
 		return *(new ObserverDoNothing<T>());
 	}
 
 	template <typename T>
-	 ObserverProperty<T>& ToProperty(T & property)
+	ObserverProperty<T>& ToProperty(T& property)
 	{
 		return *(new ObserverProperty<T>(property));
 	}
 
 	template <typename T>
-	 ObserverArray<T>& ToArray(T *array, size_t length)
+	ObserverArray<T>& ToArray(T* array, size_t length)
 	{
 		return *(new ObserverArray<T>(array, length));
 	}
 
 	template <typename T>
-	 ObserverCircularBuffer<T>& ToCircularBuffer(T *array, size_t length)
+	ObserverCircularBuffer<T>& ToCircularBuffer(T* array, size_t length)
 	{
 		return *(new ObserverCircularBuffer<T>(array, length));
 	}
 
 	template <typename T>
-	 ObserverDigitalOutput<T>& ToDigitalOutput(uint8_t pin)
+	ObserverDigitalOutput<T>& ToDigitalOutput(uint8_t pin)
 	{
 		return *(new ObserverDigitalOutput<T>(pin));
 	}
 
 	template <typename T>
-	 ObserverAnalogOutput<T>& ToAnalogOutput(uint8_t pin)
+	ObserverAnalogOutput<T>& ToAnalogOutput(uint8_t pin)
 	{
 		return *(new ObserverAnalogOutput<T>(pin));
 	}
 
 	template <typename T>
-	 ObserverSerial<T>& ToSerial()
+	ObserverSerial<T>& ToSerial()
 	{
 		return *(new ObserverSerial<T>());
 	}
@@ -192,138 +210,139 @@ namespace Reactive
 
 #pragma region Operators
 	template <typename T>
-	 OperatorWhere<T>& Where(ReactivePredicate<T> condition)
+	OperatorWhere<T>& Where(ReactivePredicate<T> condition)
 	{
 		return *(new OperatorWhere<T>(condition));
 	}
 
 	template <typename T>
-	 OperatorDistinct<T>& Distinct()
+	OperatorDistinct<T>& Distinct()
 	{
 		return *(new OperatorDistinct<T>());
 	}
 
 	template <typename T>
-	 OperatorFirst<T>& First()
+	OperatorFirst<T>& First()
 	{
 		return *(new OperatorFirst<T>());
 	}
 
 	template <typename T>
-	 OperatorLast<T>& Last()
+	OperatorLast<T>& Last()
 	{
 		return *(new OperatorLast<T>());
 	}
 
 	template <typename T>
-	 OperatorSkip<T>& Skip(size_t num)
+	OperatorSkip<T>& Skip(size_t num)
 	{
 		return *(new OperatorSkip<T>(num));
 	}
 
 	template <typename T>
-	 OperatorSkipUntil<T>& SkipUntil(ReactivePredicate<T> condition)
+	OperatorSkipUntil<T>& SkipUntil(ReactivePredicate<T> condition)
 	{
 		return *(new OperatorSkipUntil<T>(condition));
 	}
 
 	template <typename T>
-	 OperatorSkipWhile<T>& SkipWhile(ReactivePredicate<T> condition)
+	OperatorSkipWhile<T>& SkipWhile(ReactivePredicate<T> condition)
 	{
 		return *(new OperatorSkipWhile<T>(condition));
 	}
 
 
 	template <typename T>
-	 OperatorTake<T>& Take(size_t num)
+	OperatorTake<T>& Take(size_t num)
 	{
 		return *(new OperatorTake<T>(num));
 	}
 
 
 	template <typename T>
-	 OperatorTakeAt<T>& TakeAt(size_t index)
+	OperatorTakeAt<T>& TakeAt(size_t index)
 	{
 		return *(new OperatorTakeAt<T>(index));
 	}
 
 
 	template <typename T>
-	 OperatorTakeFirst<T>& TakeFirst()
+	OperatorTakeFirst<T>& TakeFirst()
 	{
 		return *(new OperatorTakeFirst<T>());
 	}
 
 
 	template <typename T>
-	 OperatorTakeLast<T>& TakeLast()
+	OperatorTakeLast<T>& TakeLast()
 	{
 		return *(new OperatorTakeLast<T>());
 	}
 
 
 	template <typename T>
-	 OperatorTakeUntil<T>& TakeUntil(ReactivePredicate<T> condition)
+	OperatorTakeUntil<T>& TakeUntil(ReactivePredicate<T> condition)
 	{
 		return *(new OperatorTakeUntil<T>(condition));
 	}
 
 
 	template <typename T>
-	 OperatorTakeWhile<T>& TakeWhile(ReactivePredicate<T> condition)
+	OperatorTakeWhile<T>& TakeWhile(ReactivePredicate<T> condition)
 	{
 		return *(new OperatorTakeWhile<T>(condition));
 	}
 
 	template <typename T>
-	 OperatorBatch<T>& Batch(size_t num)
+	OperatorBatch<T>& Batch(size_t num)
 	{
 		return *(new OperatorBatch<T>(num));
 	}
 
 	template <typename T>
-	 OperatorIf<T>& If(ReactivePredicate<T> condition, ReactiveAction<T> action)
+	OperatorIf<T>& If(ReactivePredicate<T> condition, ReactiveAction<T> action)
 	{
 		return *(new OperatorIf<T>(condition, action));
 	}
 
 	template <typename T>
-	 OperatorForEach<T>& ForEach(ReactiveAction<T> action)
+	OperatorForEach<T>& ForEach(ReactiveAction<T> action)
 	{
 		return *(new OperatorForEach<T>(action));
 	}
 
 	template <typename T>
-	 OperatorTimeoutMillis<T>& TimeoutMillis(ReactiveAction<T> action)
+	OperatorTimeoutMillis<T>& TimeoutMillis(ReactiveAction<T> action)
 	{
 		return *(new OperatorTimeoutMillis<T>(action));
 	}
 
 	template <typename T>
-	 OperatorTimeoutMicros<T>& TimeoutMicros(ReactiveAction<T> action)
+	OperatorTimeoutMicros<T>& TimeoutMicros(ReactiveAction<T> action)
 	{
 		return *(new OperatorTimeoutMicros<T>(action));
 	}
-	
+
 	template <typename T>
-	 OperatorReset<T>& Reset()
+	OperatorReset<T>& Reset()
 	{
 		return *(new OperatorReset<T>());
 	}
+
 	template <typename T>
-	 OperatorNoReset<T>& NotReset()
+	OperatorNoReset<T>& NotReset()
 	{
 		return *(new OperatorNoReset<T>());
 	}
 
 	template <typename T>
-	 OperatorLoop<T>& Loop()
+	OperatorLoop<T>& Loop()
 	{
 		return *(new OperatorLoop<T>());
 	}
 
 	template <typename T>
-	 OperatorRepeat<T>& Repeat(size_t N)
+	OperatorRepeat<T>& Repeat(size_t N)
 	{
 		return *(new OperatorRepeat<T>(N));
 	}
@@ -334,291 +353,298 @@ namespace Reactive
 
 #pragma region Transformations
 	template <typename T>
-	 TransformationSelect<T>& Select(ReactiveFunction<T> function)
+	TransformationSelect<T>& Select(ReactiveFunction<T> function)
 	{
 		return *(new TransformationSelect<T>(function));
 	}
 
 	template <typename Torig, typename Tdest>
-	 TransformationCast<Torig, Tdest>& Cast()
+	TransformationCast<Torig, Tdest>& Cast()
 	{
 		return *(new TransformationCast<Torig, Tdest>());
 	}
 
 	template <typename Torig, typename Tdest>
-	 TransformationMap<Torig, Tdest>& Map(ReactiveMap<Torig, Tdest> map)
+	TransformationMap<Torig, Tdest>& Select(ReactiveMap<Torig, Tdest> map)
+	{
+		return *(new TransformationMap<Torig, Tdest>(map));
+	}
+
+	template <typename Torig, typename Tdest>
+	TransformationMap<Torig, Tdest>& Map(ReactiveMap<Torig, Tdest> map)
 	{
 		return *(new TransformationMap<Torig, Tdest>(map));
 	}
 
 	template <typename T>
-	 TransformationReduce<T>& Reduce(ReactiveCompound<T> function)
+	TransformationReduce<T>& Reduce(ReactiveCompound<T> function)
 	{
 		return *(new TransformationReduce<T>(function));
 	}
 
 	template <typename T>
-	 TransformationUpperLimit<T>& LimitUpper(T upperLimit)
+	TransformationUpperLimit<T>& LimitUpper(T upperLimit)
 	{
 		return *(new TransformationUpperLimit<T>(upperLimit));
 	}
 
 	template <typename T>
-	 TransformationLowerLimit<T>& LimitLower(T lowerLimit)
+	TransformationLowerLimit<T>& LimitLower(T lowerLimit)
 	{
 		return *(new TransformationLowerLimit<T>(lowerLimit));
 	}
 
 	template <typename T>
-	 TransformationLimit<T>& Limit(T lowerLimit, T upperLimit)
+	TransformationLimit<T>& Limit(T lowerLimit, T upperLimit)
 	{
 		return *(new TransformationLimit<T>(lowerLimit, upperLimit));
 	}
 
 	template <typename T>
-	 TransformationScale<T>& Scale(T factor)
+	TransformationScale<T>& Scale(T factor)
 	{
 		return *(new TransformationScale<T>(0, 1, 0, factor));
 	}
 
 	template <typename T>
-	 TransformationScale<T>& Scale(T input_min, T input_max, T output_min, T output_max)
+	TransformationScale<T>& Scale(T input_min, T input_max, T output_min, T output_max)
 	{
 		return *(new TransformationScale<T>(input_min, input_max, output_min, output_max));
 	}
 
 	template <typename T>
-	 TransformationTimestampMillis<T>& Millis()
+	TransformationTimestampMillis<T>& Millis()
 	{
 		return *(new TransformationTimestampMillis<T>());
 	}
 
 	template <typename T>
-	 TransformationTimestampMicros<T>& Micros()
+	TransformationTimestampMicros<T>& Micros()
 	{
 		return *(new TransformationTimestampMicros<T>());
 	}
 
 	template <typename T>
-	 TransformationElapsedMillis<T>& ElapsedMillis()
+	TransformationElapsedMillis<T>& ElapsedMillis()
 	{
 		return *(new TransformationElapsedMillis<T>());
 	}
 
 	template <typename T>
-	 TransformationElapsedMicros<T>& ElapsedMicros()
+	TransformationElapsedMicros<T>& ElapsedMicros()
 	{
 		return *(new TransformationElapsedMicros<T>());
 	}
 
 	template <typename T>
-	 TransformationFrequency<T>& Frequency()
+	TransformationFrequency<T>& Frequency()
 	{
 		return *(new TransformationFrequency<T>());
 	}
 
 	template <typename T>
-	 TransformationThreshold<T>& Threshold(T threshold)
+	TransformationThreshold<T>& Threshold(T threshold)
 	{
 		return *(new TransformationThreshold<T>(threshold));
 	}
 
 	template <typename T>
-	 TransformationThreshold<T>& Threshold(T threshold, bool state)
+	TransformationThreshold<T>& Threshold(T threshold, bool state)
 	{
 		return *(new TransformationThreshold<T>(threshold, state));
 	}
 
 	template <typename T>
-	 TransformationThreshold<T>& Threshold(T lowThreshold, T highThreshold)
+	TransformationThreshold<T>& DoubleThreshold(T lowThreshold, T highThreshold)
 	{
 		return *(new TransformationThreshold<T>(lowThreshold, highThreshold));
 	}
 
 	template <typename T>
-	 TransformationThreshold<T>& Threshold(T lowThreshold, T highThreshold, bool state)
+	TransformationThreshold<T>& DoubleThreshold(T lowThreshold, T highThreshold, bool state)
 	{
 		return *(new TransformationThreshold<T>(lowThreshold, highThreshold, state));
 	}
 
 	template <typename T>
-	 TransformationToggle<T>& Toggle(bool state = false)
+	TransformationToggle<T>& Toggle(bool state = false)
 	{
 		return *(new TransformationToggle<T>(state));
 	}
 
 	template <typename T>
-	 TransformationAdcToVoltage<T>& AdcToVoltage(T input_max = 1023, T output_max = 5.0)
+	TransformationAdcToVoltage<T>& AdcToVoltage(T input_max = 1023, T output_max = 5.0)
 	{
 		return *(new TransformationAdcToVoltage<T>(input_max, output_max));
 	}
 
 	template <typename T>
-	 TransformationSplit<T>& Split(char separator = ',')
+	TransformationSplit<T>& Split(char separator = ',')
 	{
 		return *(new TransformationSplit<T>(separator));
 	}
 
 	template <typename T>
-	 TransformationJoin<T>& Join(char separator = ',')
+	TransformationJoin<T>& Join(char separator = ',')
 	{
 		return *(new TransformationJoin<T>(separator));
 	}
 
 	template <typename T>
-	 TransformationBuffer<T>& Buffer()
+	TransformationStringBuffer <T>& StringBuffer()
 	{
-		return *(new TransformationBuffer<T>());
+		return *(new TransformationStringBuffer <T>());
 	}
 
 	template <typename T>
-	 TransformationToBool<T>& ToBool()
+	TransformationToBool<T>& ToBool()
 	{
 		return *(new TransformationToBool<T>());
 	}
 
-	//template <typename Torig, typename Tdest>
-	 TransformationParseInt<String, int>& ParseInt()
+	template <typename T>
+	TransformationParseInt<T>& ParseInt()
 	{
-		return *(new TransformationParseInt<String, int>());
+		return *(new TransformationParseInt<T>());
 	}
 
-	 TransformationParseFloat<String, float> & ParseFloat()
+	template <typename T>
+	TransformationParseFloat<T>& ParseFloat()
 	{
-		return *(new TransformationParseFloat<String, float>());
+		return *(new TransformationParseFloat<T>());
 	}
 #pragma endregion
 
 
 #pragma region Filters
 	template <typename T>
-	 FilterOnRising<T>& OnRising()
+	FilterOnRising<T>& OnRising()
 	{
 		return *(new FilterOnRising<T>());
 	}
 
 	template <typename T>
-	 FilterOnFalling<T>& OnFalling()
+	FilterOnFalling<T>& OnFalling()
 	{
 		return *(new FilterOnFalling<T>());
 	}
 
 	template <typename T>
-	 FilterMedian3<T>& Median3()
+	FilterMedian3<T>& Median3()
 	{
 		return *(new FilterMedian3<T>());
 	}
 
 	template <typename T>
-	 FilterMedian5<T>& Median5()
+	FilterMedian5<T>& Median5()
 	{
 		return *(new FilterMedian5<T>());
 	}
 
 	template <typename T>
-	 FilterMovingAverage<T>& MovingAverage(size_t N)
+	FilterMovingAverage<T>& MovingAverage(size_t N)
 	{
 		return *(new FilterMovingAverage<T>(N));
 	}
 
 	template <typename T>
-	 FilterMovingRMS<T>& MovingRMS(size_t N)
+	FilterMovingRMS<T>& MovingRMS(size_t N)
 	{
 		return *(new FilterMovingRMS<T>(N));
 	}
 
 	template <typename T>
-	 FilterLowPass<T>& LowPass(const double alpha)
+	FilterLowPass<T>& LowPass(const double alpha)
 	{
 		return *(new FilterLowPass<T>(alpha));
 	}
 
 	template <typename T>
-	 FilterHighPass<T>& HighPass(const double alpha)
+	FilterHighPass<T>& HighPass(const double alpha)
 	{
 		return *(new FilterHighPass<T>(alpha));
 	}
 
 	template <typename T>
-	 FilterStopBand<T>& StopBand(const double alpha1, const double alpha2)
+	FilterStopBand<T>& StopBand(const double alpha1, const double alpha2)
 	{
 		return *(new FilterStopBand<T>(alpha1, alpha2));
 	}
 
 	template <typename T>
-	 FilterPassBand<T>& PassBand(const double alpha1, const double alpha2)
+	FilterPassBand<T>& PassBand(const double alpha1, const double alpha2)
 	{
 		return *(new FilterPassBand<T>(alpha1, alpha2));
 	}
 
 	template <typename T>
-	 FilterDebounceMillis<T>& DebounceMillis(const unsigned long interval)
+	FilterDebounceMillis<T>& DebounceMillis(const unsigned long interval)
 	{
 		return *(new FilterDebounceMillis<T>(interval));
 	}
 
 	template <typename T>
-	 FilterDebounceMicros<T>& DebounceMicros(const unsigned long interval)
+	FilterDebounceMicros<T>& DebounceMicros(const unsigned long interval)
 	{
 		return *(new FilterDebounceMicros<T>(interval));
 	}
 
 	template <typename T>
-	 FilterWindowMillis<T>& WindowMillis(const unsigned long interval)
+	FilterWindowMillis<T>& WindowMillis(const unsigned long interval)
 	{
 		return *(new FilterWindowMillis<T>(interval));
 	}
 
 	template <typename T>
-	 FilterWindowMicros<T>& WindowMicros(const unsigned long interval)
+	FilterWindowMicros<T>& WindowMicros(const unsigned long interval)
 	{
 		return *(new FilterWindowMicros<T>(interval));
 	}
 
 	template <typename T>
-	 FilterIsLessOrEqual<T>& IsLessOrEqual(T value)
+	FilterIsLessOrEqual<T>& IsLessOrEqual(T value)
 	{
 		return *(new FilterIsLessOrEqual<T>(value));
 	}
 
 	template <typename T>
-	 FilterIsLess<T>& IsLess(T value)
+	FilterIsLess<T>& IsLess(T value)
 	{
 		return *(new FilterIsLess<T>(value));
 	}
 
 	template <typename T>
-	 FilterIsGreaterOrEqual<T>& IsGreaterOrEqual(T value)
+	FilterIsGreaterOrEqual<T>& IsGreaterOrEqual(T value)
 	{
 		return *(new FilterIsGreaterOrEqual<T>(value));
 	}
 
 	template <typename T>
-	 FilterIsGreater<T>& IsGreater(T value)
+	FilterIsGreater<T>& IsGreater(T value)
 	{
 		return *(new FilterIsGreater<T>(value));
 	}
 
 	template <typename T>
-	 FilterIsNotEqual<T>& IsNotEqual(T value)
+	FilterIsNotEqual<T>& IsNotEqual(T value)
 	{
 		return *(new FilterIsNotEqual<T>(value));
 	}
 
 	template <typename T>
-	 FilterIsEqual<T>& IsEqual(T value)
+	FilterIsEqual<T>& IsEqual(T value)
 	{
 		return *(new FilterIsEqual<T>(value));
 	}
 
 	template <typename T>
-	 FilterIsNotZero<T>& IsNotZero()
+	FilterIsNotZero<T>& IsNotZero()
 	{
 		return *(new FilterIsNotZero<T>());
 	}
 
 	template <typename T>
-	 FilterIsZero<T>& IsZero()
+	FilterIsZero<T>& IsZero()
 	{
 		return *(new FilterIsZero<T>());
 	}
@@ -627,61 +653,61 @@ namespace Reactive
 
 #pragma region Aggregates
 	template <typename T>
-	 AggregateCount<T>& Count()
+	AggregateCount<T>& Count()
 	{
 		return *(new AggregateCount<T>());
 	}
 
 	template <typename T>
-	 AggregateCountdown<T>& CountDown(size_t N)
+	AggregateCountdown<T>& CountDown(size_t N)
 	{
 		return *(new AggregateCountdown<T>(N));
 	}
 
 	template <typename T>
-	 AggregateSum<T>& Sum()
+	AggregateSum<T>& Sum()
 	{
 		return *(new AggregateSum<T>());
 	}
 
 	template <typename T>
-	 AggregateMin<T>& Min()
+	AggregateMin<T>& Min()
 	{
 		return *(new AggregateMin<T>());
 	}
 
 	template <typename T>
-	 AggregateMax<T>& Max()
+	AggregateMax<T>& Max()
 	{
 		return *(new AggregateMax<T>());
 	}
 
 	template <typename T>
-	 AggregateAverage<T>& Average()
+	AggregateAverage<T>& Average()
 	{
 		return *(new AggregateAverage<T>());
 	}
 
 	template <typename T>
-	 AggregateRMS<T>& RMS()
+	AggregateRMS<T>& RMS()
 	{
 		return *(new AggregateRMS<T>());
 	}
 
 	template <typename T>
-	 AggregateAny<T>& Any(ReactivePredicate<T> condition)
+	AggregateAny<T>& Any(ReactivePredicate<T> condition)
 	{
 		return *(new AggregateAny<T>(condition));
 	}
 
 	template <typename T>
-	 AggregateAll<T>& All(ReactivePredicate<T> condition)
+	AggregateAll<T>& All(ReactivePredicate<T> condition)
 	{
 		return *(new AggregateAll<T>(condition));
 	}
 
 	template <typename T>
-	 AggregateNone<T>& None(ReactivePredicate<T> condition)
+	AggregateNone<T>& None(ReactivePredicate<T> condition)
 	{
 		return *(new AggregateNone<T>(condition));
 	}

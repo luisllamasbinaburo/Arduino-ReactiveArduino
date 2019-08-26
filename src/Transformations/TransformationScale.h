@@ -16,7 +16,7 @@ class TransformationScale : public Operator<T, T>
 public:
 	TransformationScale<T>(T input_min, T input_max, T output_min, T output_max);
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	T _input_min = T();
@@ -36,12 +36,10 @@ TransformationScale<T>::TransformationScale(T input_min, T input_max, T output_m
 
 
 template <typename T>
-inline void TransformationScale<T>::OnNext(T value)
+void TransformationScale<T>::OnNext(T value)
 {
 	T scaled = (value - _input_min) * (_output_max - _output_min) / (_input_max - _input_min) + _output_min;
 	this->_childObserver->OnNext(scaled);
 }
-
-
 #endif
 

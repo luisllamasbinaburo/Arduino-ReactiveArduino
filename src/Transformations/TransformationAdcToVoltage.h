@@ -11,12 +11,12 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #define _REACTIVETRANSFORMATIONADCTOVOLTAGE_h
 
 template <typename T>
-class TransformationAdcToVoltage : public Operator<T, T>
+class TransformationAdcToVoltage : public Operator<T, float>
 {
 public:
-	TransformationAdcToVoltage<T>(T input_max = 1023, T output_max = 5);
+	TransformationAdcToVoltage<T>(T input_max = 1023, T output_max = 5.0);
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 
 private:
 	T _input_max = T();
@@ -32,7 +32,7 @@ TransformationAdcToVoltage<T>::TransformationAdcToVoltage(T input_max, T output_
 
 
 template <typename T>
-inline void TransformationAdcToVoltage<T>::OnNext(T value)
+void TransformationAdcToVoltage<T>::OnNext(T value)
 {
 	this->_childObserver->OnNext((value * _output_max) / _input_max);
 }

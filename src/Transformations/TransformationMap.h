@@ -18,7 +18,7 @@ public:
 
 	TransformationMap<Torig, Tdest>(ReactiveMap<Torig, Tdest> map);
 
-	void OnNext(Torig value);
+	void OnNext(Torig value) override;
 };
 
 template <typename Torig, typename Tdest>
@@ -28,7 +28,7 @@ TransformationMap<Torig, Tdest>::TransformationMap(ReactiveMap<Torig, Tdest> map
 }
 
 template<typename Torig, typename Tdest>
-inline void TransformationMap<Torig, Tdest>::OnNext(Torig value)
+void TransformationMap<Torig, Tdest>::OnNext(Torig value)
 {
 	Tdest newValue = (Tdest)(this->_map(value));
 

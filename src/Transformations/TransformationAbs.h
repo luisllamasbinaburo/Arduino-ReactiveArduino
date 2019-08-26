@@ -16,7 +16,7 @@ class TransformationAbs : public Operator<T, T>
 public:
 	TransformationAbs<T>();
 
-	void OnNext(T value);
+	void OnNext(T value) override;
 };
 
 template <typename T>
@@ -25,7 +25,7 @@ TransformationAbs<T>::TransformationAbs()
 }
 
 template <typename T>
-inline void TransformationAbs<T>::OnNext(T value)
+void TransformationAbs<T>::OnNext(T value)
 {
 	this->_childObserver->OnNext(value >= 0 ? value : -value);
 }
