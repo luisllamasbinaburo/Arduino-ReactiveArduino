@@ -12,12 +12,9 @@ The general use of ReactiveArduino consists of:
 
 For example:
 ```c++
-FromRange<int>(10, 20)
->> Select<int>([](int x) { return x + 10; })
->> DoAndFinally<int>(
-  [](int x) { Serial.println(x); },
-  []() { Serial.println("No more items"); 
-});
+	FromRange(10, 20)
+	.Select([](int x) { return x + 10; })
+	.Do( [](int x) { Serial.println(x); });
 ```
 
 More examples in Wiki/[Examples](https://github.com/luisllamasbinaburo/Arduino-ReactiveArduino/wiki/Examples)
@@ -79,8 +76,10 @@ obsString >> counter >> ToSerial<String>();
 This example show how to use Reactive Operator to perform a 3-elements Median filter, then a 4-elements Moving Average Filter, and make some action with the final filtered value.
 ```c++
 #include "ReactiveArduinoLib.h"
+using namespace Reactive;
 
-int values[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+int values[] = { 0, 1, 4, 6, 2, 5, 7, 3, 5, 8 };
 int valuesLength = sizeof(values) / sizeof(values[0]);
 
 void setup()
@@ -88,17 +87,17 @@ void setup()
 	Serial.begin(9600);
 	while (!Serial) delay(1);
 
-	FromArray<int>(values, valuesLength)
-		>> Cast<int, float>()
-		>> Median3<float>()
-		>> MovingAverage<float>(4)
-		>> DoAndFinally<float>(
-			[](float x) { Serial.println(x); },
-			[]() { Serial.println("No more items"); }
+	FromArray(values, valuesLength)
+	.Cast<float>()
+	.Median5()
+	.MovingAverage(4)
+	.DoAndFinally(
+		[](float x) { Serial.println(x); },
+		[]() { Serial.println("No more items"); }
 	);
 }
 
-void loop() 
+void loop()
 {
 	delay(2000);
 }
