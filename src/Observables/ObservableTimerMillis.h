@@ -74,7 +74,7 @@ template <typename T>
 void ObservableTimerMillis<T>::Reset()
 {
 	this->_isActive = true;
-	this->_offset = delay;
+	this->_offset = this->_delay;
 	this->_startTime = millis();
 }
 
