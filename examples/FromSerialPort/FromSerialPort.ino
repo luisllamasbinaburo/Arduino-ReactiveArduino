@@ -23,7 +23,7 @@ void setup()
 	observable
 	>> Split<String>(',')
 	>> Distinct<String>()
-	>> ParseFloat()
+	>> ParseFloat<string>()
 	>> Map<float, String>([](float x) {return String(x * 2); })
 	>> Join<String>('+')
 	>> Last<String>()
@@ -32,5 +32,5 @@ void setup()
 
 void loop()
 {
-	observable.Recieve();
+	observable.Receive();
 }
