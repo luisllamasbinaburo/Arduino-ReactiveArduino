@@ -77,12 +77,12 @@ namespace Reactive
 
 	inline auto TimerMillis(unsigned long interval) -> ObservableTimerMillis<unsigned long>&
 	{
-		return *(new ObservableTimerMillis<unsigned long>(interval));
+		return *(new ObservableTimerMillis<unsigned long>(interval, 0));
 	}
 
 	inline auto TimerMicros(unsigned long interval) -> ObservableTimerMicros<unsigned long>&
 	{
-		return *(new ObservableTimerMicros<unsigned long>(interval));
+		return *(new ObservableTimerMicros<unsigned long>(interval, 0));
 	}
 
 	inline auto IntervalMillis(unsigned long interval, unsigned long delay = 0) -> ObservableIntervalMillis<unsigned long>&

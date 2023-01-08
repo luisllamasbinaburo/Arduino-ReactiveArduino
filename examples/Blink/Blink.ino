@@ -10,7 +10,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #include "ReactiveArduinoLib.h"
 using namespace Reactive;
 
-auto timer = IntervalMillis<unsigned long>(500);
+auto timer = IntervalMillis(500);
 
 void setup()
 {

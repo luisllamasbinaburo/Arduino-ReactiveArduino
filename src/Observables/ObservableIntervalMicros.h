@@ -14,7 +14,7 @@ template <typename T>
 class ObservableIntervalMicros : public Observable<unsigned long>
 {
 public:
-	ObservableIntervalMicros(unsigned long microsInterval, unsigned long delay = 0);
+	ObservableIntervalMicros(unsigned long microsInterval, unsigned long delay);
 	void Suscribe(IObserver<T> &observer) override;
 
 	void Start();
