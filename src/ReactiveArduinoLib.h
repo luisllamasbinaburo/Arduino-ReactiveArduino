@@ -10,6 +10,8 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #ifndef _REACTIVEARDUINOLIB_h
 #define _REACTIVEARDUINOLIB_h
 
+#define __REACTIVE_VERSION__ 2
+
 #if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
 #else
@@ -28,7 +30,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 namespace Reactive
 {
-#pragma region Observables
+// #pragma region Observables
 	template <typename T>
 	auto ManualDefer() -> ObservableManualDefer<T>&
 	{
@@ -141,10 +143,10 @@ namespace Reactive
 	{
 		return *(new ObservableSerial<double>());
 	}
-#pragma endregion
+// #pragma endregion
 
 
-#pragma region Observers
+// #pragma region Observers
 	template <typename T>
 	ObserverDo<T>& Do(ReactiveAction<T> action)
 	{
@@ -205,10 +207,10 @@ namespace Reactive
 		return *(new ObserverSerial<T>());
 	}
 
-#pragma endregion
+// #pragma endregion
 
 
-#pragma region Operators
+// #pragma region Operators
 	template <typename T>
 	OperatorWhere<T>& Where(ReactivePredicate<T> condition)
 	{
@@ -346,12 +348,10 @@ namespace Reactive
 	{
 		return *(new OperatorRepeat<T>(N));
 	}
+// #pragma endregion
 
 
-#pragma endregion
-
-
-#pragma region Transformations
+// #pragma region Transformations
 	template <typename T>
 	TransformationSelect<T>& Select(ReactiveFunction<T> function)
 	{
@@ -513,10 +513,10 @@ namespace Reactive
 	{
 		return *(new TransformationParseFloat<T>());
 	}
-#pragma endregion
+// #pragma endregion
 
 
-#pragma region Filters
+// #pragma region Filters
 	template <typename T>
 	FilterOnRising<T>& OnRising()
 	{
@@ -648,10 +648,10 @@ namespace Reactive
 	{
 		return *(new FilterIsZero<T>());
 	}
-#pragma endregion
+// #pragma endregion
 
 
-#pragma region Aggregates
+// #pragma region Aggregates
 	template <typename T>
 	AggregateCount<T>& Count()
 	{
@@ -711,7 +711,7 @@ namespace Reactive
 	{
 		return *(new AggregateNone<T>(condition));
 	}
-#pragma endregion
+// #pragma endregion
 };
 
 #endif

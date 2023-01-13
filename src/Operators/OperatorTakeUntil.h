@@ -36,7 +36,9 @@ void OperatorTakeUntil<T>::OnNext(T value)
 	if (this->_completed) return;
 
 	if (!this->_condition(value))
+	{
 		if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+	}
 	else
 	{
 		this->_completed = true;

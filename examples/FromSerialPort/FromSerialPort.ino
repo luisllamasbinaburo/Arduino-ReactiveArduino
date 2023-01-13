@@ -13,7 +13,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #include "ReactiveArduinoLib.h"
 using namespace Reactive;
 
-auto observable = FromSerialString();
+auto observable = FromSerial();
 
 void setup()
 {
@@ -21,16 +21,17 @@ void setup()
 	while (!Serial) delay(1);
 
 	observable
-	>> Split<String>(',')
-	>> Distinct<String>()
-	>> ParseFloat<string>()
-	>> Map<float, String>([](float x) {return String(x * 2); })
-	>> Join<String>('+')
-	>> Last<String>()
-	>> ToSerial<String>();
+		.Split(',')
+		.Distinct()
+		.ParseFloat()
+		.Select<String>([](float x) {return String(x * 2); })
+		.Join('+')
+		.Last()
+		.ToSerial();
 }
 
 void loop()
 {
 	observable.Receive();
+	delay(10);
 }

@@ -12,7 +12,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 #include "ReactiveArduinoBases.h"
 
-#pragma region Forward definitions
+// // #pragma region Forward definitions
 template <typename T> class ObservableRange;
 template <typename T> class ObservableRangeDefer;
 template <typename T> class ObservableArray;
@@ -120,7 +120,7 @@ template <typename T> class ObserverCircularBuffer;
 template <typename T> class ObserverDigitalOutput;
 template <typename T> class ObserverAnalogOutput;
 template <typename T> class ObserverSerial;
-#pragma endregion
+// // #pragma endregion
 
 
 /// Observable base
@@ -252,7 +252,7 @@ public:
 	ObserverAnalogOutput<T>& ToAnalogOutput(uint8_t pin);
 };
 
-#pragma region Implementation
+// #pragma region Implementation
 template <typename T>
 auto Observable<T>::Where(ReactivePredicate<T> condition) -> OperatorWhere<T>&
 {
@@ -992,7 +992,7 @@ auto Observable<T>::ToAnalogOutput(uint8_t pin) -> ObserverAnalogOutput<T>&
 	Suscribe(*newOp);
 	return *newOp;
 }
-#pragma endregion
+// #pragma endregion
 
 
 /// Operator Base

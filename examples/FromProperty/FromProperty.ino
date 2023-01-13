@@ -7,10 +7,12 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License
  ****************************************************/
 
+// will print 10, 20, 10, 20 ... that is observable * 10, and stored in result variable
 #include "ReactiveArduinoLib.h"
 using namespace Reactive;
 
 ObservableProperty<int> observableInt;
+int result;
 
 void setup()
 {
@@ -18,24 +20,17 @@ void setup()
 	while (!Serial) delay(1);
 
 	observableInt
-		>> Distinct<int>()
-		>> Where<int>([](int x) { return x > 2; })
-		>> DoAndFinally<int>(
-			[](int x) { Serial.println(x); },
-			[]() { Serial.println("No more items"); }
-		);
+		.Select([](int x) { return x * 10; })
+		.ToProperty(result);
 }
 
 void loop()
 {
 	observableInt = 1;
-	delay(200);
-	observableInt = 3;
-	delay(200);
-	observableInt = 3;
-	delay(200);
-	observableInt = 1;
-	delay(200);
-	observableInt = 5;
-	delay(200);
+	Serial.println(result);
+	delay(1000);
+	
+	observableInt = 2;
+	Serial.println(result);
+	delay(1000);
 }
