@@ -2,7 +2,7 @@
 
 ReactiveArduino implements observable-observer pattern on a processor like Arduino. The purpose is to provide declarative programming approach, within the capacity constraints of a low-power MCU.
 
-ReactiveArduino is heavly based on [ReactiveX](http://reactivex.io/) and [ReactiveUI](https://reactiveui.net/), adapted to the needs and limitations in a MCU.
+ReactiveArduino is heavily based on [ReactiveX](http://reactivex.io/) and [ReactiveUI](https://reactiveui.net/), adapted to the needs and limitations in a MCU.
 
 ## Instructions for use
 The general use of ReactiveArduino consists of:
@@ -51,13 +51,13 @@ Hot observables emits the sequence when an observer subscribes to it. For exampl
 ```c++
 FromArray(values, valuesLength)
 ```
-Cold observable does not emits any item when a observer suscribes to it. You have to explicitly call the `Next()` method whenever you want. For example, `FromArrayDefer(...)`
+Cold observable does not emits any item when a observer subscribes to it. You have to explicitly call the `Next()` method whenever you want. For example, `FromArrayDefer(...)`
 ```c++
 FromArrayDefer(values, valuesLength)
 ```
 ### Dynamic memory considerations
-On many occasions we generate operators directly when we chain them, for example in the `Setup()`. However, creating an operator allocates dynamic memory. Therefore, you should avoid creating them in `Loop()`, or you coul run out of memory.
-If you need to reuse (tipically, call some operator method later in your code) set it as a global variable, and chain as normal.
+On many occasions we generate operators directly when we chain them, for example in the `Setup()`. However, creating an operator allocates dynamic memory. Therefore, you should avoid creating them in `Loop()`, or you could run out of memory.
+If you need to reuse (typically, call some operator method later in your code) set it as a global variable, and chain as normal.
 ```c++
 auto counter = Count<int>();
 ...
