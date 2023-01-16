@@ -24,10 +24,10 @@ template <typename T> class ObservableTimerMillis;
 template <typename T> class ObservableTimerMicros;
 template <typename T> class ObservableIntervalMillis;
 template <typename T> class ObservableIntervalMicros;
-template <typename T> class ObservableSerialChar;
-template <typename T> class ObservableSerialString;
-template <typename T> class ObservableSerialInteger;
-template <typename T> class ObservableSerialFloat;
+//template <typename T> class ObservableSerialChar;
+//template <typename T> class ObservableSerialString;
+//template <typename T> class ObservableSerialInteger;
+//template <typename T> class ObservableSerialFloat;
 
 template <typename T> class FilterOnRising;
 template <typename T> class FilterOnFalling;
