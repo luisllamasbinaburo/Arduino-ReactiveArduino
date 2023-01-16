@@ -76,7 +76,7 @@ template <typename T> class OperatorNoReset;
 template <typename T> class OperatorReset;
 
 template <typename T> class TransformationSelect;
-template <typename T> class TransformationReduce;
+template <typename Torig, typename Tdest> class TransformationReduce;
 template <typename Torig, typename Tdest> class TransformationCast;
 template <typename Torig, typename Tdest> class TransformationMap;
 template <typename T> class TransformationLimit;
@@ -182,7 +182,7 @@ public:
 	template <class Tdest> TransformationCast<T, Tdest>& Cast();
 	template <class Tdest> TransformationMap<T, Tdest>& Select(ReactiveMap<T, Tdest> map);
 	template <class Tdest> TransformationMap<T, Tdest>& Map(ReactiveMap<T, Tdest> map);
-	TransformationReduce<T>& Reduce(ReactiveCompound<T> function);
+	template <class Tdest> TransformationReduce<T, Tdest>& Reduce(ReactiveReduce<T, Tdest> function, Tdest init = Tdest());
 	TransformationUpperLimit<T>& LimitUpper(T upperLimit);
 	TransformationLowerLimit<T>& LimitLower(T lowerLimit);
 	TransformationLimit<T>& Limit(T lowerLimit, T upperLimit);
@@ -473,9 +473,10 @@ auto Observable<T>::Select(ReactiveMap<T, Tdest> map) -> TransformationMap<T, Td
 
 
 template <typename T>
-auto Observable<T>::Reduce(ReactiveCompound<T> function) -> TransformationReduce<T>&
+template <typename Tdest>
+auto Observable<T>::Reduce(ReactiveReduce<T, Tdest> function, Tdest init) -> TransformationReduce<T, Tdest>&
 {
-	auto newOp = new TransformationReduce<T>(function);
+	auto newOp = new TransformationReduce<T, Tdest>(function, init);
 	Compound(*this, *newOp);
 	return *newOp;
 }

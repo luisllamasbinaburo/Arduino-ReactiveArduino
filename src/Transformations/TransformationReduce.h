@@ -10,29 +10,29 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #ifndef _REACTIVETRANSFORMATIONREDUCE_h
 #define _REACTIVETRANSFORMATIONREDUCE_h
 
-template <typename T>
-class TransformationReduce : public Operator<T, T>
+template <typename Torig, typename Tdest>
+class TransformationReduce : public Operator<Torig, Tdest>
 {
 public:
-	ReactiveCompound<T> _function;
+	ReactiveReduce<Torig, Tdest> _function;
 
-	TransformationReduce<T>(ReactiveCompound<T> function);
+	TransformationReduce<Torig, Tdest>(ReactiveReduce<Torig, Tdest> function, Tdest init);
 
-	void OnNext(T value) override;
+	void OnNext(Torig value) override;
 
 private:
-	T _rst = T();
-
+	Tdest _rst;
 };
 
-template <typename T>
-TransformationReduce<T>::TransformationReduce(ReactiveCompound<T> function)
+template <typename Torig, typename Tdest>
+TransformationReduce<Torig, Tdest>::TransformationReduce(ReactiveReduce<Torig, Tdest> function, Tdest init)
 {
 	this->_function = function;
+	this->_rst = init;
 }
 
-template <typename T>
-void TransformationReduce<T>::OnNext(T value)
+template <typename Torig, typename Tdest>
+void TransformationReduce<Torig, Tdest>::OnNext(Torig value)
 {
 	this->_rst = this->_function(this->_rst, value);
 	if (this->_childObserver != nullptr) this->_childObserver->OnNext(this->_rst);

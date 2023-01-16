@@ -24,6 +24,9 @@ using ReactiveCompound = T(*)(T, T);
 template <typename Torig, typename Tdest>
 using ReactiveMap = Tdest(*)(Torig);
 
+template <typename Torig, typename Tdest>
+using ReactiveReduce = Tdest(*)(Tdest, Torig);
+
 template <typename T>
 using ReactivePredicate = bool(*)(T);
 

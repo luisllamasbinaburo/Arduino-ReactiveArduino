@@ -376,10 +376,10 @@ namespace Reactive
 		return *(new TransformationMap<Torig, Tdest>(map));
 	}
 
-	template <typename T>
-	TransformationReduce<T>& Reduce(ReactiveCompound<T> function)
+	template <typename Torig, typename Tdest>
+	TransformationMap<Torig, Tdest>& Reduce(ReactiveMap<Torig, Tdest> map)
 	{
-		return *(new TransformationReduce<T>(function));
+		return *(new TransformationReduce<Torig, Tdest>(map));
 	}
 
 	template <typename T>
