@@ -18,6 +18,8 @@ Unless required by applicable law or agreed to in writing, software distributed 
 	#include "WProgram.h"
 #endif
 
+namespace Reactive
+{
 #include "ReactiveArduinoCore.h"
 
 #include "Observables/Observables.h"
@@ -28,8 +30,6 @@ Unless required by applicable law or agreed to in writing, software distributed 
 #include "Filters/Filters.h"
 #include "Aggregates/Aggregates.h"
 
-namespace Reactive
-{
 // #pragma region Observables
 	template <typename T>
 	auto ManualDefer() -> ObservableManualDefer<T>&
