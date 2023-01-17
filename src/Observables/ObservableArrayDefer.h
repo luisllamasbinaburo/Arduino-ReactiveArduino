@@ -15,7 +15,7 @@ class ObservableArrayDefer : public Observable<T>
 {
 public:
 	ObservableArrayDefer(T *array, size_t length);
-	void Suscribe(IObserver<T> &observer) override;
+	void Subscribe(IObserver<T> &observer) override;
 	void Next();
 	void Reset() override;
 
@@ -36,7 +36,7 @@ ObservableArrayDefer<T>::ObservableArrayDefer(T *array, size_t length)
 }
 
 template <typename T>
-void ObservableArrayDefer<T>::Suscribe(IObserver<T> &observer)
+void ObservableArrayDefer<T>::Subscribe(IObserver<T> &observer)
 {
 	_childObserver = &observer;
 }

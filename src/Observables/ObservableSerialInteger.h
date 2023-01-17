@@ -16,7 +16,7 @@ class ObservableSerial<int> : public Observable<int>
 {
 public:
 	ObservableSerial(char separator = '\n');
-	void Suscribe(IObserver<int> &observer) override;
+	void Subscribe(IObserver<int> &observer) override;
 	void Receive();
 
 private:
@@ -31,7 +31,7 @@ ObservableSerial<int>::ObservableSerial(char separator)
 	_separator = separator;
 }
 
-void ObservableSerial<int>::Suscribe(IObserver<int> &observer)
+void ObservableSerial<int>::Subscribe(IObserver<int> &observer)
 {
 	_childObserver = &observer;
 }

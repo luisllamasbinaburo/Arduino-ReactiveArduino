@@ -49,7 +49,7 @@ template <typename T>
 class IObservable
 {
 public:
-	virtual void Suscribe(IObserver<T> &observer) = 0;
+	virtual void Subscribe(IObserver<T> &observer) = 0;
 
 protected:
 	virtual ~IObservable() = default;

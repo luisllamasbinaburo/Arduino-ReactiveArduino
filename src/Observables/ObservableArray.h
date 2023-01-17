@@ -15,7 +15,7 @@ class ObservableArray : public Observable<T>
 {
 public:
 	ObservableArray(T *array, size_t length);
-	void Suscribe(IObserver<T> &observer) override;
+	void Subscribe(IObserver<T> &observer) override;
 	void Run();
 	void Reset() override;
 
@@ -33,7 +33,7 @@ ObservableArray<T>::ObservableArray(T *array, size_t length)
 }
 
 template <typename T>
-void ObservableArray<T>::Suscribe(IObserver<T> &observer)
+void ObservableArray<T>::Subscribe(IObserver<T> &observer)
 {
 	_childObserver = &observer;
 	Run();

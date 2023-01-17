@@ -15,7 +15,7 @@ class ObservableTimerMicros : public Observable<unsigned long>
 {
 public:
 	ObservableTimerMicros(unsigned long microsInterval, unsigned long delay = 0);
-	void Suscribe(IObserver<T> &observer) override;
+	void Subscribe(IObserver<T> &observer) override;
 
 	void Start();
 	void Reset() override;
@@ -52,7 +52,7 @@ ObservableTimerMicros<T>::ObservableTimerMicros(unsigned long interval, unsigned
 }
 
 template <typename T>
-void ObservableTimerMicros<T>::Suscribe(IObserver<T> &observer)
+void ObservableTimerMicros<T>::Subscribe(IObserver<T> &observer)
 {
 	_childObserver = &observer;
 }

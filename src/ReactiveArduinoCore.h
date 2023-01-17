@@ -125,11 +125,11 @@ class Observable : IObservable<T>, IResetable<T>
 {
 public:
 
-	void Suscribe(IObserver<T> &observer) override = 0;
+	void Subscribe(IObserver<T> &observer) override = 0;
 
 	void operator >> (IObserver<T> & obs)
 	{
-		Suscribe(obs);
+		Subscribe(obs);
 	}
 
 	template <typename Torig, typename Tdest>
@@ -914,7 +914,7 @@ template <typename T>
 auto Observable<T>::ToSerial() -> ObserverSerial<T>
 {
 	auto newOp = new ObserverSerial<T>();
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -922,7 +922,7 @@ template <typename T>
 auto Observable<T>::Do(ReactiveAction<T> action) -> ObserverDo<T>&
 {
 	auto newOp = new ObserverDo<T>(action);
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -930,7 +930,7 @@ template <typename T>
 auto Observable<T>::Finally(ReactiveCallback action) -> ObserverFinally<T>&
 {
 	auto newOp = new ObserverFinally<T>(action);
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -938,7 +938,7 @@ template <typename T>
 auto Observable<T>::DoAndFinally(ReactiveAction<T> doAction, ReactiveCallback finallyAction) -> ObserverDoAndFinally<T>&
 {
 	auto newOp = new ObserverDoAndFinally<T>(doAction, finallyAction);
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -946,7 +946,7 @@ template <typename T>
 auto Observable<T>::DoNothing() -> ObserverDoNothing<T>&
 {
 	auto newOp = new ObserverDoNothing<T>();
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -954,7 +954,7 @@ template <typename T>
 auto Observable<T>::ToProperty(T& property) -> ObserverProperty<T>&
 {
 	auto newOp = new ObserverProperty<T>(property);
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -962,7 +962,7 @@ template <typename T>
 auto Observable<T>::ToArray(T* array, size_t length) -> ObserverArray<T>&
 {
 	auto newOp = new ObserverArray<T>(array, length);
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -970,7 +970,7 @@ template <typename T>
 auto Observable<T>::ToCircularBuffer(T* array, size_t length) -> ObserverCircularBuffer<T>&
 {
 	auto newOp = new ObserverCircularBuffer<T>(array, length);
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -978,7 +978,7 @@ template <typename T>
 auto Observable<T>::ToDigitalOutput(uint8_t pin) -> ObserverDigitalOutput<T>&
 {
 	auto newOp = new ObserverDigitalOutput<T>(pin);
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -986,7 +986,7 @@ template <typename T>
 auto Observable<T>::ToAnalogOutput(uint8_t pin) -> ObserverAnalogOutput<T>&
 {
 	auto newOp = new ObserverAnalogOutput<T>(pin);
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 // #pragma endregion
@@ -1000,7 +1000,7 @@ public:
 	Observable<Torig>* _parentObservable;
 	IObserver<Tdest>* _childObserver;
 
-	void Suscribe(IObserver<Tdest> & observer) override;
+	void Subscribe(IObserver<Tdest> & observer) override;
 	void Reset() override;
 
 protected:
@@ -1009,10 +1009,10 @@ protected:
 };
 
 template <typename Torig, typename Tdest>
-void Operator<Torig, Tdest>::Suscribe(IObserver<Tdest> &observer)
+void Operator<Torig, Tdest>::Subscribe(IObserver<Tdest> &observer)
 {
 	this->_childObserver = &observer;
-	_parentObservable->Suscribe(*this);
+	_parentObservable->Subscribe(*this);
 }
 
 template <typename Torig, typename Tdest>

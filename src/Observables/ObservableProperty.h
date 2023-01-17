@@ -16,7 +16,7 @@ class ObservableProperty : public Observable<T>
 public:
 	void operator = (const T&);
 	ObservableProperty();
-	void Suscribe(IObserver<T> &) override;
+	void Subscribe(IObserver<T> &) override;
 	void Finish();
 	void Reset() override;
 
@@ -38,7 +38,7 @@ ObservableProperty<T>::ObservableProperty()
 }
 
 template <typename T>
-void ObservableProperty<T>::Suscribe(IObserver<T> &observer)
+void ObservableProperty<T>::Subscribe(IObserver<T> &observer)
 {
 	this->_observer = &observer;
 }

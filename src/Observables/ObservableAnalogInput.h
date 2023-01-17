@@ -15,7 +15,7 @@ class ObservableAnalogInput : public Observable<T>
 {
 public:
 	ObservableAnalogInput(uint8_t pin, uint8_t pinMode = INPUT);
-	void Suscribe(IObserver<T> &observer) override;
+	void Subscribe(IObserver<T> &observer) override;
 	void Next();
 
 private:
@@ -32,7 +32,7 @@ ObservableAnalogInput<T>::ObservableAnalogInput(uint8_t pin, uint8_t mode)
 }
 
 template <typename T>
-void ObservableAnalogInput<T>::Suscribe(IObserver<T> &observer)
+void ObservableAnalogInput<T>::Subscribe(IObserver<T> &observer)
 {
 	_childObserver = &observer;
 }

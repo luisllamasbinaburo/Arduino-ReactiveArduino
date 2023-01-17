@@ -17,7 +17,7 @@ class ObservableRange : public Observable<T>
 {
 public:
 	ObservableRange(T start, T end, T step = 1);
-	void Suscribe(IObserver<T> &observer) override;
+	void Subscribe(IObserver<T> &observer) override;
 	void Run();
 	void Reset() override;
 
@@ -38,7 +38,7 @@ ObservableRange<T>::ObservableRange(T start, T end, T step)
 }
 
 template <typename T>
-void ObservableRange<T>::Suscribe(IObserver<T> &observer)
+void ObservableRange<T>::Subscribe(IObserver<T> &observer)
 {
 	_childObserver = &observer;
 	Run();

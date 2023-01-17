@@ -15,7 +15,7 @@ class ObservableSerial<byte> : public Observable<byte>
 {
 public:
 	ObservableSerial();
-	void Suscribe(IObserver<byte> &observer);
+	void Subscribe(IObserver<byte> &observer);
 	void Receive();
 
 private:
@@ -26,7 +26,7 @@ ObservableSerial<byte>::ObservableSerial()
 {
 }
 
-void ObservableSerial<byte>::Suscribe(IObserver<byte> &observer)
+void ObservableSerial<byte>::Subscribe(IObserver<byte> &observer)
 {
 	_childObserver = &observer;
 }

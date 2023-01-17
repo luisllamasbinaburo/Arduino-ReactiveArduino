@@ -15,7 +15,7 @@ class ObservableManualDefer : public Observable<T>
 {
 public:
 	ObservableManualDefer();
-	void Suscribe(IObserver<T> &observer) override;
+	void Subscribe(IObserver<T> &observer) override;
 	void Next();
 	void Reset() override;
 	void Complete();
@@ -30,7 +30,7 @@ ObservableManualDefer<T>::ObservableManualDefer()
 }
 
 template <typename T>
-void ObservableManualDefer<T>::Suscribe(IObserver<T> &observer)
+void ObservableManualDefer<T>::Subscribe(IObserver<T> &observer)
 {
 	_childObserver = &observer;
 }
