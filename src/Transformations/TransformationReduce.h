@@ -35,7 +35,6 @@ template <typename Torig, typename Tdest>
 void TransformationReduce<Torig, Tdest>::OnNext(Torig value)
 {
 	this->_rst = this->_function(this->_rst, value);
-	Tdest newValue = this->_rst;
-	this->_childObservers.Fire(newValue);
+	this->_childObservers.Fire(this->_rst);
 }
 #endif

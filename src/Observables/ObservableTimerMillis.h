@@ -85,7 +85,6 @@ void ObservableTimerMillis<T>::Reset()
 	this->_startTime = millis();
 }
 
-
 template <typename T>
 void ObservableTimerMillis<T>::Start()
 {
