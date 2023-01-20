@@ -16,12 +16,14 @@ class ObservableSerial<String> : public Observable<String>
 public:
 	ObservableSerial(char separator = '\n');
 	void Subscribe(IObserver<String> &observer) override;
+	void UnSubscribe(IObserver<String> &observer) override;
 	void Receive();
 
 private:
 	String _buffer = "";
 	char _separator;
-	IObserver<String>* _childObserver;
+
+	ObserverList<String> _childObservers;
 };
 
 ObservableSerial<String>::ObservableSerial(char separator)
@@ -31,7 +33,12 @@ ObservableSerial<String>::ObservableSerial(char separator)
 
 void ObservableSerial<String>::Subscribe(IObserver<String> &observer)
 {
-	_childObserver = &observer;
+	_childObservers.Add(&observer);
+}
+
+void ObservableSerial<String>::UnSubscribe(IObserver<String> &observer)
+{
+	_childObservers.Remove(&observer);
 }
 
 void ObservableSerial<String>::Receive()
@@ -45,7 +52,7 @@ void ObservableSerial<String>::Receive()
 		}
 		else
 		{
-			if (_childObserver != nullptr) _childObserver->OnNext(_buffer);
+			_childObservers.Fire(_buffer);
 			_buffer = "";
 		}
 	}

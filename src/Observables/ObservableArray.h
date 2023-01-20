@@ -16,13 +16,15 @@ class ObservableArray : public Observable<T>
 public:
 	ObservableArray(T *array, size_t length);
 	void Subscribe(IObserver<T> &observer) override;
+	void UnSubscribe(IObserver<T> &observer) override;
+	
 	void Run();
 	void Reset() override;
 
 private:
 	T *_array;
 	size_t _length;
-	IObserver<T>* _childObserver;
+	ObserverList<T> _childObservers;
 };
 
 template <typename T>
@@ -35,8 +37,14 @@ ObservableArray<T>::ObservableArray(T *array, size_t length)
 template <typename T>
 void ObservableArray<T>::Subscribe(IObserver<T> &observer)
 {
-	_childObserver = &observer;
+	this->_childObservers.Add(&observer);
 	Run();
+}
+
+template <typename T>
+void ObservableArray<T>::UnSubscribe(IObserver<T> &observer)
+{
+	this->_childObservers.Remove(&observer);
 }
 
 template<typename T>
@@ -44,9 +52,9 @@ void ObservableArray<T>::Run()
 {
 	if (this->_childObserver == nullptr) return;
 	for (size_t i = 0; i < this->_length; i++)
-		_childObserver->OnNext(_array[i]);
+		this->_childObservers.Fire(_array[i]);
 
-	_childObserver->OnComplete();
+	this->_childObservers.Complete();
 }
 
 template<typename T>

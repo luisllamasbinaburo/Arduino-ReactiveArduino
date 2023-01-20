@@ -126,6 +126,7 @@ class Observable : IObservable<T>, IResetable<T>
 public:
 
 	void Subscribe(IObserver<T> &observer) override = 0;
+	void UnSubscribe(IObserver<T> &observer) override = 0;
 
 	void operator >> (IObserver<T> & obs)
 	{
@@ -994,13 +995,14 @@ auto Observable<T>::ToAnalogOutput(uint8_t pin) -> ObserverAnalogOutput<T>&
 
 /// Operator Base
 template <typename Torig, typename Tdest>
-class Operator : public  IObserver<Torig>, public  Observable<Tdest>
+class Operator : public  IObserver<Torig>, public Observable<Tdest>
 {
 public:
 	Observable<Torig>* _parentObservable;
-	IObserver<Tdest>* _childObserver;
+	ObserverList<Tdest> _childObservers;
 
 	void Subscribe(IObserver<Tdest> & observer) override;
+	void UnSubscribe(IObserver<Tdest> & observer) override;
 	void Reset() override;
 
 protected:
@@ -1011,9 +1013,19 @@ protected:
 template <typename Torig, typename Tdest>
 void Operator<Torig, Tdest>::Subscribe(IObserver<Tdest> &observer)
 {
-	this->_childObserver = &observer;
-	_parentObservable->Subscribe(*this);
+	bool wasEmpty = _childObservers.IsEmpty();
+	_childObservers.Add(&observer);
+	if (wasEmpty)
+		_parentObservable->Subscribe(*this);
 }
+
+template <typename Torig, typename Tdest>
+void Operator<Torig, Tdest>::UnSubscribe(IObserver<Tdest> &observer)
+{
+	_childObservers.Remove(&observer);
+	if (_childObservers.IsEmpty())
+		_parentObservable->UnSubscribe(*this);
+}	
 
 template <typename Torig, typename Tdest>
 void Operator<Torig, Tdest>::OnNext(Torig value)
@@ -1023,12 +1035,13 @@ void Operator<Torig, Tdest>::OnNext(Torig value)
 template <typename Torig, typename Tdest>
 void Operator<Torig, Tdest>::OnComplete()
 {
-	if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
+	_childObservers.Complete();
 }
 
 template<typename Torig, typename Tdest>
 void Operator<Torig, Tdest>::Reset()
 {
 	if(_parentObservable != nullptr) _parentObservable->Reset();
+	_childObservers.RemoveAll();
 }
 #endif

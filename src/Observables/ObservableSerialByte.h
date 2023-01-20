@@ -16,10 +16,11 @@ class ObservableSerial<byte> : public Observable<byte>
 public:
 	ObservableSerial();
 	void Subscribe(IObserver<byte> &observer);
+	void UnSubscribe(IObserver<byte> &observer);
 	void Receive();
 
 private:
-	IObserver<byte>* _childObserver;
+	ObserverList<byte> _childObservers;
 };
 
 ObservableSerial<byte>::ObservableSerial()
@@ -28,16 +29,18 @@ ObservableSerial<byte>::ObservableSerial()
 
 void ObservableSerial<byte>::Subscribe(IObserver<byte> &observer)
 {
-	_childObserver = &observer;
+	_childObservers.Add(&observer);
+}
+
+void ObservableSerial<byte>::UnSubscribe(IObserver<byte> &observer)
+{
+	_childObservers.Remove(&observer);
 }
 
 void ObservableSerial<byte>::Receive()
 {
 	while (Serial.available())
-	{
-		byte newChar = Serial.read();
-		if (_childObserver != nullptr) _childObserver->OnNext(newChar);
-	}
+		_childObservers.Fire((byte)Serial.read());
 }
 
 #endif

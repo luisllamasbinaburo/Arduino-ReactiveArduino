@@ -16,6 +16,7 @@ class ObservableIntervalMicros : public Observable<unsigned long>
 public:
 	ObservableIntervalMicros(unsigned long microsInterval, unsigned long delay = 0);
 	void Subscribe(IObserver<T> &observer) override;
+	void UnSubscribe(IObserver<T> &observer) override;
 
 	void Start();
 	void Reset() override;
@@ -38,7 +39,7 @@ private:
 	unsigned long _offset;
 	unsigned long _interval;
 
-	IObserver<T>* _childObserver;
+	ObserverList<T> _childObservers;
 };
 
 template <typename T>
@@ -54,7 +55,13 @@ ObservableIntervalMicros<T>::ObservableIntervalMicros(unsigned long interval, un
 template <typename T>
 void ObservableIntervalMicros<T>::Subscribe(IObserver<T> &observer)
 {
-	_childObserver = &observer;
+	this->_childObservers.Add(&observer);
+}
+
+template <typename T>
+void ObservableIntervalMicros<T>::UnSubscribe(IObserver<T> &observer)
+{
+	this->_childObservers.Remove(&observer);
 }
 
 template <typename T>
@@ -65,7 +72,7 @@ void ObservableIntervalMicros<T>::Update()
 	auto elapsed = static_cast<unsigned long>(micros() - _startTime);
 	if (elapsed >= _interval + _offset)
 	{
-		if (_childObserver != nullptr) _childObserver->OnNext(elapsed);
+		this->_childObservers.Fire(elapsed);
 		this->_startTime = micros();
 		_offset = 0;
 	}

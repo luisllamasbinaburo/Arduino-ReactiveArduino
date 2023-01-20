@@ -18,6 +18,7 @@ class ObservableRange : public Observable<T>
 public:
 	ObservableRange(T start, T end, T step = 1);
 	void Subscribe(IObserver<T> &observer) override;
+	void UnSubscribe(IObserver<T> &observer) override;
 	void Run();
 	void Reset() override;
 
@@ -26,7 +27,7 @@ private:
 	T _end;
 	T _step;
 
-	IObserver<T>* _childObserver;
+	ObserverList<T> _childObservers;
 };
 
 template <typename T>
@@ -40,17 +41,23 @@ ObservableRange<T>::ObservableRange(T start, T end, T step)
 template <typename T>
 void ObservableRange<T>::Subscribe(IObserver<T> &observer)
 {
-	_childObserver = &observer;
+	this->_childObservers.Add(&observer);
 	Run();
+}
+
+template <typename T>
+void ObservableRange<T>::UnSubscribe(IObserver<T> &observer)
+{
+	this->_childObservers.Remove(&observer);
 }
 
 template<typename T>
 void ObservableRange<T>::Run()
 {
 	for (auto i = _start; i <= _end; i += _step)
-		_childObserver->OnNext(i);
+		this->_childObservers.Each([i](IObserver<T>* o) { o->OnNext(i); });
 
-	_childObserver->OnComplete();
+	this->_childObservers.Each([](IObserver<T>* o) { o->OnComplete(); });
 }
 
 template<typename T>

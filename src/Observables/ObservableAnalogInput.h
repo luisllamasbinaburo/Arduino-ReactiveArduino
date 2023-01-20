@@ -16,12 +16,14 @@ class ObservableAnalogInput : public Observable<T>
 public:
 	ObservableAnalogInput(uint8_t pin, uint8_t pinMode = INPUT);
 	void Subscribe(IObserver<T> &observer) override;
+	void UnSubscribe(IObserver<T> &observer) override;
+
 	void Next();
 
 private:
 	uint8_t _pin;
 
-	IObserver<T>* _childObserver;
+	ObserverList<T> _childObservers;
 };
 
 template <typename T>
@@ -34,13 +36,19 @@ ObservableAnalogInput<T>::ObservableAnalogInput(uint8_t pin, uint8_t mode)
 template <typename T>
 void ObservableAnalogInput<T>::Subscribe(IObserver<T> &observer)
 {
-	_childObserver = &observer;
+	this->_childObservers.Add(&observer);
+}
+
+template <typename T>
+void ObservableAnalogInput<T>::UnSubscribe(IObserver<T> &observer)
+{
+	this->_childObservers.Remove(&observer);
 }
 
 template <typename T>
 void ObservableAnalogInput<T>::Next()
 {
-	if (_childObserver != nullptr) _childObserver->OnNext(analogRead(this->_pin));
+	this->_childObservers.Fire(analogRead(this->_pin));
 }
 
 #endif

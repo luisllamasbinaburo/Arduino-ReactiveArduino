@@ -17,11 +17,13 @@ public:
 	void operator = (const T&);
 	ObservableProperty();
 	void Subscribe(IObserver<T> &) override;
+	void UnSubscribe(IObserver<T> &) override;
 	void Finish();
 	void Reset() override;
 
 private:
-	IObserver<T> *_observer;
+	ObserverList<T> _observers;
+	
 	bool _complete = false;
 };
 
@@ -29,7 +31,7 @@ template <typename T>
 void ObservableProperty<T>::operator=(const T& value)
 {
 	if (this->_complete) return;
-	if (this->_observer != nullptr) this->_observer->OnNext(value);
+	_observers.Fire(value);
 }
 
 template <typename T>
@@ -40,7 +42,13 @@ ObservableProperty<T>::ObservableProperty()
 template <typename T>
 void ObservableProperty<T>::Subscribe(IObserver<T> &observer)
 {
-	this->_observer = &observer;
+	_observers.Add(&observer);
+}
+
+template <typename T>
+void ObservableProperty<T>::UnSubscribe(IObserver<T> &observer)
+{
+	_observers.Remove(&observer);
 }
 
 template<typename T>
@@ -48,7 +56,7 @@ void ObservableProperty<T>::Finish()
 {
 	if (_complete) return;
 
-	if (this->_observer != nullptr) this->_observer->OnComplete();
+	_observers.Complete();
 	this->_complete = true;
 }
 

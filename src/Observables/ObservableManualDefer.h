@@ -16,12 +16,13 @@ class ObservableManualDefer : public Observable<T>
 public:
 	ObservableManualDefer();
 	void Subscribe(IObserver<T> &observer) override;
+	void UnSubscribe(IObserver<T> &observer) override;
 	void Next();
 	void Reset() override;
 	void Complete();
 
 private:
-	IObserver<T>* _childObserver;
+	ObserverList<T> _childObservers;
 };
 
 template <typename T>
@@ -32,19 +33,25 @@ ObservableManualDefer<T>::ObservableManualDefer()
 template <typename T>
 void ObservableManualDefer<T>::Subscribe(IObserver<T> &observer)
 {
-	_childObserver = &observer;
+	this->_childObservers.Add(&observer);
+}
+
+template <typename T>
+void ObservableManualDefer<T>::UnSubscribe(IObserver<T> &observer)
+{
+	this->_childObservers.Remove(&observer);
 }
 
 template <typename T>
 void ObservableManualDefer<T>::Next()
 {
-	if (_childObserver != nullptr) _childObserver->OnNext({});
+	this->_childObservers.Fire({});
 }
 
 template <typename T>
 void ObservableManualDefer<T>::Complete()
 {
-	if (_childObserver != nullptr) _childObserver->OnComplete();
+	this->_childObservers.Complete();
 }
 
 template <typename T>

@@ -31,7 +31,6 @@ template<typename Torig, typename Tdest>
 void TransformationMap<Torig, Tdest>::OnNext(Torig value)
 {
 	Tdest newValue = (Tdest)(this->_map(value));
-
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(newValue);
+	this->_childObservers.Fire(newValue);
 }
 #endif

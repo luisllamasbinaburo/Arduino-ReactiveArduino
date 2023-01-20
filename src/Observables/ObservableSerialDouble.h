@@ -17,6 +17,7 @@ class ObservableSerial<double> : public Observable<double>
 public:
 	ObservableSerial(char separator = '\n');
 	void Subscribe(IObserver<double> &observer) override;
+	void UnSubscribe(IObserver<double> &observer) override;
 	void Receive();
 
 private:
@@ -29,9 +30,8 @@ private:
 	bool _isDecimalStage = false;
 	bool _isNegative = false;
 
-	IObserver<double>* _childObserver;
+	ObserverList<double> _childObservers;
 };
-
 
 ObservableSerial<double>::ObservableSerial(char separator)
 {
@@ -40,7 +40,12 @@ ObservableSerial<double>::ObservableSerial(char separator)
 
 void ObservableSerial<double>::Subscribe(IObserver<double> &observer)
 {
-	_childObserver = &observer;
+	_childObservers.Add(&observer);
+}
+
+void ObservableSerial<double>::UnSubscribe(IObserver<double> &observer)
+{
+	_childObservers.Remove(&observer);
 }
 
 void ObservableSerial<double>::Receive()
@@ -70,7 +75,7 @@ void ObservableSerial<double>::Receive()
 			_data = (double)_dataReal + (double)_dataDecimal / _dataPow;
 			_data = _isNegative ? -_data : _data;
 
-			if (_childObserver != nullptr) _childObserver->OnNext(_data);
+			_childObservers.Fire(_data);
 
 			_dataReal = 0;
 			_dataDecimal = 0;

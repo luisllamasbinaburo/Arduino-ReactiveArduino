@@ -50,6 +50,7 @@ class IObservable
 {
 public:
 	virtual void Subscribe(IObserver<T> &observer) = 0;
+	virtual void UnSubscribe(IObserver<T> &observer) = 0;
 
 protected:
 	virtual ~IObservable() = default;
@@ -65,4 +66,105 @@ public:
 protected:
 	bool _isComplete = false;
 };
+
+template <typename T>
+class ObserverList {
+public:
+  ObserverList();
+  ~ObserverList();
+
+  void Add(IObserver<T>*);
+  void Remove(IObserver<T>*);
+  void RemoveAll();
+  bool IsEmpty() const;
+
+  void Fire(T) const;
+  void Complete() const;
+  
+private:
+  struct Node
+  {
+    IObserver<T>* obj_;
+    Node *next_;
+  };
+
+  Node *head_;
+  Node *tail_;
+};
+
+template <typename T>
+ObserverList<T>::ObserverList() {
+  head_ = tail_ = nullptr;
+}
+
+template <typename T>
+ObserverList<T>::~ObserverList() {
+	RemoveAll();
+}
+
+template <typename T>
+void ObserverList<T>::RemoveAll() {
+  Node *node;
+  while (head_ != nullptr) {
+    node = head_;
+    head_ = head_->next_;
+    delete node;
+  }
+}
+
+template <typename T>
+void ObserverList<T>::Add(IObserver<T>* obj) {
+  Node *node = new Node();
+  node->obj_ = obj;
+  node ->next_ = nullptr;
+  if (head_)
+    tail_ = tail_->next_ = node;
+  else
+    head_ = tail_ = node;
+}
+
+template <typename T>
+void ObserverList<T>::Remove(IObserver<T>* obj) {
+  Node *last = nullptr;
+  Node *node = head_;
+  while (node != nullptr) {
+    if (node->obj_ == obj) {
+      if (last)
+        last->next_ = node->next_;
+      else
+        head_ = node->next_;
+
+      if (tail_ == node)
+        tail_ = last;
+
+      delete node;
+    }
+    last = node;
+    node = node->next_;
+  }
+}
+
+template <typename T>
+bool ObserverList<T>::IsEmpty() const {
+  return head_ == nullptr;
+  }
+
+template <typename T>
+void ObserverList<T>::Fire(T value) const {
+  Node *node = head_;
+  while (node != nullptr) {
+    node->obj_->OnNext(value);
+    node = node->next_;
+  }
+}
+
+template <typename T>
+void ObserverList<T>::Complete() const {
+  Node *node = head_;
+  while (node != nullptr) {
+    node->obj_->OnComplete();
+    node = node->next_;
+  }
+}
+
 #endif

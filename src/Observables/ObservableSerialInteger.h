@@ -17,13 +17,15 @@ class ObservableSerial<int> : public Observable<int>
 public:
 	ObservableSerial(char separator = '\n');
 	void Subscribe(IObserver<int> &observer) override;
+	void UnSubscribe(IObserver<int> &observer) override;
 	void Receive();
 
 private:
 	int _data = 0;
 	char _separator;
 	bool _isNegative = false;
-	IObserver<int>* _childObserver;
+
+	ObserverList<int> _childObservers;
 };
 
 ObservableSerial<int>::ObservableSerial(char separator)
@@ -33,14 +35,18 @@ ObservableSerial<int>::ObservableSerial(char separator)
 
 void ObservableSerial<int>::Subscribe(IObserver<int> &observer)
 {
-	_childObserver = &observer;
+	_childObservers.Add(&observer);
+}
+
+void ObservableSerial<int>::UnSubscribe(IObserver<int> &observer)
+{
+	_childObservers.Remove(&observer);
 }
 
 void ObservableSerial<int>::Receive()
 {
-	if (_childObserver != nullptr)
+	if (!_childObservers.IsEmpty())
 	{
-		
 		while (Serial.available())
 		{
 			char newChar = Serial.read();
@@ -54,7 +60,7 @@ void ObservableSerial<int>::Receive()
 			else if (newChar == _separator)
 			{
 				_data = _isNegative ? -_data : _data;
-				if (_childObserver != nullptr) _childObserver->OnNext(_data);
+				_childObservers.Fire(_data);
 
 				_data = 0;
 				_isNegative = false;
