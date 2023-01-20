@@ -23,21 +23,21 @@ private:
 	ObserverList<byte> _childObservers;
 };
 
-ObservableSerial<byte>::ObservableSerial()
+inline ObservableSerial<byte>::ObservableSerial()
 {
 }
 
-void ObservableSerial<byte>::Subscribe(IObserver<byte> &observer)
+inline void ObservableSerial<byte>::Subscribe(IObserver<byte> &observer)
 {
 	_childObservers.Add(&observer);
 }
 
-void ObservableSerial<byte>::UnSubscribe(IObserver<byte> &observer)
+inline void ObservableSerial<byte>::UnSubscribe(IObserver<byte> &observer)
 {
 	_childObservers.Remove(&observer);
 }
 
-void ObservableSerial<byte>::Receive()
+inline void ObservableSerial<byte>::Receive()
 {
 	while (Serial.available())
 		_childObservers.Fire((byte)Serial.read());

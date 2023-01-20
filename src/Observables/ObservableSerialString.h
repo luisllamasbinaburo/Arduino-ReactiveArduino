@@ -26,22 +26,22 @@ private:
 	ObserverList<String> _childObservers;
 };
 
-ObservableSerial<String>::ObservableSerial(char separator)
+inline ObservableSerial<String>::ObservableSerial(char separator)
 {
 	_separator = separator;
 }
 
-void ObservableSerial<String>::Subscribe(IObserver<String> &observer)
+inline void ObservableSerial<String>::Subscribe(IObserver<String> &observer)
 {
 	_childObservers.Add(&observer);
 }
 
-void ObservableSerial<String>::UnSubscribe(IObserver<String> &observer)
+inline void ObservableSerial<String>::UnSubscribe(IObserver<String> &observer)
 {
 	_childObservers.Remove(&observer);
 }
 
-void ObservableSerial<String>::Receive()
+inline void ObservableSerial<String>::Receive()
 {
 	while (Serial.available())
 	{
