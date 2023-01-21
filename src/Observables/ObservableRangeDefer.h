@@ -59,7 +59,7 @@ void ObservableRangeDefer<T>::Next()
 	this->_childObservers.OnNext(value);
 	_value += _step;
 
-	if(_value > _end)
+	if (_value > _end)
 		this->_childObservers.OnComplete();
 }
 

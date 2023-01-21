@@ -57,7 +57,7 @@ void ObservableArrayDefer<T>::Next()
 	this->_childObservers.OnNext(value);
 	_index++;
 
-	if(_index >= _length)
+	if (_index >= _length)
 		this->_childObservers.OnComplete();
 }
 

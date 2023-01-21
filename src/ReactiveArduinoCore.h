@@ -1041,7 +1041,7 @@ void Operator<Torig, Tdest>::OnComplete()
 template<typename Torig, typename Tdest>
 void Operator<Torig, Tdest>::Reset()
 {
-	if(_parentObservable != nullptr) _parentObservable->Reset();
+	if (_parentObservable != nullptr) _parentObservable->Reset();
 	_childObservers.RemoveAll();
 }
 #endif

@@ -34,7 +34,7 @@ OperatorFirst<T>::OperatorFirst()
 template <typename T>
 void OperatorFirst<T>::OnNext(T value)
 {
-	if(!_any) 
+	if (!_any) 
 		_first = value;
 
 	_any = true;
