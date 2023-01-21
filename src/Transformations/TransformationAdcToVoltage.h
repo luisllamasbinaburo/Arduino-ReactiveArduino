@@ -26,15 +26,15 @@ private:
 template <typename T>
 TransformationAdcToVoltage<T>::TransformationAdcToVoltage(T input_max, T output_max)
 {
-	this->_input_max = input_max;
-	this->_output_max = output_max;
+	_input_max = input_max;
+	_output_max = output_max;
 }
 
 
 template <typename T>
 void TransformationAdcToVoltage<T>::OnNext(T value)
 {
-	this->_childObserver->OnNext((value * _output_max) / _input_max);
+	this->_childObservers.OnNext((value * _output_max) / _input_max);
 }
 
 #endif

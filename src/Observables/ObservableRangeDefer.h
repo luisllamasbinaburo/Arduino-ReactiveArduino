@@ -16,6 +16,7 @@ class ObservableRangeDefer : public Observable<T>
 public:
 	ObservableRangeDefer(T start, T end, T step = 1);
 	void Subscribe(IObserver<T> &observer) override;
+	void UnSubscribe(IObserver<T> &observer) override;
 	void Next();
 	void Reset() override;
 
@@ -25,40 +26,47 @@ private:
 	T _step;
 	T _value;
 
-	IObserver<T>* _childObserver;
+	ObserverList<T> _childObservers;
 };
 
 template <typename T>
 ObservableRangeDefer<T>::ObservableRangeDefer(T start, T end, T step)
 {
-	this->_start = start;
-	this->_end = end;
-	this->_step = step;
-	this->_value = start;
+	_start = start;
+	_end = end;
+	_step = step;
+	_value = start;
 }
 
 template <typename T>
 void ObservableRangeDefer<T>::Subscribe(IObserver<T> &observer)
 {
-	_childObserver = &observer;
+	this->_childObservers.Add(&observer);
+}
+
+template <typename T>
+void ObservableRangeDefer<T>::UnSubscribe(IObserver<T> &observer)
+{
+	this->_childObservers.Remove(&observer);
 }
 
 template <typename T>
 void ObservableRangeDefer<T>::Next()
 {
-	if (_value > this->_end) return;
+	if (_value > _end) return;
 
-	if (_childObserver != nullptr) _childObserver->OnNext(_value);
+	T value = _value;
+	this->_childObservers.OnNext(value);
 	_value += _step;
 
-	if(_value > this->_end)
-		if (_childObserver != nullptr) _childObserver->OnComplete();
+	if (_value > _end)
+		this->_childObservers.OnComplete();
 }
 
 template <typename T>
 void ObservableRangeDefer<T>::Reset()
 {
-	this->_value = this->_start;
+	_value = _start;
 }
 
 #endif

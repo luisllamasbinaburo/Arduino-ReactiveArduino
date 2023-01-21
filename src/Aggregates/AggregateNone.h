@@ -27,15 +27,15 @@ private:
 template <typename T>
 AggregateNone<T>::AggregateNone(ReactivePredicate<T> condition)
 {
-	this->_condition = condition;
+	_condition = condition;
 }
 
 template <typename T>
 void AggregateNone<T>::OnNext(T value)
 {
-	if (!this->_condition(value)) this->_state = false;
+	if (!_condition(value)) _state = false;
 
-	this->_childObserver->OnNext(this->_state);
+	this->_childObservers.OnNext(_state);
 }
 
 #endif

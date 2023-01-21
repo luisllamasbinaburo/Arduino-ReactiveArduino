@@ -31,9 +31,9 @@ AggregateAverage<T>::AggregateAverage()
 template <typename T>
 void AggregateAverage<T>::OnNext(T value)
 {
-	this->_sum += value;
-	this->_count++;
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(this->_sum/ this->_count);
+	_sum += value;
+	_count++;
+	this->_childObservers.OnNext(_sum / _count);
 }
 
 #endif

@@ -35,7 +35,7 @@ template <typename T>
 void OperatorIf<T>::OnNext(T value)
 {
 	if (_condition(value)) _action(value);
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+	this->_childObservers.OnNext(value);
 }
 
 #endif

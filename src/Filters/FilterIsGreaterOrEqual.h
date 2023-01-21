@@ -30,8 +30,8 @@ FilterIsGreaterOrEqual<T>::FilterIsGreaterOrEqual(T value)
 template <typename T>
 void FilterIsGreaterOrEqual<T>::OnNext(T value)
 {
-	if (value >= this->_value)
-		if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+	if (value >= _value)
+		this->_childObservers.OnNext(value);
 }
 
 #endif

@@ -19,14 +19,14 @@ private:
 template <typename T>
 ObserverDigitalOutput<T>::ObserverDigitalOutput(uint8_t pin)
 {
-	this->_pin = pin;
+	_pin = pin;
 	pinMode(pin, OUTPUT);
 }
 
 template <typename T>
 void ObserverDigitalOutput<T>::OnNext(int value)
 {
-	digitalWrite(this->_pin, value);
+	digitalWrite(_pin, value);
 }
 
 template <typename T>

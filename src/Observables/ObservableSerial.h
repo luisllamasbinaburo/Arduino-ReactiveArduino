@@ -16,10 +16,11 @@ class ObservableSerial : public Observable<T>
 public:
 	ObservableSerial();
 	void Subscribe(IObserver<T> &observer) override;
+	void UnSubscribe(IObserver<T> &observer) override;
 	virtual void Receive();
 
 private:
-	IObserver<T>* _childObserver;
+	ObserverList<T> _childObservers;
 };
 
 template <typename T>
@@ -30,7 +31,13 @@ ObservableSerial<T>::ObservableSerial()
 template <typename T>
 void ObservableSerial<T>::Subscribe(IObserver<T> &observer)
 {
-	_childObserver = &observer;
+	this->_childObservers.Add(&observer);
+}
+
+template <typename T>
+void ObservableSerial<T>::UnSubscribe(IObserver<T> &observer)
+{
+	this->_childObservers.Remove(&observer);
 }
 
 template <typename T>

@@ -31,12 +31,11 @@ AggregateMax<T>::AggregateMax()
 template <typename T>
 void AggregateMax<T>::OnNext(T value)
 {
-	if (!this->_any) this->_max = value;
-	else this->_max = value > this->_max ? value : this->_max;
-	this->_any = true;
+	if (!_any) _max = value;
+	else _max = value > _max ? value : _max;
+	_any = true;
 
-	this->_childObserver->OnNext(this->_max);
-
+	this->_childObservers.OnNext(_max);
 }
 
 #endif

@@ -19,28 +19,28 @@ public:
 	void OnNext(T value) override;
 
 private:
-	size_t index = 0;
-	size_t num_elements = 0;
+	size_t _index = 0;
+	size_t _num_elements = 0;
 };
 
 template <typename T>
 OperatorBatch<T>::OperatorBatch(size_t N)
 {
-	num_elements = N;
+	_num_elements = N;
 }
 
 template <typename T>
 void OperatorBatch<T>::OnNext(T value)
 {
-	if (index < num_elements)
+	if (_index < _num_elements)
 	{
-		if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
-		index++;
+		this->_childObservers.OnNext(value);
+		_index++;
 	}
 	else
 	{
-		index = 0;
-		if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
+		_index = 0;
+		this->_childObservers.OnComplete();
 	}
 }
 

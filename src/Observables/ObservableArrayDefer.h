@@ -16,6 +16,7 @@ class ObservableArrayDefer : public Observable<T>
 public:
 	ObservableArrayDefer(T *array, size_t length);
 	void Subscribe(IObserver<T> &observer) override;
+	void UnSubscribe(IObserver<T> &observer) override;
 	void Next();
 	void Reset() override;
 
@@ -24,33 +25,40 @@ private:
 	size_t _index;
 	size_t _length;
 
-	IObserver<T>* _childObserver;
+	ObserverList<T> _childObservers;
 };
 
 template <typename T>
 ObservableArrayDefer<T>::ObservableArrayDefer(T *array, size_t length)
 {
-	this->_index = 0;
-	this->_array = array;
-	this->_length = length;
+	_index = 0;
+	_array = array;
+	_length = length;
 }
 
 template <typename T>
 void ObservableArrayDefer<T>::Subscribe(IObserver<T> &observer)
 {
-	_childObserver = &observer;
+	this->_childObservers.Add(&observer);
+}
+
+template <typename T>
+void ObservableArrayDefer<T>::UnSubscribe(IObserver<T> &observer)
+{
+	this->_childObservers.Remove(&observer);
 }
 
 template <typename T>
 void ObservableArrayDefer<T>::Next()
 {
-	if (_index >= this->_length) return;
+	if (_index >= _length) return;
 
-	if (_childObserver != nullptr) _childObserver->OnNext(_array[_index]);
+	T value = _array[_index];
+	this->_childObservers.OnNext(value);
 	_index++;
 
-	if(_index >= this->_length)
-		if(_childObserver != nullptr) _childObserver->OnComplete();
+	if (_index >= _length)
+		this->_childObservers.OnComplete();
 }
 
 template <typename T>

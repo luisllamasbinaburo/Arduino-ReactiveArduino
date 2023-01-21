@@ -37,9 +37,10 @@ void FilterWindowMillis<T>::OnNext(T value)
 		_lastTrigger = millis();
 		_started = true;
 	}
+	
 	if (_started && static_cast<unsigned long>(millis() - _lastTrigger) <= _interval)
 	{
-		if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+		this->_childObservers.OnNext(value);
 	}
 }
 

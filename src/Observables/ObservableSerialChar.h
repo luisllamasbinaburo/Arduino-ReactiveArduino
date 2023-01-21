@@ -16,28 +16,31 @@ class ObservableSerial<char> : public Observable<char>
 public:
 	ObservableSerial();
 	void Subscribe(IObserver<char> &observer) override;
+	void UnSubscribe(IObserver<char> &observer) override;
 	void Receive();
 
 private:
-	IObserver<char>* _childObserver;
+	ObserverList<char> _childObservers;
 };
 
-ObservableSerial<char>::ObservableSerial()
+inline ObservableSerial<char>::ObservableSerial()
 {
 }
 
-void ObservableSerial<char>::Subscribe(IObserver<char> &observer)
+inline void ObservableSerial<char>::Subscribe(IObserver<char> &observer)
 {
-	_childObserver = &observer;
+	_childObservers.Add(&observer);
 }
 
-void ObservableSerial<char>::Receive()
+inline void ObservableSerial<char>::UnSubscribe(IObserver<char> &observer)
 {
-	while(Serial.available())
-	{
-		char newChar = Serial.read();
-		if (_childObserver != nullptr) _childObserver->OnNext(newChar);
-	}
+	_childObservers.Remove(&observer);
+}
+
+inline void ObservableSerial<char>::Receive()
+{
+	while (Serial.available())
+		_childObservers.OnNext((char)Serial.read());
 }
 
 #endif

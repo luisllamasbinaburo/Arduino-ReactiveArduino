@@ -47,7 +47,8 @@ void TransformationThreshold<T>::OnNext(T value)
 	{
 		_state = LOW;
 	}
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(_state);
+	
+	this->_childObservers.OnNext(_state);
 }
 #endif
 

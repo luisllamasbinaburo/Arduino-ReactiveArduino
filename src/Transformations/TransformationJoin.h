@@ -43,14 +43,13 @@ void TransformationJoin<T>::OnNext(T value)
 	{
 		_buffer = _buffer + _separator + String(value);
 	}
-	
 
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(_buffer);
+	this->_childObservers.OnNext(_buffer);
 }
 
 template <typename T>
 void TransformationJoin<T>::OnComplete()
 {
-	if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
+	this->_childObservers.OnComplete();
 }
 #endif

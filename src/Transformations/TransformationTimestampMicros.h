@@ -39,6 +39,6 @@ void TransformationTimestampMicros<T>::Reset()
 template <typename T>
 void TransformationTimestampMicros<T>::OnNext(T value)
 {
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(micros() - _starTime);
+	this->_childObservers.OnNext(micros() - _starTime);
 }
 #endif

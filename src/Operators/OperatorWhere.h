@@ -33,9 +33,8 @@ OperatorWhere<T>::OperatorWhere(ReactivePredicate<T> condition)
 template <typename T>
 void OperatorWhere<T>::OnNext(T value)
 {
-	if (this->_childObserver != nullptr)
-		if (this->_condition(value))
-			this->_childObserver->OnNext(value);
+		if (_condition(value))
+			this->_childObservers.OnNext(value);
 }
 
 #endif

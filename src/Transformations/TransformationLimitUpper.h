@@ -31,7 +31,7 @@ TransformationUpperLimit<T>::TransformationUpperLimit(T upperLimit)
 template <typename T>
 void TransformationUpperLimit<T>::OnNext(T value)
 {
-	this->_childObserver->OnNext(value > _upperLimit ? _upperLimit : value);
+	this->_childObservers.OnNext(value > _upperLimit ? _upperLimit : value);
 }
 
 #endif

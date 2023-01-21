@@ -30,9 +30,10 @@ void FilterWindowMicros<T>::OnNext(T value)
 		_lastTrigger = micros();
 		_started = true;
 	}
+	
 	if (_started && static_cast<unsigned long>(micros() - _lastTrigger) <= _interval)
 	{
-		if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+		this->_childObservers.OnNext(value);
 	}
 }
 

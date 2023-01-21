@@ -27,7 +27,7 @@ template <typename T>
 void FilterIsNotZero<T>::OnNext(T value)
 {
 	if (value != 0)
-		if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+		this->_childObservers.OnNext(value);
 }
 
 #endif

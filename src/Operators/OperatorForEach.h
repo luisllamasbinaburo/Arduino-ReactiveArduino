@@ -34,7 +34,7 @@ void OperatorForEach<T>::OnNext(T value)
 {
 	_doAction(value);
 
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+	this->_childObservers.OnNext(value);
 }
 
 template <typename T>

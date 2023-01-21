@@ -34,17 +34,17 @@ OperatorFirst<T>::OperatorFirst()
 template <typename T>
 void OperatorFirst<T>::OnNext(T value)
 {
-	if(!_any) 
-		this->_first = value;
+	if (!_any) 
+		_first = value;
 
-	this->_any = true;
+	_any = true;
 }
 
 template <typename T>
 void OperatorFirst<T>::OnComplete()
 {
 	if (_any)
-		if (this->_childObserver != nullptr) this->_childObserver->OnNext(_first);
+		this->_childObservers.OnNext(_first);
 }
 
 #endif

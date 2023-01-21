@@ -26,13 +26,13 @@ private:
 template <typename T>
 ObserverProperty<T>::ObserverProperty(T &property)
 {
-	this->_property = &property;
+	_property = &property;
 }
 
 template <typename T>
 void ObserverProperty<T>::OnNext(T value)
 {
-	*(this->_property) = value;
+	*(_property) = value;
 }
 
 template <typename T>

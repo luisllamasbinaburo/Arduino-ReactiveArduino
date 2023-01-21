@@ -39,7 +39,7 @@ void TransformationElapsedMicros<T>::Reset()
 template <typename T>
 void TransformationElapsedMicros<T>::OnNext(T value)
 {
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(micros() - _starTime);
+	this->_childObservers.OnNext(micros() - _starTime);
 	_starTime = micros();
 }
 
