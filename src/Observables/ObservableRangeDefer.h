@@ -32,10 +32,10 @@ private:
 template <typename T>
 ObservableRangeDefer<T>::ObservableRangeDefer(T start, T end, T step)
 {
-	this->_start = start;
-	this->_end = end;
-	this->_step = step;
-	this->_value = start;
+	_start = start;
+	_end = end;
+	_step = step;
+	_value = start;
 }
 
 template <typename T>
@@ -53,20 +53,20 @@ void ObservableRangeDefer<T>::UnSubscribe(IObserver<T> &observer)
 template <typename T>
 void ObservableRangeDefer<T>::Next()
 {
-	if (_value > this->_end) return;
+	if (_value > _end) return;
 
 	T value = _value;
-	this->_childObservers.Each([value](IObserver<T>* o) { o->OnNext(value); });
+	this->_childObservers.OnNext(value);
 	_value += _step;
 
-	if(_value > this->_end)
-		this->_childObservers.Each([](IObserver<T>* o) { o->OnComplete(); });
+	if(_value > _end)
+		this->_childObservers.OnComplete();
 }
 
 template <typename T>
 void ObservableRangeDefer<T>::Reset()
 {
-	this->_value = this->_start;
+	_value = _start;
 }
 
 #endif

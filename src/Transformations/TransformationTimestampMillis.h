@@ -39,6 +39,6 @@ void TransformationTimestampMillis<T>::Reset()
 template <typename T>
 void TransformationTimestampMillis<T>::OnNext(T value)
 {
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(millis() - _starTime);
+	this->_childObservers.OnNext(millis() - _starTime);
 }
 #endif

@@ -32,7 +32,7 @@ template <typename T>
 void OperatorDistinct<T>::OnNext(T value)
 {
 	if (!_any || (_any && _last != value))
-		this->_childObservers.Fire(value);
+		this->_childObservers.OnNext(value);
 
 	_last = value;
 	_any = true;

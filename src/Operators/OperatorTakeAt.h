@@ -19,30 +19,30 @@ public:
 	void OnNext(T value) override;
 
 private:
-	size_t index = 0;
-	size_t element_index = 0;
+	size_t _index = 0;
+	size_t _element_index = 0;
 	bool _completed = false;
 };
 
 template <typename T>
 OperatorTakeAt<T>::OperatorTakeAt(size_t N)
 {
-	element_index = N;
+	_element_index = N;
 }
 
 template <typename T>
 void OperatorTakeAt<T>::OnNext(T value)
 {
-	if (this->_completed) return;
+	if (_completed) return;
 
-	if (this->index == this->element_index)
+	if (_index == _element_index)
 	{
-		if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
-		if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
-		this->_completed = true;
+		this->_childObservers.OnNext(value);
+		this->_childObservers.OnComplete();
+		_completed = true;
 	}
 
-	this->index++;
+	_index++;
 }
 
 #endif

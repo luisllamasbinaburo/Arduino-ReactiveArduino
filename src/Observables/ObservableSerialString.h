@@ -52,7 +52,7 @@ inline void ObservableSerial<String>::Receive()
 		}
 		else
 		{
-			_childObservers.Fire(_buffer);
+			_childObservers.OnNext(_buffer);
 			_buffer = "";
 		}
 	}

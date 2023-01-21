@@ -30,8 +30,8 @@ private:
 template <typename T>
 void ObservableProperty<T>::operator=(const T& value)
 {
-	if (this->_complete) return;
-	_observers.Fire(value);
+	if (_complete) return;
+	_observers.OnNext(value);
 }
 
 template <typename T>
@@ -56,14 +56,14 @@ void ObservableProperty<T>::Finish()
 {
 	if (_complete) return;
 
-	_observers.Complete();
-	this->_complete = true;
+	_observers.OnComplete();
+	_complete = true;
 }
 
 template<typename T>
 void ObservableProperty<T>::Reset()
 {
-	this->_complete = false;
+	_complete = false;
 }
 
 #endif

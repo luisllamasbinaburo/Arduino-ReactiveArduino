@@ -25,17 +25,17 @@ private:
 template<typename T>
 FilterDebounceMillis<T>::FilterDebounceMillis(unsigned long interval)
 {
-	this->_previousMillis = millis();
-	this->_intervalMillis = interval;
+	_previousMillis = millis();
+	_intervalMillis = interval;
 }
 
 template <typename T>
 void FilterDebounceMillis<T>::OnNext(T value)
 {
-	if (millis() - this->_previousMillis >= this->_intervalMillis)
+	if (millis() - _previousMillis >= _intervalMillis)
 	{
-		this->_previousMillis = millis();
-		if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+		_previousMillis = millis();
+		this->_childObservers.OnNext(value);
 	}
 }
 

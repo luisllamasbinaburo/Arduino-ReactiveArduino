@@ -45,13 +45,13 @@ void ObservableManualDefer<T>::UnSubscribe(IObserver<T> &observer)
 template <typename T>
 void ObservableManualDefer<T>::Next()
 {
-	this->_childObservers.Fire({});
+	this->_childObservers.OnNext({});
 }
 
 template <typename T>
 void ObservableManualDefer<T>::Complete()
 {
-	this->_childObservers.Complete();
+	this->_childObservers.OnComplete();
 }
 
 template <typename T>

@@ -26,26 +26,26 @@ private:
 template <typename T>
 OperatorRepeat<T>::OperatorRepeat(size_t N)
 {
-	this->_repetition = N;
+	_repetition = N;
 }
 
 template <typename T>
 void OperatorRepeat<T>::OnNext(T value)
 {
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+	this->_childObservers.OnNext(value);
 }
 
 template <typename T>
 void OperatorRepeat<T>::OnComplete()
 {
-	this->_repetition--;
-	if (this->_repetition > 0)
+	_repetition--;
+	if (_repetition > 0)
 	{
 		if (this->_parentObservable != nullptr) this->_parentObservable->Reset();
 	}
 	else
 	{
-		if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
+		this->_childObservers.OnComplete();
 	}
 }
 

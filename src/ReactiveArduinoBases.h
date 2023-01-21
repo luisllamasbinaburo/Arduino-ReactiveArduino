@@ -78,8 +78,8 @@ public:
   void RemoveAll();
   bool IsEmpty() const;
 
-  void Fire(T) const;
-  void Complete() const;
+  void OnNext(T) const;
+  void OnComplete() const;
   
 private:
   struct Node
@@ -150,7 +150,7 @@ bool ObserverList<T>::IsEmpty() const {
   }
 
 template <typename T>
-void ObserverList<T>::Fire(T value) const {
+void ObserverList<T>::OnNext(T value) const {
   Node *node = head_;
   while (node != nullptr) {
     node->obj_->OnNext(value);
@@ -159,7 +159,7 @@ void ObserverList<T>::Fire(T value) const {
 }
 
 template <typename T>
-void ObserverList<T>::Complete() const {
+void ObserverList<T>::OnComplete() const {
   Node *node = head_;
   while (node != nullptr) {
     node->obj_->OnComplete();

@@ -33,9 +33,9 @@ private:
 template <typename T>
 ObservableRange<T>::ObservableRange(T start, T end, T step)
 {
-	this->_start = start;
-	this->_end = end;
-	this->_step = step;
+	_start = start;
+	_end = end;
+	_step = step;
 }
 
 template <typename T>
@@ -55,9 +55,9 @@ template<typename T>
 void ObservableRange<T>::Run()
 {
 	for (auto i = _start; i <= _end; i += _step)
-		this->_childObservers.Each([i](IObserver<T>* o) { o->OnNext(i); });
+		this->_childObservers.OnNext(i);
 
-	this->_childObservers.Each([](IObserver<T>* o) { o->OnComplete(); });
+	this->_childObservers.OnComplete();
 }
 
 template<typename T>

@@ -25,18 +25,18 @@ private:
 template <typename T>
 AggregateCountdown<T>::AggregateCountdown(int count)
 {
-	this->_count = count;
+	_count = count;
 }
 
 template <typename T>
 void AggregateCountdown<T>::OnNext(T value)
 {
-	this->_count--;
-	this->_childObserver->OnNext(_count);
+	_count--;
+	this->_childObservers.OnNext(_count);
 
 	if (_count <= 0)
 	{
-		this->_childObserver->OnComplete();
+		this->_childObservers.OnComplete();
 	}
 }
 

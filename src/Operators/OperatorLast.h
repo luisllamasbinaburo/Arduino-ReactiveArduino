@@ -32,17 +32,17 @@ OperatorLast<T>::OperatorLast()
 template <typename T>
 void OperatorLast<T>::OnNext(T value)
 {
-	this->_last = value;
-	this->_any = true;
+	_last = value;
+	_any = true;
 }
 
 template <typename T>
 void OperatorLast<T>::OnComplete()
 {
-	if (!this->_any) return;
+	if (!_any) return;
 
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(_last);
-	if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
+	this->_childObservers.OnNext(_last);
+	this->_childObservers.OnComplete();
 }
 
 #endif

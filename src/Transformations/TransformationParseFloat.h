@@ -27,6 +27,6 @@ TransformationParseFloat<T>::TransformationParseFloat()
 template <typename T>
 void TransformationParseFloat<T>::OnNext(String value)
 {
-	this->_childObserver->OnNext((value).toFloat());
+	this->_childObservers.OnNext((value).toFloat());
 }
 #endif

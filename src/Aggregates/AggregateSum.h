@@ -30,8 +30,8 @@ AggregateSum<T>::AggregateSum()
 template <typename T>
 void AggregateSum<T>::OnNext(T value)
 {
-	this->_sum += value;
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(this->_sum);
+	_sum += value;
+	this->_childObservers.OnNext(_sum);
 }
 
 #endif

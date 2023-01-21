@@ -29,13 +29,13 @@ OperatorReset<T>::OperatorReset()
 template <typename T>
 void OperatorReset<T>::OnNext(T value)
 {
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+	this->_childObservers.OnNext(value);
 }
 
 template <typename T>
 void OperatorReset<T>::OnComplete()
 {
-	if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
+	this->_childObservers.OnComplete();
 }
 
 template <typename T>

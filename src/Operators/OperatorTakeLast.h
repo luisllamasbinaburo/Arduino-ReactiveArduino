@@ -27,7 +27,7 @@ OperatorTakeLast<T>::OperatorTakeLast()
 template <typename T>
 void OperatorTakeLast<T>::OnNext(T value)
 {
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+	this->_childObservers.OnNext(value);
 }
 
 #endif

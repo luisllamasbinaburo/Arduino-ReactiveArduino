@@ -31,9 +31,9 @@ private:
 template <typename T>
 ObservableArrayDefer<T>::ObservableArrayDefer(T *array, size_t length)
 {
-	this->_index = 0;
-	this->_array = array;
-	this->_length = length;
+	_index = 0;
+	_array = array;
+	_length = length;
 }
 
 template <typename T>
@@ -51,14 +51,14 @@ void ObservableArrayDefer<T>::UnSubscribe(IObserver<T> &observer)
 template <typename T>
 void ObservableArrayDefer<T>::Next()
 {
-	if (_index >= this->_length) return;
+	if (_index >= _length) return;
 
 	T value = _array[_index];
-	this->_childObservers.Each([value](IObserver<T>* o) { o->OnNext(value); });
+	this->_childObservers.OnNext(value);
 	_index++;
 
-	if(_index >= this->_length)
-		this->_childObservers.Each([](IObserver<T>* o) { o->OnComplete(); });
+	if(_index >= _length)
+		this->_childObservers.OnComplete();
 }
 
 template <typename T>

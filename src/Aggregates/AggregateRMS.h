@@ -31,9 +31,9 @@ AggregateRMS<T>::AggregateRMS()
 template <typename T>
 void AggregateRMS<T>::OnNext(T value)
 {
-	this->_sumSqr += value * value;
-	this->_count++;
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(sqrt(this->_sumSqr / this->_count));
+	_sumSqr += value * value;
+	_count++;
+	this->_childObservers.OnNext(sqrt(_sumSqr / _count));
 }
 
 #endif

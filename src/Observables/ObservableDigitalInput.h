@@ -28,7 +28,7 @@ private:
 template <typename T>
 ObservableDigitalInput<T>::ObservableDigitalInput(uint8_t pin, uint8_t mode)
 {
-	this->_pin = pin;
+	_pin = pin;
 	pinMode(pin, mode);
 }
 
@@ -47,7 +47,7 @@ void ObservableDigitalInput<T>::UnSubscribe(IObserver<T> &observer)
 template <typename T>
 void ObservableDigitalInput<T>::Next()
 {
-	this->_childObservers.Fire(digitalRead(this->_pin));
+	this->_childObservers.OnNext(digitalRead(_pin));
 }
 
 #endif

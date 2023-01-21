@@ -75,7 +75,7 @@ inline void ObservableSerial<float>::Receive()
 			_data = (float)_dataReal + (float)_dataDecimal / _dataPow;
 			_data = _isNegative ? -_data : _data;
 				
-			_childObservers.Fire(_data);
+			_childObservers.OnNext(_data);
 
 			_dataReal = 0;
 			_dataDecimal = 0;

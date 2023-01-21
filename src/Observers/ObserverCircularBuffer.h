@@ -20,18 +20,18 @@ private:
 template <typename T>
 ObserverCircularBuffer<T>::ObserverCircularBuffer(T *array, size_t length)
 {
-	this->_array = array;
-	this->_length = length;
-	this->_index = 0;
+	_array = array;
+	_length = length;
+	_index = 0;
 }
 
 template <typename T>
 void ObserverCircularBuffer<T>::OnNext(T value)
 {
-	this->_array[this->_index] = value;
+	_array[_index] = value;
 
-	this->_index++;
-	if (this->_index >= this->_length) this->_index = 0;
+	_index++;
+	if (_index >= _length) _index = 0;
 }
 
 template <typename T>
@@ -41,7 +41,7 @@ void ObserverCircularBuffer<T>::OnComplete()
 template<typename T>
 size_t ObserverCircularBuffer<T>::GetIndex()
 {
-	return this->_index;
+	return _index;
 }
 
 #endif

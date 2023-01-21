@@ -27,7 +27,7 @@ TransformationAbs<T>::TransformationAbs()
 template <typename T>
 void TransformationAbs<T>::OnNext(T value)
 {
-	this->_childObserver->OnNext(value >= 0 ? value : -value);
+	this->_childObservers.OnNext(value >= 0 ? value : -value);
 }
 
 #endif

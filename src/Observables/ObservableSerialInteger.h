@@ -60,7 +60,7 @@ inline void ObservableSerial<int>::Receive()
 			else if (newChar == _separator)
 			{
 				_data = _isNegative ? -_data : _data;
-				_childObservers.Fire(_data);
+				_childObservers.OnNext(_data);
 
 				_data = 0;
 				_isNegative = false;

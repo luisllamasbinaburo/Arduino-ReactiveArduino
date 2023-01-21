@@ -27,14 +27,14 @@ private:
 template <typename Torig, typename Tdest>
 TransformationReduce<Torig, Tdest>::TransformationReduce(ReactiveReduce<Torig, Tdest> function, Tdest init)
 {
-	this->_function = function;
-	this->_rst = init;
+	_function = function;
+	_rst = init;
 }
 
 template <typename Torig, typename Tdest>
 void TransformationReduce<Torig, Tdest>::OnNext(Torig value)
 {
-	this->_rst = this->_function(this->_rst, value);
-	this->_childObservers.Fire(this->_rst);
+	_rst = _function(_rst, value);
+	this->_childObservers.OnNext(_rst);
 }
 #endif

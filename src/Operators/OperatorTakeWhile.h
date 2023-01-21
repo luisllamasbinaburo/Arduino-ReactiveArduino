@@ -33,16 +33,16 @@ OperatorTakeWhile<T>::OperatorTakeWhile(ReactivePredicate<T> condition)
 template <typename T>
 void OperatorTakeWhile<T>::OnNext(T value)
 {
-	if (this->_completed) return;
+	if (_completed) return;
 
 	if (this->_condition(value))
 	{
-		if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+		this->_childObservers.OnNext(value);
 	}
 	else
 	{
-		this->_completed = true;
-		if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
+		_completed = true;
+		this->_childObservers.OnComplete();
 	}
 }
 

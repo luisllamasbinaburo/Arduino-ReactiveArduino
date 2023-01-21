@@ -39,7 +39,7 @@ void TransformationElapsedMillis<T>::Reset()
 template <typename T>
 void TransformationElapsedMillis<T>::OnNext(T value)
 {
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(millis() - _starTime);
+	this->_childObservers.OnNext(millis() - _starTime);
 	_starTime = millis();
 }
 

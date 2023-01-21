@@ -30,8 +30,8 @@ private:
 template <typename T>
 ObservableArray<T>::ObservableArray(T *array, size_t length)
 {
-	this->_array = array;
-	this->_length = length;
+	_array = array;
+	_length = length;
 }
 
 template <typename T>
@@ -50,11 +50,12 @@ void ObservableArray<T>::UnSubscribe(IObserver<T> &observer)
 template<typename T>
 void ObservableArray<T>::Run()
 {
-	if (this->_childObserver == nullptr) return;
+	if (this->_childObservers.IsEmpty()) return;
+	
 	for (size_t i = 0; i < this->_length; i++)
-		this->_childObservers.Fire(_array[i]);
+		this->_childObservers.OnNext(_array[i]);
 
-	this->_childObservers.Complete();
+	this->_childObservers.OnComplete();
 }
 
 template<typename T>

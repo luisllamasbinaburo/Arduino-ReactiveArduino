@@ -40,7 +40,7 @@ inline void ObservableSerial<char>::UnSubscribe(IObserver<char> &observer)
 inline void ObservableSerial<char>::Receive()
 {
 	while (Serial.available())
-		_childObservers.Fire((char)Serial.read());
+		_childObservers.OnNext((char)Serial.read());
 }
 
 #endif

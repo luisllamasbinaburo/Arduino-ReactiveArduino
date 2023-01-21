@@ -29,18 +29,18 @@ private:
 template <typename T>
 ObserverArray<T>::ObserverArray(T *array, size_t length)
 {
-	this->_array = array;
-	this->_length = length;
-	this->_index = 0;
+	_array = array;
+	_length = length;
+	_index = 0;
 }
 
 template <typename T>
 void ObserverArray<T>::OnNext(T value)
 {
-	if (this->_index >= this->_length) return;
+	if (_index >= _length) return;
 
-	this->_array[this->_index] = value;
-	this->_index++;
+	_array[_index] = value;
+	_index++;
 }
 
 template <typename T>
@@ -51,7 +51,7 @@ void ObserverArray<T>::OnComplete()
 template<typename T>
 size_t ObserverArray<T>::GetIndex()
 {
-	return this->_index;
+	return _index;
 }
 
 #endif

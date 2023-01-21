@@ -29,7 +29,7 @@ private:
 template <typename T>
 ObservableAnalogInput<T>::ObservableAnalogInput(uint8_t pin, uint8_t mode)
 {
-	this->_pin = pin;
+	_pin = pin;
 	pinMode(pin, mode);
 }
 
@@ -48,7 +48,7 @@ void ObservableAnalogInput<T>::UnSubscribe(IObserver<T> &observer)
 template <typename T>
 void ObservableAnalogInput<T>::Next()
 {
-	this->_childObservers.Fire(analogRead(this->_pin));
+	this->_childObservers.OnNext(analogRead(_pin));
 }
 
 #endif

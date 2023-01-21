@@ -35,7 +35,7 @@ void OperatorWhere<T>::OnNext(T value)
 {
 	if (this->_childObserver != nullptr)
 		if (this->_condition(value))
-			this->_childObserver->OnNext(value);
+			this->_childObservers.OnNext(value);
 }
 
 #endif

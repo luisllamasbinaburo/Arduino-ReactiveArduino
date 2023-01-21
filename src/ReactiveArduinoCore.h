@@ -1035,7 +1035,7 @@ void Operator<Torig, Tdest>::OnNext(Torig value)
 template <typename Torig, typename Tdest>
 void Operator<Torig, Tdest>::OnComplete()
 {
-	_childObservers.Complete();
+	_childObservers.OnComplete();
 }
 
 template<typename Torig, typename Tdest>

@@ -25,14 +25,14 @@ private:
 template <typename T>
 TransformationToggle<T>::TransformationToggle(int state)
 {
-	this->_state = false;
+	_state = false;
 }
 
 template <typename T>
 void TransformationToggle<T>::OnNext(T value)
 {
-	this->_state = !this->_state;
+	_state = !_state;
 
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(this->_state);
+	this->_childObservers.OnNext(_state);
 }
 #endif

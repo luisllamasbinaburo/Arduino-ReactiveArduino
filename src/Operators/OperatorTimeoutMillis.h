@@ -30,37 +30,37 @@ private:
 template <typename T>
 OperatorTimeoutMillis<T>::OperatorTimeoutMillis(unsigned long interval, ReactiveAction<T> action)
 {
-	this->_doAction = action;
-	this->_interval = interval;
-	this->_starTime = millis();
+	_doAction = action;
+	_interval = interval;
+	_starTime = millis();
 }
 
 template <typename T>
 void OperatorTimeoutMillis<T>::OnNext(T value)
 {
-	this->_doAction(value);
-	this->_starTime = millis();
+	_doAction(value);
+	_starTime = millis();
 
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+	this->_childObservers.OnNext(value);
 }
 
 template <typename T>
 inline void OperatorTimeoutMillis<T>::OnComplete()
 {
-	this->_completed = true;
-	if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
+	_completed = true;
+	this->_childObservers.OnComplete();
 }
 
 template <typename T>
 inline void OperatorTimeoutMillis<T>::Update()
 {
-	if (this->_completed) return;
+	if (_completed) return;
 
-	if (millis() - this->_starTime > this->_interval)
+	if (millis() - _starTime > _interval)
 	{
-		if (this->_doAction != nullptr) this->_doAction();
-		this->_completed = true;
-		if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
+		if (_doAction != nullptr) _doAction();
+		_completed = true;
+		this->_childObservers.OnComplete();
 	}
 }
 
