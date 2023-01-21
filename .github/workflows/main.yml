@@ -7,14 +7,7 @@ jobs:
     strategy:
       matrix:
         pio-env: ['esp12e', 'esp32dev']
-        example: ['examples/Blink/Blink.ino',
-          'examples/Do/Do.ino',
-          'examples/FromArray/FromArray.ino'
-          'examples/FromProperty/FromProperty.ino',
-          'examples/FromSerialPort/FromSerialPort.ino',
-          'examples/FromString/FromString.ino',
-          'examples/GlobalDefined/GlobalDefined.ino',
-          'examples/Reduce/Reduce.ino']
+        example: ['examples/Blink/Blink.ino', 'examples/Do/Do.ino', 'examples/FromArray/FromArray.ino', 'examples/FromProperty/FromProperty.ino', 'examples/FromSerialPort/FromSerialPort.ino', 'examples/FromString/FromString.ino', 'examples/GlobalDefined/GlobalDefined.ino', 'examples/Reduce/Reduce.ino']
     steps:
       - uses: actions/checkout@v2
       - name: Set up python
