@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         pio-env: ['esp12e', 'esp32dev']
-        example: ['Blink/Blink.ino', 'Do/Do.ino', 'FromArray/FromArray.ino', 'FromProperty/FromProperty.ino', 'FromSerialPort/FromSerialPort.ino', 'FromString/FromString.ino', 'GlobalDefined/GlobalDefined.ino', 'Reduce/Reduce.ino']
+        example: ['Blink/Blink.cpp', 'Do/Do.cpp', 'FromArray/FromArray.cpp', 'FromProperty/FromProperty.cpp', 'FromSerialPort/FromSerialPort.cpp', 'FromString/FromString.cpp', 'GlobalDefined/GlobalDefined.cpp', 'Reduce/Reduce.cpp']
     steps:
       - uses: actions/checkout@v2
       - name: Set up python
@@ -18,4 +18,4 @@ jobs:
       - name: Install PlatformIO
         run: python -m pip install platformio
       - name: Build firmware
-        run: pio ci --lib="." --board ${{matrix.pio-env}}  "./examples/${{matrix.example}}"
+        run: pio ci --lib="." --board ${{matrix.pio-env}}  "examples/${{matrix.example}}"
