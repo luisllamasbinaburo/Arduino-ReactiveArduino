@@ -118,7 +118,8 @@ template <typename T>
 void ObserverList<T>::RemoveAll()
 {
   Node *node;
-  while (_head != nullptr) {
+  while (_head != nullptr)
+  {
     node = _head;
     _head = _head->_next;
     delete node;
@@ -130,7 +131,10 @@ void ObserverList<T>::Add(IObserver<T>* obj)
 {
   Node *node = new Node(obj);
   if (_head)
-    _tail = _tail->_next = node;
+  {
+    _tail->_next = node;
+    _tail = node;
+  }
   else
     _head = _tail = node;
 }
@@ -140,8 +144,10 @@ void ObserverList<T>::Remove(IObserver<T>* obj)
 {
   Node *last = nullptr;
   Node *node = _head;
-  while (node != nullptr) {
-    if (node->_obj == obj) {
+  while (node != nullptr)
+  {
+    if (node->_obj == obj)
+    {
       if (last)
         last->_next = node->_next;
       else
@@ -167,7 +173,8 @@ template <typename T>
 void ObserverList<T>::OnNext(T value) const
 {
   Node *node = _head;
-  while (node != nullptr) {
+  while (node != nullptr)
+  {
     node->_obj->OnNext(value);
     node = node->_next;
   }
@@ -177,7 +184,8 @@ template <typename T>
 void ObserverList<T>::OnComplete() const
 {
   Node *node = _head;
-  while (node != nullptr) {
+  while (node != nullptr)
+  {
     node->_obj->OnComplete();
     node = node->_next;
   }
