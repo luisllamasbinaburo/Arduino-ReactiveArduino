@@ -68,7 +68,8 @@ protected:
 };
 
 template <typename T>
-class ObserverList {
+class ObserverList
+{
 public:
   ObserverList();
   ~ObserverList();
@@ -84,86 +85,101 @@ public:
 private:
   struct Node
   {
-    IObserver<T>* obj_;
-    Node *next_;
+    IObserver<T>* _obj;
+    Node *_next;
+
+    Node(IObserver<T>*);
   };
 
-  Node *head_;
-  Node *tail_;
+  Node *_head;
+  Node *_tail;
 };
 
 template <typename T>
-ObserverList<T>::ObserverList() {
-  head_ = tail_ = nullptr;
+ObserverList<T>::Node::Node(IObserver<T>* obj)
+{
+  _obj = obj;
+  _next = nullptr;
 }
 
 template <typename T>
-ObserverList<T>::~ObserverList() {
+ObserverList<T>::ObserverList()
+{
+  _head = _tail = nullptr;
+}
+
+template <typename T>
+ObserverList<T>::~ObserverList()
+{
 	RemoveAll();
 }
 
 template <typename T>
-void ObserverList<T>::RemoveAll() {
+void ObserverList<T>::RemoveAll()
+{
   Node *node;
-  while (head_ != nullptr) {
-    node = head_;
-    head_ = head_->next_;
+  while (_head != nullptr) {
+    node = _head;
+    _head = _head->_next;
     delete node;
   }
 }
 
 template <typename T>
-void ObserverList<T>::Add(IObserver<T>* obj) {
-  Node *node = new Node();
-  node->obj_ = obj;
-  node ->next_ = nullptr;
-  if (head_)
-    tail_ = tail_->next_ = node;
+void ObserverList<T>::Add(IObserver<T>* obj)
+{
+  Node *node = new Node(obj);
+  if (_head)
+    _tail = _tail->_next = node;
   else
-    head_ = tail_ = node;
+    _head = _tail = node;
 }
 
 template <typename T>
-void ObserverList<T>::Remove(IObserver<T>* obj) {
+void ObserverList<T>::Remove(IObserver<T>* obj)
+{
   Node *last = nullptr;
-  Node *node = head_;
+  Node *node = _head;
   while (node != nullptr) {
-    if (node->obj_ == obj) {
+    if (node->_obj == obj) {
       if (last)
-        last->next_ = node->next_;
+        last->_next = node->_next;
       else
-        head_ = node->next_;
+        _head = node->_next;
 
-      if (tail_ == node)
-        tail_ = last;
+      if (_tail == node)
+        _tail = last;
 
       delete node;
     }
     last = node;
-    node = node->next_;
+    node = node->_next;
   }
 }
 
 template <typename T>
-bool ObserverList<T>::IsEmpty() const {
-  return head_ == nullptr;
-  }
+bool ObserverList<T>::IsEmpty() const
+{
+  return _head == nullptr;
+}
 
 template <typename T>
-void ObserverList<T>::OnNext(T value) const {
-  Node *node = head_;
+void ObserverList<T>::OnNext(T value) const
+{
+  Node *node = _head;
   while (node != nullptr) {
-    node->obj_->OnNext(value);
-    node = node->next_;
+    node->_obj->OnNext(value);
+    node = node->_next;
   }
 }
 
 template <typename T>
-void ObserverList<T>::OnComplete() const {
-  Node *node = head_;
+void ObserverList<T>::OnComplete() const
+{
+  Node *node = _head;
   while (node != nullptr) {
-    node->obj_->OnComplete();
-    node = node->next_;
+    node->_obj->OnComplete();
+    node = node->_next;
   }
 }
 
