@@ -18,9 +18,6 @@ public:
 
 	void OnNext(T value) override;
 	void OnComplete() override;
-
-private:
-	ReactiveAction<T> _doAction;
 };
 
 template <typename T>

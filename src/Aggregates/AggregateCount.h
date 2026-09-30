@@ -19,7 +19,7 @@ public:
 	void OnNext(T value) override;
 
 private:
-	int _count = false;
+	int _count = 0;
 };
 
 template <typename T>
@@ -30,7 +30,7 @@ AggregateCount<T>::AggregateCount()
 template <typename T>
 void AggregateCount<T>::OnNext(T value)
 {
-	this->_count++;
-	this->_childObserver->OnNext(this->_count);
+	_count++;
+	this->_childObservers.OnNext(_count);
 }
 #endif

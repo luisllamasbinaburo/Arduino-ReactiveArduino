@@ -37,7 +37,7 @@ void OperatorSkipUntil<T>::OnNext(T value)
 		_started = true;
 
 	if (_started == true)
-		if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+		this->_childObservers.OnNext(value);
 }
 
 #endif

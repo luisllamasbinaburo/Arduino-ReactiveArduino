@@ -15,7 +15,8 @@ class ObservableIntervalMicros : public Observable<unsigned long>
 {
 public:
 	ObservableIntervalMicros(unsigned long microsInterval, unsigned long delay = 0);
-	void Suscribe(IObserver<T> &observer) override;
+	void Subscribe(IObserver<T> &observer) override;
+	void UnSubscribe(IObserver<T> &observer) override;
 
 	void Start();
 	void Reset() override;
@@ -32,29 +33,34 @@ public:
 
 private:
 	bool _isActive;
-	bool _isExpired;
 	unsigned long _startTime;
 	unsigned long _delay;
 	unsigned long _offset;
 	unsigned long _interval;
 
-	IObserver<T>* _childObserver;
+	ObserverList<T> _childObservers;
 };
 
 template <typename T>
 ObservableIntervalMicros<T>::ObservableIntervalMicros(unsigned long interval, unsigned long delay)
 {
-	this->_isActive = true;
-	this->_delay = delay;
-	this->_offset = delay;
-	this->_interval = interval;
-	this->_startTime = micros();
+	_isActive = true;
+	_delay = delay;
+	_offset = delay;
+	_interval = interval;
+	_startTime = micros();
 }
 
 template <typename T>
-void ObservableIntervalMicros<T>::Suscribe(IObserver<T> &observer)
+void ObservableIntervalMicros<T>::Subscribe(IObserver<T> &observer)
 {
-	_childObserver = &observer;
+	this->_childObservers.Add(&observer);
+}
+
+template <typename T>
+void ObservableIntervalMicros<T>::UnSubscribe(IObserver<T> &observer)
+{
+	this->_childObservers.Remove(&observer);
 }
 
 template <typename T>
@@ -65,8 +71,8 @@ void ObservableIntervalMicros<T>::Update()
 	auto elapsed = static_cast<unsigned long>(micros() - _startTime);
 	if (elapsed >= _interval + _offset)
 	{
-		if (_childObserver != nullptr) _childObserver->OnNext(elapsed);
-		this->_startTime = micros();
+		this->_childObservers.OnNext(elapsed);
+		_startTime = micros();
 		_offset = 0;
 	}
 }
@@ -74,9 +80,9 @@ void ObservableIntervalMicros<T>::Update()
 template <typename T>
 void ObservableIntervalMicros<T>::Reset()
 {
-	this->_isActive = true;
-	this->_offset = _delay;
-	this->_startTime = micros();
+	_isActive = true;
+	_offset = _delay;
+	_startTime = micros();
 }
 
 
@@ -114,7 +120,9 @@ unsigned long ObservableIntervalMicros<T>::GetElapsedTime()
 template <typename T>
 unsigned long ObservableIntervalMicros<T>::GetRemainingTime()
 {
-	return _interval - micros() + _startTime;
+	unsigned long elapsed = micros() - _startTime;
+	if (elapsed >= _interval) return 0;
+	return _interval - elapsed;
 }
 
 template <typename T>

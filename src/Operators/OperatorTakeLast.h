@@ -17,6 +17,11 @@ public:
 	OperatorTakeLast();
 
 	void OnNext(T value) override;
+	void OnComplete() override;
+
+private:
+	T _last = T();
+	bool _any = false;
 };
 
 template <typename T>
@@ -27,7 +32,17 @@ OperatorTakeLast<T>::OperatorTakeLast()
 template <typename T>
 void OperatorTakeLast<T>::OnNext(T value)
 {
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+	_last = value;
+	_any = true;
+}
+
+template <typename T>
+void OperatorTakeLast<T>::OnComplete()
+{
+	if (!_any) return;
+
+	this->_childObservers.OnNext(_last);
+	this->_childObservers.OnComplete();
 }
 
 #endif

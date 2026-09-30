@@ -27,15 +27,15 @@ private:
 template <typename T>
 AggregateAny<T>::AggregateAny(ReactivePredicate<T> condition)
 {
-	this->_condition = condition;
+	_condition = condition;
 }
 
 template <typename T>
 void AggregateAny<T>::OnNext(T value)
 {
-	if (this->_condition(value)) this->_state = true;
+	if (_condition(value)) _state = true;
 
-	this->_childObserver->OnNext(this->_state);
+	this->_childObservers.OnNext(_state);
 }
 
 

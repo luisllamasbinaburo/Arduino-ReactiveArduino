@@ -80,7 +80,7 @@ template <typename T>
 void FilterMovingRMS<T>::OnNext(T value)
 {
 	AddValue(value);
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(GetFiltered());
+	this->_childObservers.OnNext(GetFiltered());
 }
 
 #endif

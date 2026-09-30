@@ -30,19 +30,19 @@ private:
 template<typename T>
 FilterStopBand<T>::FilterStopBand(const double alpha1, const double alpha2)
 {
-	this->_alphaLow = alpha1 < alpha2 ? alpha1 : alpha2;
-	this->_alphaHigh = alpha1 >= alpha2 ? alpha1 : alpha2;
+	_alphaLow = alpha1 < alpha2 ? alpha1 : alpha2;
+	_alphaHigh = alpha1 >= alpha2 ? alpha1 : alpha2;
 }
 
 template <typename T>
 void FilterStopBand<T>::OnNext(T value)
 {
-	this->_lowPassFilterLow = (T)(this->_alphaLow * value + (1 - this->_alphaLow) * this->_lowPassFilterLow);
-	this->_lowPassFilterHigh = (T)(this->_alphaHigh * value + (1 - this->_alphaHigh) * this->_lowPassFilterHigh);
-	this->_bandPassFilter = this->_lowPassFilterHigh - this->_lowPassFilterLow;
-	this->_bandStopFilter = value - this->_bandPassFilter;
+	_lowPassFilterLow = (T)(_alphaLow * value + (1 - _alphaLow) * _lowPassFilterLow);
+	_lowPassFilterHigh = (T)(_alphaHigh * value + (1 - _alphaHigh) * _lowPassFilterHigh);
+	_bandPassFilter = _lowPassFilterHigh - _lowPassFilterLow;
+	_bandStopFilter = value - _bandPassFilter;
 
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(_bandStopFilter);
+	this->_childObservers.OnNext(_bandStopFilter);
 }
 
 #endif

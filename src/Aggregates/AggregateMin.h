@@ -31,12 +31,11 @@ AggregateMin<T>::AggregateMin()
 template <typename T>
 void AggregateMin <T>::OnNext(T value)
 {
-	if (!this->_any) this->_min = value;
-	else this->_min = value < this->_min ? value : this->_min;
-	this->_any = true;
+	if (!_any) _min = value;
+	else _min = value < _min ? value : _min;
+	_any = true;
 
-	if(this->_childObserver != nullptr) this->_childObserver->OnNext(this->_min);
-
+	this->_childObservers.OnNext(_min);
 }
 
 #endif

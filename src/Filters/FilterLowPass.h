@@ -33,7 +33,7 @@ void FilterLowPass<T>::OnNext(T value)
 {
 	_lowPassFilter = static_cast<T>(_alpha * value + (1 - _alpha) * _lowPassFilter);
 
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(_lowPassFilter);
+	this->_childObservers.OnNext(_lowPassFilter);
 }
 
 #endif

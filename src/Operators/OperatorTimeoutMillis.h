@@ -14,53 +14,52 @@ template <typename T>
 class OperatorTimeoutMillis : public Operator<T, T>
 {
 public:
-	OperatorTimeoutMillis(unsigned long interval, ReactiveAction<T> action);
+	OperatorTimeoutMillis(unsigned long interval, ReactiveCallback action);
 
 	void OnNext(T value) override;
 	void OnComplete() override;
 	void Update();
 
 private:
-	ReactiveAction<T> _doAction;
-	unsigned long _starTime;
+	ReactiveCallback _doAction;
+	unsigned long _startTime;
 	unsigned long _interval;
 	bool _completed = false;
 };
 
 template <typename T>
-OperatorTimeoutMillis<T>::OperatorTimeoutMillis(unsigned long interval, ReactiveAction<T> action)
+OperatorTimeoutMillis<T>::OperatorTimeoutMillis(unsigned long interval, ReactiveCallback action)
 {
-	this->_doAction = action;
-	this->_interval = interval;
-	this->_starTime = millis();
+	_doAction = action;
+	_interval = interval;
+	_startTime = millis();
 }
 
 template <typename T>
 void OperatorTimeoutMillis<T>::OnNext(T value)
 {
-	this->_doAction(value);
-	this->_starTime = millis();
+	_startTime = millis();
 
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+	this->_childObservers.OnNext(value);
 }
 
 template <typename T>
 inline void OperatorTimeoutMillis<T>::OnComplete()
 {
-	this->_completed = true;
-	if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
+	_completed = true;
+	this->_childObservers.OnComplete();
 }
 
 template <typename T>
 inline void OperatorTimeoutMillis<T>::Update()
 {
-	if (this->_completed) return;
+	if (_completed) return;
 
-	if (millis() - this->_starTime > this->_interval)
+	if (millis() - _startTime > _interval)
 	{
-		if (this->_doAction != nullptr) this->_doAction();
-		this->_completed = true;
-		if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
+		if (_doAction != nullptr) _doAction();
+		_completed = true;
+		this->_childObservers.OnComplete();
 	}
 }
 

@@ -30,10 +30,11 @@ OperatorTakeFirst<T>::OperatorTakeFirst()
 template <typename T>
 void OperatorTakeFirst<T>::OnNext(T value)
 {
-	if (this->_completed) return;
+	if (_completed) return;
 
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
-	this->_completed = true;
+	this->_childObservers.OnNext(value);
+	this->_childObservers.OnComplete();
+	_completed = true;
 }
 
 #endif

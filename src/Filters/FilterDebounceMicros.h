@@ -25,17 +25,17 @@ private:
 template<typename T>
 FilterDebounceMicros<T>::FilterDebounceMicros(const unsigned long interval)
 {
-	this->_previousMicros = micros();
-	this->_intervalMicros = interval;
+	_previousMicros = micros();
+	_intervalMicros = interval;
 }
 
 template <typename T>
 void FilterDebounceMicros<T>::OnNext(T value)
 {
-	if (micros() - this->_previousMicros >= this->_intervalMicros)
+	if (micros() - _previousMicros >= _intervalMicros)
 	{
-		this->_previousMicros = micros();
-		if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+		_previousMicros = micros();
+		this->_childObservers.OnNext(value);
 	}
 }
 

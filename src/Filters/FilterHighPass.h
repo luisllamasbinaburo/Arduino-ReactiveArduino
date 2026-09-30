@@ -26,15 +26,15 @@ private:
 template<typename T>
 FilterHighPass<T>::FilterHighPass(const double alpha)
 {
-	this->_alpha = alpha;
+	_alpha = alpha;
 }
 
 template <typename T>
 void FilterHighPass<T>::OnNext(T value)
 {
-	this->_lowPassFilter = static_cast<T>(this->_alpha * value + (1 - this->_alpha) * this->_lowPassFilter);
+	_lowPassFilter = static_cast<T>(_alpha * value + (1 - _alpha) * _lowPassFilter);
 
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(value - this->_lowPassFilter);
+	this->_childObservers.OnNext(value - _lowPassFilter);
 }
 
 #endif

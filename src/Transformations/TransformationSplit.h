@@ -14,8 +14,6 @@ template <typename T>
 class TransformationSplit : public Operator<T, T>
 {
 public:
-	ReactiveFunction<T> _function;
-
 	TransformationSplit(char separator = ',');
 
 	void OnNext(T value) override;
@@ -34,21 +32,19 @@ TransformationSplit<T>::TransformationSplit(char separator)
 template <typename T>
 void TransformationSplit<T>::OnNext(T value)
 {
-	size_t counter = 0;
 	size_t lastIndex = 0;
 	_buffer = value;
 	for (size_t index = 0; index < _buffer.length(); index++) {
-		if (_buffer.substring(index, index + 1) == ",") 
+		if (_buffer.charAt(index) == _separator)
 		{
-			if (this->_childObserver != nullptr) this->_childObserver->OnNext(_buffer.substring(lastIndex, index));
+			this->_childObservers.OnNext(_buffer.substring(lastIndex, index));
 			lastIndex = index + 1;
-			counter++;
 		}
 
 		if (index == _buffer.length() - 1)
 		{
-			if (this->_childObserver != nullptr) this->_childObserver->OnNext(_buffer.substring(lastIndex, _buffer.length()));
-			if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
+			this->_childObservers.OnNext(_buffer.substring(lastIndex, _buffer.length()));
+			this->_childObservers.OnComplete();
 		}
 	}
 }

@@ -18,10 +18,6 @@ public:
 
 	void OnNext(T value) override;
 	void OnComplete() override;
-
-private:
-	int _last = false;
-	bool _any = false;
 };
 
 template <typename T>
@@ -32,7 +28,7 @@ OperatorLoop<T>::OperatorLoop()
 template <typename T>
 void OperatorLoop<T>::OnNext(T value)
 {
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+	this->_childObservers.OnNext(value);
 }
 
 template <typename T>

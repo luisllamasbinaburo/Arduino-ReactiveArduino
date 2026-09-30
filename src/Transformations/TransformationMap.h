@@ -24,14 +24,13 @@ public:
 template <typename Torig, typename Tdest>
 TransformationMap<Torig, Tdest>::TransformationMap(ReactiveMap<Torig, Tdest> map)
 {
-	this->_map = map;
+	_map = map;
 }
 
 template<typename Torig, typename Tdest>
 void TransformationMap<Torig, Tdest>::OnNext(Torig value)
 {
-	Tdest newValue = (Tdest)(this->_map(value));
-
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(newValue);
+	Tdest newValue = (Tdest)(_map(value));
+	this->_childObservers.OnNext(newValue);
 }
 #endif

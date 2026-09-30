@@ -26,7 +26,7 @@ private:
 template <typename T>
 ObserverAnalogOutput<T>::ObserverAnalogOutput(uint8_t pin)
 {
-	this->_pin = pin;
+	_pin = pin;
 	pinMode(pin, OUTPUT);
 }
 
@@ -34,7 +34,7 @@ ObserverAnalogOutput<T>::ObserverAnalogOutput(uint8_t pin)
 template <typename T>
 void ObserverAnalogOutput<T>::OnNext(T value)
 {
-	analogWrite(value);
+	analogWrite(_pin, value);
 }
 
 template <typename T>

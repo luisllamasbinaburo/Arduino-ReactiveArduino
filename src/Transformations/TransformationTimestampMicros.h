@@ -21,24 +21,24 @@ public:
 	void Reset() override;
 
 private:
-	unsigned long _starTime;
+	unsigned long _startTime;
 };
 
 template <typename T>
 TransformationTimestampMicros<T>::TransformationTimestampMicros()
 {
-	_starTime = micros();
+	_startTime = micros();
 }
 
 template <typename T>
 void TransformationTimestampMicros<T>::Reset()
 {
-	_starTime = micros();
+	_startTime = micros();
 }
 
 template <typename T>
 void TransformationTimestampMicros<T>::OnNext(T value)
 {
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(micros() - _starTime);
+	this->_childObservers.OnNext(micros() - _startTime);
 }
 #endif

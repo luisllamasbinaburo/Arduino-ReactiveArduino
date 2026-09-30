@@ -24,12 +24,12 @@ public:
 template <typename T>
 TransformationSelect<T>::TransformationSelect(ReactiveFunction<T> function)
 {
-	this->_function = function;
+	_function = function;
 }
 
 template <typename T>
 void TransformationSelect<T>::OnNext(T value)
 {
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(this->_function(value));
+	this->_childObservers.OnNext(_function(value));
 }
 #endif

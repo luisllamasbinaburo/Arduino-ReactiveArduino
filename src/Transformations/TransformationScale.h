@@ -38,8 +38,14 @@ TransformationScale<T>::TransformationScale(T input_min, T input_max, T output_m
 template <typename T>
 void TransformationScale<T>::OnNext(T value)
 {
+	if (_input_max == _input_min)
+	{
+		this->_childObservers.OnNext(_output_min);
+		return;
+	}
+
 	T scaled = (value - _input_min) * (_output_max - _output_min) / (_input_max - _input_min) + _output_min;
-	this->_childObserver->OnNext(scaled);
+	this->_childObservers.OnNext(scaled);
 }
 #endif
 

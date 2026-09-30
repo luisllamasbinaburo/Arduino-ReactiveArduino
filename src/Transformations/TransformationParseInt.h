@@ -27,6 +27,6 @@ TransformationParseInt<T>::TransformationParseInt()
 template <typename T>
 void TransformationParseInt<T>::OnNext(String value)
 {
-	this->_childObserver->OnNext((value).toInt());
+	this->_childObservers.OnNext((value).toInt());
 }
 #endif

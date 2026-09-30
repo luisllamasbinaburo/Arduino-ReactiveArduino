@@ -24,6 +24,9 @@ using ReactiveCompound = T(*)(T, T);
 template <typename Torig, typename Tdest>
 using ReactiveMap = Tdest(*)(Torig);
 
+template <typename Torig, typename Tdest>
+using ReactiveReduce = Tdest(*)(Tdest, Torig);
+
 template <typename T>
 using ReactivePredicate = bool(*)(T);
 
@@ -46,7 +49,8 @@ template <typename T>
 class IObservable
 {
 public:
-	virtual void Suscribe(IObserver<T> &observer) = 0;
+	virtual void Subscribe(IObserver<T> &observer) = 0;
+	virtual void UnSubscribe(IObserver<T> &observer) = 0;
 
 protected:
 	virtual ~IObservable() = default;
@@ -62,4 +66,129 @@ public:
 protected:
 	bool _isComplete = false;
 };
+
+template <typename T>
+class ObserverList
+{
+public:
+  ObserverList();
+  ~ObserverList();
+
+  void Add(IObserver<T>*);
+  void Remove(IObserver<T>*);
+  void RemoveAll();
+  bool IsEmpty() const;
+
+  void OnNext(T) const;
+  void OnComplete() const;
+  
+private:
+  struct Node
+  {
+    IObserver<T>* _obj;
+    Node *_next;
+
+    Node(IObserver<T>*);
+  };
+
+  Node *_head;
+  Node *_tail;
+};
+
+template <typename T>
+ObserverList<T>::Node::Node(IObserver<T>* obj)
+{
+  _obj = obj;
+  _next = nullptr;
+}
+
+template <typename T>
+ObserverList<T>::ObserverList()
+{
+  _head = _tail = nullptr;
+}
+
+template <typename T>
+ObserverList<T>::~ObserverList()
+{
+	RemoveAll();
+}
+
+template <typename T>
+void ObserverList<T>::RemoveAll()
+{
+  Node *node;
+  while (_head != nullptr)
+  {
+    node = _head;
+    _head = _head->_next;
+    delete node;
+  }
+}
+
+template <typename T>
+void ObserverList<T>::Add(IObserver<T>* obj)
+{
+  Node *node = new Node(obj);
+  if (_head)
+  {
+    _tail->_next = node;
+    _tail = node;
+  }
+  else
+    _head = _tail = node;
+}
+
+template <typename T>
+void ObserverList<T>::Remove(IObserver<T>* obj)
+{
+  Node *last = nullptr;
+  Node *node = _head;
+  while (node != nullptr)
+  {
+    if (node->_obj == obj)
+    {
+      if (last)
+        last->_next = node->_next;
+      else
+        _head = node->_next;
+
+      if (_tail == node)
+        _tail = last;
+
+      delete node;
+    }
+    last = node;
+    node = node->_next;
+  }
+}
+
+template <typename T>
+bool ObserverList<T>::IsEmpty() const
+{
+  return _head == nullptr;
+}
+
+template <typename T>
+void ObserverList<T>::OnNext(T value) const
+{
+  Node *node = _head;
+  while (node != nullptr)
+  {
+    node->_obj->OnNext(value);
+    node = node->_next;
+  }
+}
+
+template <typename T>
+void ObserverList<T>::OnComplete() const
+{
+  Node *node = _head;
+  while (node != nullptr)
+  {
+    node->_obj->OnComplete();
+    node = node->_next;
+  }
+}
+
 #endif

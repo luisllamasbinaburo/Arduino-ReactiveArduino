@@ -32,7 +32,7 @@ template <typename T>
 void FilterOnFalling<T>::OnNext(T value)
 {
 	if (_any && (value < _last))
-		if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+		this->_childObservers.OnNext(value);
 
 	_last = value;
 	_any = true;

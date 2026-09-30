@@ -40,12 +40,12 @@ void TransformationStringBuffer <T>::OnNext(T value)
 {
 	_buffer = _buffer + String(value);
 
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(_buffer);
+	this->_childObservers.OnNext(_buffer);
 }
 
 template <typename T>
 void TransformationStringBuffer <T>::OnComplete()
 {
-	if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
+	this->_childObservers.OnComplete();
 }
 #endif

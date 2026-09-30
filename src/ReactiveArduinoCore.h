@@ -24,10 +24,6 @@ template <typename T> class ObservableTimerMillis;
 template <typename T> class ObservableTimerMicros;
 template <typename T> class ObservableIntervalMillis;
 template <typename T> class ObservableIntervalMicros;
-template <typename T> class ObservableSerialChar;
-template <typename T> class ObservableSerialString;
-template <typename T> class ObservableSerialInteger;
-template <typename T> class ObservableSerialFloat;
 
 template <typename T> class FilterOnRising;
 template <typename T> class FilterOnFalling;
@@ -76,7 +72,7 @@ template <typename T> class OperatorNoReset;
 template <typename T> class OperatorReset;
 
 template <typename T> class TransformationSelect;
-template <typename T> class TransformationReduce;
+template <typename Torig, typename Tdest> class TransformationReduce;
 template <typename Torig, typename Tdest> class TransformationCast;
 template <typename Torig, typename Tdest> class TransformationMap;
 template <typename T> class TransformationLimit;
@@ -129,11 +125,12 @@ class Observable : IObservable<T>, IResetable<T>
 {
 public:
 
-	void Suscribe(IObserver<T> &observer) override = 0;
+	void Subscribe(IObserver<T> &observer) override = 0;
+	void UnSubscribe(IObserver<T> &observer) override = 0;
 
 	void operator >> (IObserver<T> & obs)
 	{
-		Suscribe(obs);
+		Subscribe(obs);
 	}
 
 	template <typename Torig, typename Tdest>
@@ -171,8 +168,8 @@ public:
 	OperatorBatch<T>& Batch(size_t num);
 	OperatorIf<T>& If(ReactivePredicate<T> condition, ReactiveAction<T> action);
 	OperatorForEach<T>& ForEach(ReactiveAction<T> action);
-	OperatorTimeoutMillis<T>& TimeoutMillis(ReactiveAction<T> action);
-	OperatorTimeoutMicros<T>& TimeoutMicros(ReactiveAction<T> action);
+	OperatorTimeoutMillis<T>& TimeoutMillis(unsigned long interval, ReactiveCallback action);
+	OperatorTimeoutMicros<T>& TimeoutMicros(unsigned long interval, ReactiveCallback action);
 	OperatorReset<T>& DoReset();
 	OperatorNoReset<T>& NotReset();
 	OperatorLoop<T>& Loop();
@@ -182,7 +179,7 @@ public:
 	template <class Tdest> TransformationCast<T, Tdest>& Cast();
 	template <class Tdest> TransformationMap<T, Tdest>& Select(ReactiveMap<T, Tdest> map);
 	template <class Tdest> TransformationMap<T, Tdest>& Map(ReactiveMap<T, Tdest> map);
-	TransformationReduce<T>& Reduce(ReactiveCompound<T> function);
+	template <class Tdest> TransformationReduce<T, Tdest>& Reduce(ReactiveReduce<T, Tdest> function, Tdest init = Tdest());
 	TransformationUpperLimit<T>& LimitUpper(T upperLimit);
 	TransformationLowerLimit<T>& LimitLower(T lowerLimit);
 	TransformationLimit<T>& Limit(T lowerLimit, T upperLimit);
@@ -193,10 +190,10 @@ public:
 	TransformationElapsedMillis<T>& ElapsedMillis();
 	TransformationElapsedMicros<T>& ElapsedMicros();
 	TransformationFrequency<T>& Frequency();
-	TransformationThreshold<T>& Threshold(T threshold, int state = LOW);
-	TransformationThreshold<T>& DoubleThreshold(T lowThreshold, T highThreshold, int state = LOW);
-	TransformationToggle<T>& Toggle(int state = LOW);
-	TransformationAdcToVoltage<T>& AdcToVoltage(T input_max = 1023, T output_max = 5.0);
+	TransformationThreshold<T>& Threshold(T threshold, bool state = false);
+	TransformationThreshold<T>& DoubleThreshold(T lowThreshold, T highThreshold, bool state = false);
+	TransformationToggle<T>& Toggle(bool state = false);
+	TransformationAdcToVoltage<T>& AdcToVoltage(float input_max = 1023.0f, float output_max = 5.0f);
 	TransformationSplit<T>& Split(char separator = ',');
 	TransformationJoin<T>& Join(char separator = ',');
 	TransformationStringBuffer <T>& StringBuffer();
@@ -240,7 +237,7 @@ public:
 	AggregateAll<T>& All(ReactivePredicate<T> condition);
 	AggregateNone<T>& None(ReactivePredicate<T> condition);
 
-	ObserverSerial<T> ToSerial();
+	ObserverSerial<T>& ToSerial();
 	ObserverDo<T>& Do(ReactiveAction<T> action);
 	ObserverFinally<T>& Finally(ReactiveCallback action);
 	ObserverDoAndFinally<T>& DoAndFinally(ReactiveAction<T> doAction, ReactiveCallback finallyAction);
@@ -388,17 +385,17 @@ auto Observable<T>::ForEach(ReactiveAction<T> action) -> OperatorForEach<T>&
 }
 
 template <typename T>
-auto Observable<T>::TimeoutMillis(ReactiveAction<T> action) -> OperatorTimeoutMillis<T>&
+auto Observable<T>::TimeoutMillis(unsigned long interval, ReactiveCallback action) -> OperatorTimeoutMillis<T>&
 {
-	auto newOp = new OperatorTimeoutMillis<T>(action);
+	auto newOp = new OperatorTimeoutMillis<T>(interval, action);
 	Compound(*this, *newOp);
 	return *newOp;
 }
 
 template <typename T>
-auto Observable<T>::TimeoutMicros(ReactiveAction<T> action) -> OperatorTimeoutMicros<T>&
+auto Observable<T>::TimeoutMicros(unsigned long interval, ReactiveCallback action) -> OperatorTimeoutMicros<T>&
 {
-	auto newOp = new OperatorTimeoutMicros<T>(action);
+	auto newOp = new OperatorTimeoutMicros<T>(interval, action);
 	Compound(*this, *newOp);
 	return *newOp;
 }
@@ -473,9 +470,10 @@ auto Observable<T>::Select(ReactiveMap<T, Tdest> map) -> TransformationMap<T, Td
 
 
 template <typename T>
-auto Observable<T>::Reduce(ReactiveCompound<T> function) -> TransformationReduce<T>&
+template <typename Tdest>
+auto Observable<T>::Reduce(ReactiveReduce<T, Tdest> function, Tdest init) -> TransformationReduce<T, Tdest>&
 {
-	auto newOp = new TransformationReduce<T>(function);
+	auto newOp = new TransformationReduce<T, Tdest>(function, init);
 	Compound(*this, *newOp);
 	return *newOp;
 }
@@ -562,7 +560,7 @@ auto Observable<T>::Frequency() -> TransformationFrequency<T>&
 }
 
 template <typename T>
-auto Observable<T>::Threshold(T threshold, int state) -> TransformationThreshold<T>&
+auto Observable<T>::Threshold(T threshold, bool state) -> TransformationThreshold<T>&
 {
 	auto newOp = new TransformationThreshold<T>(threshold, state);
 	Compound(*this, *newOp);
@@ -570,7 +568,7 @@ auto Observable<T>::Threshold(T threshold, int state) -> TransformationThreshold
 }
 
 template <typename T>
-auto Observable<T>::DoubleThreshold(T lowThreshold, T highThreshold, int state) -> TransformationThreshold<T>&
+auto Observable<T>::DoubleThreshold(T lowThreshold, T highThreshold, bool state) -> TransformationThreshold<T>&
 {
 	auto newOp = new TransformationThreshold<T>(lowThreshold, highThreshold, state);
 	Compound(*this, *newOp);
@@ -578,7 +576,7 @@ auto Observable<T>::DoubleThreshold(T lowThreshold, T highThreshold, int state) 
 }
 
 template <typename T>
-auto Observable<T>::Toggle(int state) -> TransformationToggle<T>&
+auto Observable<T>::Toggle(bool state) -> TransformationToggle<T>&
 {
 	auto newOp = new TransformationToggle<T>(state);
 	Compound(*this, *newOp);
@@ -586,7 +584,7 @@ auto Observable<T>::Toggle(int state) -> TransformationToggle<T>&
 }
 
 template <typename T>
-auto Observable<T>::AdcToVoltage(T input_max, T output_max) -> TransformationAdcToVoltage<T>&
+auto Observable<T>::AdcToVoltage(float input_max, float output_max) -> TransformationAdcToVoltage<T>&
 {
 	auto newOp = new TransformationAdcToVoltage<T>(input_max, output_max);
 	Compound(*this, *newOp);
@@ -914,10 +912,10 @@ auto Observable<T>::None(ReactivePredicate<T> condition) -> AggregateNone<T>&
 }
 
 template <typename T>
-auto Observable<T>::ToSerial() -> ObserverSerial<T>
+auto Observable<T>::ToSerial() -> ObserverSerial<T>&
 {
 	auto newOp = new ObserverSerial<T>();
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -925,7 +923,7 @@ template <typename T>
 auto Observable<T>::Do(ReactiveAction<T> action) -> ObserverDo<T>&
 {
 	auto newOp = new ObserverDo<T>(action);
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -933,7 +931,7 @@ template <typename T>
 auto Observable<T>::Finally(ReactiveCallback action) -> ObserverFinally<T>&
 {
 	auto newOp = new ObserverFinally<T>(action);
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -941,7 +939,7 @@ template <typename T>
 auto Observable<T>::DoAndFinally(ReactiveAction<T> doAction, ReactiveCallback finallyAction) -> ObserverDoAndFinally<T>&
 {
 	auto newOp = new ObserverDoAndFinally<T>(doAction, finallyAction);
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -949,7 +947,7 @@ template <typename T>
 auto Observable<T>::DoNothing() -> ObserverDoNothing<T>&
 {
 	auto newOp = new ObserverDoNothing<T>();
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -957,7 +955,7 @@ template <typename T>
 auto Observable<T>::ToProperty(T& property) -> ObserverProperty<T>&
 {
 	auto newOp = new ObserverProperty<T>(property);
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -965,7 +963,7 @@ template <typename T>
 auto Observable<T>::ToArray(T* array, size_t length) -> ObserverArray<T>&
 {
 	auto newOp = new ObserverArray<T>(array, length);
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -973,7 +971,7 @@ template <typename T>
 auto Observable<T>::ToCircularBuffer(T* array, size_t length) -> ObserverCircularBuffer<T>&
 {
 	auto newOp = new ObserverCircularBuffer<T>(array, length);
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -981,7 +979,7 @@ template <typename T>
 auto Observable<T>::ToDigitalOutput(uint8_t pin) -> ObserverDigitalOutput<T>&
 {
 	auto newOp = new ObserverDigitalOutput<T>(pin);
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 
@@ -989,7 +987,7 @@ template <typename T>
 auto Observable<T>::ToAnalogOutput(uint8_t pin) -> ObserverAnalogOutput<T>&
 {
 	auto newOp = new ObserverAnalogOutput<T>(pin);
-	Suscribe(*newOp);
+	Subscribe(*newOp);
 	return *newOp;
 }
 // #pragma endregion
@@ -997,13 +995,14 @@ auto Observable<T>::ToAnalogOutput(uint8_t pin) -> ObserverAnalogOutput<T>&
 
 /// Operator Base
 template <typename Torig, typename Tdest>
-class Operator : public  IObserver<Torig>, public  Observable<Tdest>
+class Operator : public  IObserver<Torig>, public Observable<Tdest>
 {
 public:
 	Observable<Torig>* _parentObservable;
-	IObserver<Tdest>* _childObserver;
+	ObserverList<Tdest> _childObservers;
 
-	void Suscribe(IObserver<Tdest> & observer) override;
+	void Subscribe(IObserver<Tdest> & observer) override;
+	void UnSubscribe(IObserver<Tdest> & observer) override;
 	void Reset() override;
 
 protected:
@@ -1012,11 +1011,21 @@ protected:
 };
 
 template <typename Torig, typename Tdest>
-void Operator<Torig, Tdest>::Suscribe(IObserver<Tdest> &observer)
+void Operator<Torig, Tdest>::Subscribe(IObserver<Tdest> &observer)
 {
-	this->_childObserver = &observer;
-	_parentObservable->Suscribe(*this);
+	bool wasEmpty = _childObservers.IsEmpty();
+	_childObservers.Add(&observer);
+	if (wasEmpty)
+		_parentObservable->Subscribe(*this);
 }
+
+template <typename Torig, typename Tdest>
+void Operator<Torig, Tdest>::UnSubscribe(IObserver<Tdest> &observer)
+{
+	_childObservers.Remove(&observer);
+	if (_childObservers.IsEmpty())
+		_parentObservable->UnSubscribe(*this);
+}	
 
 template <typename Torig, typename Tdest>
 void Operator<Torig, Tdest>::OnNext(Torig value)
@@ -1026,12 +1035,13 @@ void Operator<Torig, Tdest>::OnNext(Torig value)
 template <typename Torig, typename Tdest>
 void Operator<Torig, Tdest>::OnComplete()
 {
-	if (this->_childObserver != nullptr) this->_childObserver->OnComplete();
+	_childObservers.OnComplete();
 }
 
 template<typename Torig, typename Tdest>
 void Operator<Torig, Tdest>::Reset()
 {
-	if(_parentObservable != nullptr) _parentObservable->Reset();
+	if (_parentObservable != nullptr) _parentObservable->Reset();
+	_childObservers.RemoveAll();
 }
 #endif

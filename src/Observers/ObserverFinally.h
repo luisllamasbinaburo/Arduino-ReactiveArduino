@@ -38,7 +38,7 @@ void ObserverFinally<T>::OnNext(T value)
 template <typename T>
 void ObserverFinally<T>::OnComplete()
 {
-	_action();
+	if (_action != nullptr) _action();
 }
 
 #endif

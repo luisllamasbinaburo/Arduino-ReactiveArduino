@@ -27,7 +27,7 @@ TransformationToBool<T>::TransformationToBool()
 template <typename T>
 void TransformationToBool<T>::OnNext(T value)
 {
-	this->_childObserver->OnNext(value != 0);
+	this->_childObservers.OnNext(value != 0);
 }
 
 #endif

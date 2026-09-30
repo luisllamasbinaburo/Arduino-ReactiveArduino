@@ -36,8 +36,8 @@ void OperatorSkipWhile<T>::OnNext(T value)
 	if (!_started && !this->_condition(value))
 		_started = true;
 
-	if(_started == true)
-		if (this->_childObserver != nullptr) this->_childObserver->OnNext(value);
+	if (_started == true)
+		this->_childObservers.OnNext(value);
 }
 
 #endif

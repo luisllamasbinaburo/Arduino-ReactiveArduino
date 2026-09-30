@@ -14,25 +14,25 @@ template <typename T>
 class TransformationToggle : public Operator<T, int>
 {
 public:
-	TransformationToggle(int state = LOW);
+	TransformationToggle(bool state = false);
 
 	void OnNext(T value) override;
 
 private:
-	int _state = false;
+	bool _state = false;
 };
 
 template <typename T>
-TransformationToggle<T>::TransformationToggle(int state)
+TransformationToggle<T>::TransformationToggle(bool state)
 {
-	this->_state = false;
+	_state = state;
 }
 
 template <typename T>
 void TransformationToggle<T>::OnNext(T value)
 {
-	this->_state = !this->_state;
+	_state = !_state;
 
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(this->_state);
+	this->_childObservers.OnNext(_state);
 }
 #endif

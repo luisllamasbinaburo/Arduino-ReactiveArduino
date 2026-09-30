@@ -27,6 +27,6 @@ TransformationCast<Torig, Tdest>::TransformationCast()
 template<typename Torig, typename Tdest>
 void TransformationCast<Torig, Tdest>::OnNext(Torig value)
 {
-	this->_childObserver->OnNext((Tdest)(value));
+	this->_childObservers.OnNext((Tdest)(value));
 }
 #endif

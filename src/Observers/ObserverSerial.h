@@ -14,9 +14,6 @@ template <typename T>
 class ObserverSerial : public IObserver<T>
 {
 public:
-
-
-private:
 	void OnNext(T value) override;
 	void OnComplete() override;
 };

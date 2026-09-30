@@ -19,24 +19,28 @@ public:
 	void OnNext(T value) override;
 
 private:
-	int _count = false;
+	int _count = 0;
+	bool _completed = false;
 };
 
 template <typename T>
 AggregateCountdown<T>::AggregateCountdown(int count)
 {
-	this->_count = count;
+	_count = count;
 }
 
 template <typename T>
 void AggregateCountdown<T>::OnNext(T value)
 {
-	this->_count--;
-	this->_childObserver->OnNext(_count);
+	if (_completed) return;
+
+	_count--;
+	this->_childObservers.OnNext(_count);
 
 	if (_count <= 0)
 	{
-		this->_childObserver->OnComplete();
+		_completed = true;
+		this->_childObservers.OnComplete();
 	}
 }
 

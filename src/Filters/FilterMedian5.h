@@ -115,6 +115,6 @@ void FilterMedian5<T>::OnNext(T value)
 	AddValue(value);
 
 	if (_count < _windowSize) return;
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(GetFiltered());
+	this->_childObservers.OnNext(GetFiltered());
 }
 #endif

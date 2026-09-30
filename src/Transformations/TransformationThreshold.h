@@ -14,21 +14,20 @@ template <typename T>
 class TransformationThreshold : public Operator<T, int>
 {
 public:
-	TransformationThreshold<T>(T threshold) : TransformationThreshold<T>(threshold, threshold, LOW) {}
-	TransformationThreshold<T>(T threshold, int state) : TransformationThreshold<T>(threshold, threshold, state) {}
-	TransformationThreshold<T>(T lowThreshold, T highThreshold) : TransformationThreshold<T>(lowThreshold, highThreshold, LOW) {}
-	TransformationThreshold<T>(T lowThreshold, T highThreshold, int state);
+	TransformationThreshold<T>(T threshold) : TransformationThreshold<T>(threshold, threshold, false) {}
+	TransformationThreshold<T>(T threshold, bool state) : TransformationThreshold<T>(threshold, threshold, state) {}
+	TransformationThreshold<T>(T lowThreshold, T highThreshold, bool state);
 
 	void OnNext(T value) override;
 
 private:
 	T _fallThreshold = T();
 	T _riseThreshold = T();
-	int _state;
+	bool _state = false;
 };
 
 template<typename T>
-TransformationThreshold<T>::TransformationThreshold(T threshold1, T threshold2, int state)
+TransformationThreshold<T>::TransformationThreshold(T threshold1, T threshold2, bool state)
 {
 	_fallThreshold = threshold1 <= threshold2 ? threshold1 : threshold2;
 	_riseThreshold = threshold1 > threshold2 ? threshold1 : threshold2;
@@ -38,16 +37,13 @@ TransformationThreshold<T>::TransformationThreshold(T threshold1, T threshold2, 
 template <typename T>
 void TransformationThreshold<T>::OnNext(T value)
 {
-	if (_state == LOW && value > _riseThreshold)
-	{
-		_state = HIGH;
-	}
+	if (!_state && value > _riseThreshold)
+		_state = true;
 
-	if (_state == HIGH && value < _fallThreshold)
-	{
-		_state = LOW;
-	}
-	if (this->_childObserver != nullptr) this->_childObserver->OnNext(_state);
+	if (_state && value < _fallThreshold)
+		_state = false;
+	
+	this->_childObservers.OnNext(_state);
 }
 #endif
 
